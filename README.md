@@ -1,4 +1,4 @@
-<p align="center"><img width="25%" height="25%" src="http://i.imgur.com/6dtC91m.png" alt="Notion.so"><br>unofficial Notion.so for Linux</p>
+<p align="center"><img width="25%" height="25%" src="http://i.imgur.com/6dtC91m.png" alt="Notion.so"><br>unofficial Notion.so Desktop app for Linux</p>
 
 ------
 
@@ -39,4 +39,6 @@ Simply clone this repo and run
 
 - Tray icon
 
-
+ -------
+ 
+Thanks to [sysdrum](https://github.com/sysdrum/notion-app), I used some of his code and improved upon it
