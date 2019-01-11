@@ -1,0 +1,9 @@
+These emojis are provided by  Emojione (or Emoji One) and the forked name Emojitwo (or Emoji Two).
+
+Links to the repository and Ranks.com's website
+	https://github.com/EmojiTwo/emojitwo/
+	https://emojitwo.github.io/emojitwo/
+	https://www.emojione.com
+
+Creative Commons Attribution International 4.0 (CC-BY 4.0)
+https://creativecommons.org/licenses/by/4.0/legalcode
