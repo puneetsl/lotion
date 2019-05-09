@@ -31,11 +31,12 @@ Simply clone this repo and run
 
 - Better Icon (courtesy: [Konrad Kolasa](https://dribbble.com/shots/4886987-Notion-Icon-Replacement) )
 
-  <img width="20%" height="20%" src="https://github.com/puneetsl/lotion/blob/master/icon.png?raw=true" alt="Notion Icon">
+  <img width="15%" height="15%" src="https://github.com/puneetsl/lotion/blob/master/icon.png?raw=true" alt="Notion Icon">
 
 - Everything you would expect from Windows or Mac application except offline use
 
-  - However there are ways to use windows app using this code to have offline capabilities
+  - However there are ways to use windows app using this code to have offline capabilities ( [here](https://github.com/puneetsl/lotion/issues/1) is how you can do that )
+  - I'll add a script to automatically install native Notion with all these capabilities soon
 
 - Tray icon
 
