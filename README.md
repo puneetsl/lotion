@@ -32,7 +32,8 @@ Simply clone this repo and run
 - Better Icon (courtesy: [Konrad Kolasa](https://dribbble.com/shots/4886987-Notion-Icon-Replacement) )
 
   <img width="15%" height="15%" src="https://github.com/puneetsl/lotion/blob/master/icon.png?raw=true" alt="Notion Icon">
-
+<br>looks stunning in actual usage:<br>
+<img width="75%" height="75%" src="https://cdn.dribbble.com/users/23017/screenshots/4886987/attachments/1096743/icon_in_dock.png">
 - Everything you would expect from Windows or Mac application except offline use
 
   - However there are ways to use windows app using this code to have offline capabilities ( [here](https://github.com/puneetsl/lotion/issues/1) is how you can do that )
