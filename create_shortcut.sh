@@ -15,6 +15,7 @@ Terminal=false
 Categories=Office;TextEditor;Utility
 Type=Application
 Icon=${FULL_PATH}/icon.png
+StartupWMClass=notion-nativefier-fe83e9
 EOS
 chmod +x Notion.desktop
 ## This can be updated if this path is not valid. 
