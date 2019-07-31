@@ -44,6 +44,7 @@ Simply clone this repo and run
  -------
  
 Thanks to [sysdrum](https://github.com/sysdrum/notion-app), I used some of his code and improved upon it
+
 -------
 
 # Advertisement
