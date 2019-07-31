@@ -44,3 +44,6 @@ Simply clone this repo and run
  -------
  
 Thanks to [sysdrum](https://github.com/sysdrum/notion-app), I used some of his code and improved upon it
+
+# Advertisement
+<a href="https://www.binarydecimal.com"><img width="80%" height="80%" src="https://i.imgur.com/L7vCi4o.jpg" alt="BinaryDecimal.com"></a>
