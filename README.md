@@ -27,6 +27,12 @@ Simply clone this repo and run
 ./install.sh 
 ```
 
+### Native Notion
+
+To get native Notion app running with offline capabilities, you can use this guide: https://github.com/puneetsl/lotion/issues/1
+
+
+
 # Features
 
 - Better Icon (courtesy: [Konrad Kolasa](https://dribbble.com/shots/4886987-Notion-Icon-Replacement) )
