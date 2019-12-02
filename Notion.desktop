@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Notion
-Name[en_US]=Notion
-Comment=Notion.so Desktop application for Linux
-Exec="/home/puneet/apps/Notion/Notion/notion"
-Terminal=false
-Categories=Office;TextEditor;Utility
-Type=Application
-Icon=/home/puneet/apps/Notion/Notion/icon.png
