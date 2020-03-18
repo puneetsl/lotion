@@ -10,12 +10,12 @@ cat <<EOS > Lotion.desktop
 Name=Notion
 Name[en_US]=Lotion
 Comment=Unofficial Notion.so application for Linux
-Exec="${FULL_PATH}/lotion"
+Exec="${FULL_PATH}/Lotion"
 Terminal=false
 Categories=Office;TextEditor;Utility
 Type=Application
 Icon=${WORKING_DIR}/icon.png
-StartupWMClass=lotion
+StartupWMClass=lotion-binary
 EOS
 chmod +x Lotion.desktop
 ## This can be updated if this path is not valid. 

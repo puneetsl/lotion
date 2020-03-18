@@ -2,7 +2,7 @@
 
 ------
 
-`Version: 0.02` 
+`Version: 0.03` 
 
 # Introduction
 
@@ -56,8 +56,9 @@ Thanks to [sysdrum](https://github.com/sysdrum/notion-app), I used some of his c
 
 # Uninstall
 
-1. Simply delete the entire cloned repository from your machine (`rm -rf lotion/`)
-2. Delete desktop entry (`rm -r ~/.local/share/applications/Lotion.desktop`)
+```bash
+./uninstall.sh
+```
 
 # Advertisement
 <a href="https://www.binarydecimal.com"><img width="80%" height="80%" src="https://i.imgur.com/L7vCi4o.jpg" alt="BinaryDecimal.com"></a>
