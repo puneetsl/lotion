@@ -19,6 +19,10 @@ Here is how it looks
 
 
 
+> Is it your first time finding about Notion app? 
+>
+> Use this [link](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76) to sign up and get ready to manage your life like you have never managed before ([Notion.so](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76))
+
 # Installation
 
 Simply clone this repo and run 
