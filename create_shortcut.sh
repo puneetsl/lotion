@@ -5,18 +5,18 @@ THIS_PATH=`readlink -f $0`
 cd `dirname ${THIS_PATH}`
 FULL_PATH=`pwd`/Lotion
 cd ${WORKING_DIR}
-cat <<EOS > LotionDev.desktop
+cat <<EOS > Lotion.desktop
 [Desktop Entry]
 Name=Notion
 Name[en_US]=LotionDev
 Comment=Unofficial Notion.so application for Linux
-Exec="${FULL_PATH}/lotion"
+Exec="${FULL_PATH}/Lotion"
 Terminal=false
 Categories=Office;TextEditor;Utility
 Type=Application
 Icon=${WORKING_DIR}/icon.png
 StartupWMClass=lotion
 EOS
-chmod +x LotionDev.desktop
+chmod +x Lotion.desktop
 ## This can be updated if this path is not valid. 
-cp -p LotionDev.desktop ~/.local/share/applications
+cp -p Lotion.desktop ~/.local/share/applications
