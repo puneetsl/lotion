@@ -15,7 +15,7 @@ Terminal=false
 Categories=Office;TextEditor;Utility
 Type=Application
 Icon=${WORKING_DIR}/icon.png
-StartupWMClass=Lotion
+StartupWMClass=$0
 EOS
 chmod +x Lotion.desktop
 ## This can be updated if this path is not valid. 
