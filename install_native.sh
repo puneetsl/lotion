@@ -10,7 +10,7 @@ wget -P "$PD"/nativeApp https://desktop-release.notion-static.com/Notion%20Setup
 cd nativeApp || exit 2
 7z x "Notion Setup 2.0.9.exe"
 7z x \$PLUGINSDIR/app-64.7z
-cp resources/app.asar "$PD"/Lotion/
-mv "$PD"/Lotion/app/ "$PD"/Lotion/app.bak/
+cp resources/app.asar "$PD"/Lotion/resources/
+mv "$PD"/Lotion/resources/app/ "$PD"/Lotion/resources/app.bak/
 /bin/bash "$PD"/create_shortcut.sh
 
