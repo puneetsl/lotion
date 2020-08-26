@@ -1,7 +1,6 @@
 #!/bin/bash
 PD=$(pwd)
 INSTALL_DIR=$PD"/Lotion"
-APP_DIR=$PD"/nativeApp"
 echo "$INSTALL_DIR"
 mkdir -p "$INSTALL_DIR"
 tar xvf "$PD"/Lotion-linux-x64.tar.xz -C "$INSTALL_DIR" --strip 1
