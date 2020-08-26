@@ -1,4 +1,9 @@
 #!/bin/bash
+if ! command -v 7z &> /dev/null
+then
+    echo "7z tool required to install natively, install using sudo apt install p7zip-full"
+    exit
+fi
 PD=$(pwd)
 INSTALL_DIR=$PD"/Lotion"
 echo "$INSTALL_DIR"
