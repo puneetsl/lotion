@@ -19,7 +19,7 @@ Here is how it looks
 
 
 
-> Is it your first time finding about Notion app? 
+> Is it your first time finding about the Notion app? 
 >
 > Use this [link](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76) to sign up and get ready to manage your life like you have never managed before ([Notion.so](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76))
 
@@ -30,10 +30,14 @@ Simply clone this repo and run
 ```bash
 ./install.sh 
 ```
+If you would like to install the native (offline) version, run:
 
-### Native Notion
+```bash
+./install_native.sh
+```
 
-To get native Notion app running with offline capabilities, you can use this guide: https://github.com/puneetsl/lotion/issues/1
+If the script has errors or you would like to install
+manually, you can refer to [these](https://github.com/puneetsl/lotion/issues/1) instructions.
 
 
 
@@ -44,11 +48,10 @@ To get native Notion app running with offline capabilities, you can use this gui
   <img width="15%" height="15%" src="https://github.com/puneetsl/lotion/blob/master/icon.png?raw=true" alt="Notion Icon">
 <br>looks stunning in actual usage:<br>
 <img width="75%" height="75%" src="https://cdn.dribbble.com/users/23017/screenshots/4886987/attachments/1096743/icon_in_dock.png">
-- Everything you would expect from Windows or Mac application except offline use
+- Everything you would expect from Windows or Mac application 
 
-  - However there are ways to use windows app using this code to have offline capabilities ( [here](https://github.com/puneetsl/lotion/issues/1) is how you can do that )
-  - I'll add a script to automatically install native Notion with all these capabilities soon
-
+  -  [Here](https://github.com/puneetsl/lotion/issues/1) are the instructions to manually install natively if the
+  installer script doesn't work.
 - Tray icon
 
  -------
