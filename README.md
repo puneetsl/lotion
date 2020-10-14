@@ -26,12 +26,14 @@ Here is how it looks
 # Installation
 Download setup script
 ```bash
-wget https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh
+wget https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh 
+# Or
+curl https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh > setup.sh
 
 # Run
-./setup.sh install
+sudo ./setup.sh install
 # Or for native installation
-./setup.sh install_native
+sudo ./setup.sh install_native
 ```
 Or simply clone this repo and run 
 
