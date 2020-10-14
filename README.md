@@ -25,7 +25,12 @@ Here is how it looks
 
 # Installation
 
-Dowload setup script
+Run setup script directly (you be prompted to type installation type)
+```bash
+curl https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh | bash
+```
+
+Download setup script
 ```bash
 wget https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh
 
