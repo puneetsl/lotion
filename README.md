@@ -25,7 +25,16 @@ Here is how it looks
 
 # Installation
 
-Simply clone this repo and run 
+Dowload setup script
+```bash
+wget https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh
+
+# Run
+./setup.sh install
+# Or for native installation
+./setup.sh install_native
+```
+Or simply clone this repo and run 
 
 ```bash
 ./install.sh 
