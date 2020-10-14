@@ -24,12 +24,6 @@ Here is how it looks
 > Use this [link](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76) to sign up and get ready to manage your life like you have never managed before ([Notion.so](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76))
 
 # Installation
-
-Run setup script directly (you be prompted to type installation type)
-```bash
-curl https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh | bash
-```
-
 Download setup script
 ```bash
 wget https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh
