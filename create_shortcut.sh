@@ -19,4 +19,4 @@ StartupWMClass=$1
 EOS
 chmod +x Lotion.desktop
 ## This can be updated if this path is not valid. 
-cp -p Lotion.desktop ~/.local/share/applications
+cp -p Lotion.desktop /usr/share/applications
