@@ -1,5 +1,6 @@
 #!/bin/bash
 
+lotion_mirror="https://github.com/puneetsl/lotion"
 required_programs=(git tar)
 
 for cmd in ${required_programs[@]};
@@ -7,7 +8,7 @@ do
     [ ! $(command -v $cmd) ] && echo Command $cmd is required to run this script && exit -1
 done
 
-[ -z "$1" ] && echo Please select of the install types: && echo install && echo install_native && read cmd
+[ -z "$1" ] && echo Please select one of the install types: && echo install && echo install_native && read cmd
 
 [ -n "$1" ] && cmd=$1
 
@@ -17,13 +18,13 @@ if [ -d lotion ];
 then
     echo Do you want to use already cashed lotion directory ? [yes/no] && read answer
     case $answer in
-        "no") echo Downloading ... && rm -rf ./lotion && git clone https://github.com/puneetsl/lotion ;;
+        "no") echo Downloading ... && rm -rf ./lotion && git clone $lotion_mirror ;;
         "yes") echo Using cached directory ... ;;
         *) echo Invalid response, using cached directory ;;
     esac
 else
     echo Downloading ...
-    git clone https://github.com/puneetsl/lotion
+    git clone $lotion_mirror
 fi
 
 cd ./lotion
