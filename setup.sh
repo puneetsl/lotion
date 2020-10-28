@@ -59,13 +59,16 @@ cd $installation_folder
 echo Runinng ./$cmd.sh
 [ ! $(./$cmd.sh) ] && echo Specified installment method \($cmd\) is not avaible && exit -1
 
+echo Linking executables ...
 # Linking executables for terminal usage
 ln -s $PWD/Lotion/Lotion ${executable_folder}lotion
 ln -s $PWD/uninstall.sh ${executable_folder}lotion_uninstall
 
-# Setup shortcut
+echo Creating shortcut ...
 ./create_shortcut.sh
 cp ./Lotion.desktop ${applications_folder}Lotion.desktop
 
-# Cleaning
+echo Cleaning ...
 ./clean.sh
+
+echo Done !
