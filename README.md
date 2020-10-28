@@ -30,10 +30,10 @@ wget https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh
 # Or
 curl https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh > setup.sh
 
-# Run
-sudo ./setup.sh install
+# Run (with sudo for global installation, without sudo for local installation)
+[sudo] ./setup.sh install
 # Or for native installation
-sudo ./setup.sh install_native
+[sudo] ./setup.sh install_native
 ```
 Or simply clone this repo and run 
 
