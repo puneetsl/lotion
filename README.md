@@ -24,8 +24,18 @@ Here is how it looks
 > Use this [link](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76) to sign up and get ready to manage your life like you have never managed before ([Notion.so](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76))
 
 # Installation
+Download setup script
+```bash
+wget https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh 
+# Or
+curl https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh > setup.sh
 
-Simply clone this repo and run 
+# Run (with sudo for global installation, without sudo for local installation)
+[sudo] ./setup.sh install
+# Or for native installation
+[sudo] ./setup.sh install_native
+```
+Or simply clone this repo and run 
 
 ```bash
 ./install.sh 
