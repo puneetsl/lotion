@@ -1,10 +1,18 @@
 #!/bin/bash
 PD=`pwd`
-INSTALL_DIR=$PD"/Lotion"
 
-[ -d /usr/share/lotion ] INSTALL_DIR="/usr/share/lotion"
+if [ -d /usr/share/lotion ]
+then
+INSTALL_DIR="/usr/share/lotion"
+SHORTCUT_DIR="/usr/share/applications/"
+EXEC_DIR="/usr/bin/"
+else
+INSTALL_DIR=$PD"/Lotion"
+SHORTCUT_DIR="~/.local/share/applications/"
+EXEC_DIR="~/.local/bin/"
+fi
 
 rm -r $INSTALL_DIR
-rm /usr/share/applications/Lotion.desktop
-rm /usr/bin/lotion
-rm /usr/bin/lotion_uninstall
+rm $SHORTCUT_DIR/Lotion.desktop
+rm $EXEC_DIR/lotion
+rm $EXEC_DIR/lotion_uninstall
