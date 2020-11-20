@@ -56,8 +56,13 @@ cp -rf ./* $installation_folder
 cd $installation_folder
 
 # Installation
-echo Runinng ./$cmd.sh
-[ ! $(./$cmd.sh) ] && echo Specified installment method \($cmd\) is not avaible && exit -1
+echo "$cmd"
+if [[ -f $cmd.sh ]]; then
+    ./$cmd.sh
+else
+    echo Specified installment method \($cmd\) is not avaible
+    exit -1
+fi
 
 echo Linking executables ...
 # Linking executables for terminal usage
