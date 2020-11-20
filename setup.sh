@@ -52,8 +52,8 @@ if [ -d lotion ];
 then
     echo Do you want to use already cashed lotion directory ? [yes/no] && read answer
     case $answer in
-        "no") echo Downloading ... && rm -rf ./lotion && git clone --depth=1 $lotion_mirror ;;
-        "yes") echo Using cached directory ... ;;
+        "N" | "n" | "No" | "no") echo Downloading ... && rm -rf ./lotion && git clone --depth=1 $lotion_mirror ;;
+        "Y" | "y" | "Yes" | "yes") echo Using cached directory ... ;;
         *) echo Invalid response, using cached directory ;;
     esac
 else
