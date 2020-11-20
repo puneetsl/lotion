@@ -31,7 +31,19 @@ if [ $locally == 'yes' ] && [ ! -d ~/.local/bin/ ]; then
 fi
 
 # Select installation type
-[ -n "$1" ] && cmd=$1 || (echo Please select one of the install types: && echo install && echo install_native && read cmd)
+if [ -n "$1" ]; then
+    cmd=$1
+else
+    echo "Please select one of the install types:"
+    echo "1) install"
+    echo "2) install_native"
+    read cmd
+    case $cmd in
+        "1" | "install") cmd=install;;
+        "2" | "install_native") cmd=install_native;;
+        *) echo "Wrong value"; exit -1;;
+    esac
+fi
 
 cd /tmp
 
