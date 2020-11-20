@@ -26,6 +26,10 @@ case $locally in
         ;;
 esac
 
+if [ $locally == 'yes' ] && [ ! -d ~/.local/bin/ ]; then
+    mkdir ~/.local/bin/
+fi
+
 # Select installation type
 [ -n "$1" ] && cmd=$1 || (echo Please select one of the install types: && echo install && echo install_native && read cmd)
 
