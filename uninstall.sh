@@ -4,12 +4,12 @@ PD=`pwd`
 if [ -d /usr/share/lotion ]
 then
 INSTALL_DIR="/usr/share/lotion"
-SHORTCUT_DIR="/usr/share/applications/"
-EXEC_DIR="/usr/bin/"
+SHORTCUT_DIR="/usr/share/applications"
+EXEC_DIR="/usr/bin"
 else
 INSTALL_DIR=$PD"/Lotion"
-SHORTCUT_DIR="~/.local/share/applications/"
-EXEC_DIR="~/.local/bin/"
+SHORTCUT_DIR="$HOME/.local/share/applications"
+EXEC_DIR="$HOME/.local/bin"
 fi
 
 rm -r $INSTALL_DIR
