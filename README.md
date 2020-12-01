@@ -78,4 +78,4 @@ Thanks to [sysdrum](https://github.com/sysdrum/notion-app), I used some of his c
 ```
 
 # Advertisement
-<a href="https://www.titanvest.com/?r=7824861d-96fc-4509-bb25-ee8e40daf22e"><img width="80%" height="80%" src="https://user-images.githubusercontent.com/6509604/100786392-14d31200-33e0-11eb-9133-1c03f0b337b4.png" alt="BinaryDecimal.com"></a>
+<a href="https://www.titanvest.com/?r=7824861d-96fc-4509-bb25-ee8e40daf22e"><img width="50%" height="50%" src="https://user-images.githubusercontent.com/6509604/100786392-14d31200-33e0-11eb-9133-1c03f0b337b4.png" alt="BinaryDecimal.com"></a>
