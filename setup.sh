@@ -48,10 +48,10 @@ mkdir $installation_folder
 cd $installation_folder
 cd /tmp
 
-# Cashing 
+# Caching 
 if [ -d lotion ];
 then
-    echo Do you want to use already cashed lotion directory ? [yes/no] && read answer
+    echo Do you want to use already cached lotion directory ? [yes/no] && read answer
     case $answer in
         "N" | "n" | "No" | "no") echo Downloading ... && rm -rf ./lotion && git clone --depth=1 $lotion_mirror ;;
         "Y" | "y" | "Yes" | "yes") echo Using cached directory ... ;;
