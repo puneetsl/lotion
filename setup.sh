@@ -16,6 +16,7 @@ installation_folder=$(pwd)
 case $locally in
     "yes") 
         echo "Installing for current user. If you want to install globally, run script as sudo" 
+		installation_folder=~/.local/share/lotion/
         executable_folder=~/.local/bin/
         applications_folder=~/.local/share/applications/
         ;;
