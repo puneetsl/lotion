@@ -1,7 +1,7 @@
 #!/bin/bash
 
 lotion_mirror="https://github.com/puneetsl/lotion"
-required_programs=(git tar)
+required_programs=(git tar 7z wget)
 
 # Check for required programs
 for cmd in ${required_programs[@]};
@@ -12,39 +12,40 @@ done
 # Select installation destination
 [ "$EUID" -ne 0 ] && locally="yes" || locally="no"
 
+installation_folder=$(pwd)
 case $locally in
     "yes") 
-        echo "Installing program locally (only for current user). If you want to install globally, run script as sudo" 
-        installation_folder=~/.local/share/lotion/
+        echo "Installing for current user. If you want to install globally, run script as sudo" 
         executable_folder=~/.local/bin/
         applications_folder=~/.local/share/applications/
         ;;
-    "no")  echo "Installing program globaly (for all users). If you want to install program locally, run script without sudo" 
+    "no")  echo "Installing program for all users. If you want to install program locally, run script without sudo" 
         installation_folder=/usr/share/lotion/
         executable_folder=/usr/bin/
         applications_folder=/usr/share/applications/
         ;;
 esac
 
-if [ $locally == 'yes' ] && [ ! -d ~/.local/bin/ ]; then
-    mkdir ~/.local/bin/
-fi
-
 # Select installation type
-if [ -n "$1" ]; then
-    cmd=$1
-else
-    echo "Please select one of the install types:"
-    echo "1) install"
-    echo "2) install_native"
-    read cmd
-    case $cmd in
-        "1" | "install") cmd=install;;
-        "2" | "install_native") cmd=install_native;;
-        *) echo "Wrong value"; exit -1;;
-    esac
-fi
+printf "\nPlease select an install type\ninstall - Installs the web app, the latest version\ninstall_native - Installs v2.0.9 of the windows app which has offline support.\n\n"
+select cmd  in install install_native
+do
+	if [[ $cmd == install* ]]
+	then
+		echo "You have chosen $cmd"
+		break
+	else
+		echo "Please select 1 or 2"
+		echo $cmd
+	fi
+done
 
+# Create and copy current lotion folder
+echo Copying to $installation_folder
+
+rm -rf $installation_folder
+mkdir $installation_folder
+cd $installation_folder
 cd /tmp
 
 # Cashing 
