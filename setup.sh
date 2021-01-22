@@ -6,7 +6,7 @@ required_programs=(git tar 7z wget)
 # Check for required programs
 for cmd in ${required_programs[@]};
 do
-    [ ! $(command -v $cmd) ] && echo Command $cmd is required to run this script && exit -1
+    [ ! $(command -v $cmd) ] && echo Command $cmd is required to run this script && exit 1
 done
 
 # Select installation destination
@@ -28,16 +28,15 @@ case $locally in
 esac
 
 # Select installation type
-printf "\nPlease select an install type\ninstall - Installs the web app, the latest version\ninstall_native - Installs v2.0.9 of the windows app which has offline support.\n\n"
-select cmd  in install install_native
+printf "\nPlease select an install type\nweb - Installs the web app, the latest version\nnative - Installs v2.0.9 of the windows app which has offline support.\n\n"
+select cmd  in web native
 do
-	if [[ $cmd == install* ]]
+	if [[ $cmd =~ web|native ]]
 	then
-		echo "You have chosen $cmd"
+		echo $cmd
 		break
 	else
 		echo "Please select 1 or 2"
-		echo $cmd
 	fi
 done
 
@@ -75,11 +74,11 @@ cd $installation_folder
 
 # Installation
 echo "$cmd"
-if [[ -f $cmd.sh ]]; then
-    ./$cmd.sh
+if [[ -f install.sh ]]; then
+    ./install.sh $cmd
 else
     echo Specified installment method \($cmd\) is not avaible
-    exit -1
+    exit 1
 fi
 
 echo Linking executables ...
@@ -92,6 +91,6 @@ echo Creating shortcut ...
 cp ./Lotion.desktop ${applications_folder}Lotion.desktop
 
 echo Cleaning ...
-./clean.sh
+#./clean.sh
 
 echo Done !
