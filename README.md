@@ -19,7 +19,7 @@ Here is how it looks
 
 
 
-> Is it your first time finding about the Notion app? 
+> Is it your first time finding out about the Notion app? 
 >
 > Use this [link](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76) to sign up and get ready to manage your life like you have never managed before ([Notion.so](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76))
 
@@ -31,25 +31,20 @@ wget https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh
 curl https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh > setup.sh
 
 # Run (with sudo for global installation, without sudo for local installation)
-[sudo] ./setup.sh install
-# Or for native installation
-[sudo] ./setup.sh install_native
+[sudo] ./setup.sh native
+# Or for web installation
+[sudo] ./setup.sh web
 ```
-Or simply clone this repo and run 
 
+To install into a specific directory (creating a portable linux install) clone the repository and run this in the folder:
 ```bash
 ./install.sh 
 ```
-If you would like to install the native (offline) version, run:
-
-```bash
-./install_native.sh
-```
+During set up select `web` or `native`. The native version supports offline mode
+while the web version is the most up to date Notion web client.
 
 If the script has errors or you would like to install
 manually, you can refer to [these](https://github.com/puneetsl/lotion/issues/1) instructions.
-
-
 
 # Features
 
