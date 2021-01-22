@@ -1,10 +1,8 @@
 #!/bin/bash
-command=$1
 
 # Selects native or web installation
-if [[  $command =~ native|web ]]; then
-	continue
-else
+command=$1
+if [[  ! $command =~ native|web ]]; then
 	printf "\nSelect an installation type:\n\nweb - Installs the web app at the latest version\nnative - Installs the native windows app at v2.0.9 which has offline support.\n"
 	select command in web native
 	do
