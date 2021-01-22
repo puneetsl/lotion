@@ -28,17 +28,19 @@ case $locally in
 esac
 
 # Select installation type
-printf "\nPlease select an install type\nweb - Installs the web app, the latest version\nnative - Installs v2.0.9 of the windows app which has offline support.\n\n"
-select cmd  in web native
-do
-	if [[ $cmd =~ web|native ]]
-	then
-		echo $cmd
-		break
-	else
-		echo "Please select 1 or 2"
-	fi
-done
+cmd=$1
+if [[  ! $cmd =~ native|web ]]; then
+	printf "\nSelect an installation type:\n\nweb - Installs the web app at the latest version\nnative - Installs the native windows app at v2.0.9 which has offline support.\n"
+	select cmd in web native
+	do
+		if [[ $cmd =~ native|web ]]; then
+			echo $cmd
+			break
+		else
+			echo "Please input 1 or 2"
+		fi
+	done
+fi
 
 # Create and copy current lotion folder
 echo Copying to $installation_folder
