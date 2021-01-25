@@ -15,6 +15,6 @@ Terminal=false
 Categories=Office;TextEditor;Utility
 Type=Application
 Icon=${WORKING_DIR}/icon.png
-StartupWMClass=$1
+StartupWMClass=Notion
 EOS
 chmod +x Lotion.desktop
