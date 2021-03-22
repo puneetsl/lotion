@@ -31,7 +31,7 @@ wget https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh
 curl https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh > setup.sh
 
 # Make the script executable
-chmox +x setup.sh
+chmod +x setup.sh
 
 # Run (with sudo for global installation, without sudo for local installation)
 [sudo] ./setup.sh native
