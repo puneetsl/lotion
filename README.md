@@ -34,7 +34,7 @@ curl https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh > setup.s
 chmod +x setup.sh
 
 # Run (with sudo for global installation, without sudo for local installation)
-[sudo] ./setup.sh nativej
+[sudo] ./setup.sh native
 # Or for web installation
 [sudo] ./setup.sh web
 ```
