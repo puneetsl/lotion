@@ -2,7 +2,7 @@
 
 ------
 
-`Version: 0.04` 
+`Version: 0.05` 
 
 # Introduction
 
@@ -74,6 +74,17 @@ Thanks to [sysdrum](https://github.com/sysdrum/notion-app), I used some of his c
 ```bash
 ./uninstall.sh
 ```
+
+# Login issues
+At this point the web version does not support Google SSO logins, this is an issue with [Google](https://security.googleblog.com/2019/04/better-protection-against-man-in-middle.html), they have stopped allowing login from unidentified browser. Earlier this could have been solved by adding a useragent, but now Google is doing sophisticated checks (and rightly so), making it harder for us to bypass. The only solution is to implement our own oAuth, which would require extreme amount of work.
+So a simple solution to this issue is, use email address
+![image](https://user-images.githubusercontent.com/6509604/114249493-c541bb80-9968-11eb-9a79-fd242aa9010c.png)
+
+you will be emailed by Notion a login code that you can use to login.
+
+Some helpful issue threads for this problem: [Google issue](https://github.com/puneetsl/lotion/issues/78), [Apple issue](https://github.com/puneetsl/lotion/issues/70)
+
+Other way to not have this issue is to use Native version of this app.
 
 # Advertisement
 <a href="https://www.titanvest.com/?r=7824861d-96fc-4509-bb25-ee8e40daf22e"><img width="50%" height="50%" src="https://user-images.githubusercontent.com/6509604/100786392-14d31200-33e0-11eb-9133-1c03f0b337b4.png" alt="BinaryDecimal.com"></a>
