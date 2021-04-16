@@ -15,7 +15,7 @@ So I decided to build my own app using `nativefier`
 
 Here is how it looks
 
-![](http://i.imgur.com/QfG4Fwn.png) 
+![image](https://user-images.githubusercontent.com/6509604/115094341-2e867900-9eeb-11eb-8305-a0cc50426283.png)
 
 
 
@@ -55,7 +55,8 @@ manually, you can refer to [these](https://github.com/puneetsl/lotion/issues/1) 
 
   <img width="15%" height="15%" src="https://github.com/puneetsl/lotion/blob/master/icon.png?raw=true" alt="Notion Icon">
 <br>looks stunning in actual usage:<br>
-<img width="75%" height="75%" src="https://cdn.dribbble.com/users/23017/screenshots/4886987/attachments/1096743/icon_in_dock.png">
+
+<img width="75%" height="75%" src="https://user-images.githubusercontent.com/6509604/115094448-86bd7b00-9eeb-11eb-9be5-2ac125825fa1.png">
 - Everything you would expect from Windows or Mac application 
 
   -  [Here](https://github.com/puneetsl/lotion/issues/1) are the instructions to manually install natively if the
