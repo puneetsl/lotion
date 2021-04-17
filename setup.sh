@@ -85,11 +85,16 @@ fi
 
 echo Linking executables ...
 # Linking executables for terminal usage
+mkdir -p ${executable_folder}
 ln -s $PWD/Lotion/Lotion ${executable_folder}lotion
 ln -s $PWD/uninstall.sh ${executable_folder}lotion_uninstall
 
 echo Copying shortcut ...
-cp ./Lotion.desktop ${applications_folder}Lotion.desktop
+if [[ $cmd == 'web' ]]; then
+    cp ./Lotion.desktop ${applications_folder}Lotion.desktop
+else
+    cp ./Notion_native.desktop ${applications_folder}Notion_native.desktop
+fi
 
 echo Cleaning ...
 #./clean.sh

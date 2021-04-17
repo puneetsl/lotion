@@ -21,33 +21,19 @@ echo $INSTALL_DIR
 mkdir -p $INSTALL_DIR
 
 # Unzips nativefier application
-tar xvf $PD/Lotion-linux-x64.tar.xz -C $INSTALL_DIR --strip 1
+
 if [[ $command == 'web' ]]; then
+	wget https://github.com/puneetsl/lotion/releases/download/V-0.05/Lotion-web.tar.xz
+	tar xvf $PD/Lotion-web.tar.xz -C $INSTALL_DIR --strip 1
+	rm Lotion-web.tar.xz
 	/bin/bash $PD/create_shortcut.sh Lotion
 	echo done
 	exit 0
 fi
 
-# Ensures 7z command is available
-if ! command -v 7z &> /dev/null
-then
-	echo "7z tool required to install natively, install using sudo apt install p7zip-full"
-	exit 1
-fi
-
-mkdir nativeApp
-# Pulls the Notion windows app from the v2.0.9 release channel
-wget -P "$PD"/nativeApp "https://desktop-release.notion-static.com/Notion%20Setup%202.0.9.exe"
-cd nativeApp || exit 1
-
-# Extracts the Notion app
-7z x "Notion Setup 2.0.9.exe"
-7z x \$PLUGINSDIR/app-64.7z
-
-# Copies the needed resources to location for linux use.
-cp resources/app.asar "$PD"/Lotion/resources/
-mv "$PD"/Lotion/resources/app/ "$PD"/Lotion/resources/app.bak/
-cd "$PD" || exit 1
+wget https://github.com/puneetsl/lotion/releases/download/V-0.05/Lotion-native.tar.gz
+tar xvf $PD/Lotion-native.tar.gz -C $INSTALL_DIR --strip 1
+rm Lotion-native.tar.gz
 
 # Creates the desktop shortcut
-/bin/bash "$PD"/create_shortcut.sh Notion
+/bin/bash "$PD"/create_shortcut.sh $command
