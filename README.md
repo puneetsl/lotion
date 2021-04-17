@@ -23,6 +23,14 @@ Here is how it looks
 >
 > Use this [link](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76) to sign up and get ready to manage your life like you have never managed before ([Notion.so](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76))
 
+---
+⚠️ **NOTE** ⚠️
+
+Before you go ahead and install Lotion, I've found a better implementation called [notion-linux](https://github.com/davidbailey00/notion-linux) by [davidbailey00](https://github.com/davidbailey00) which works seamlessly via apt/yum installers. You can try it out and if that solutions works for you please use that instead. 
+
+If you want a portable version, or do not wish to install for all users in that case you can try out Lotion, the web version is lightweight and in my usage a little bit faster than native versions.
+---
+
 # Installation
 Download setup script
 ```bash
@@ -87,5 +95,4 @@ Some helpful issue threads for this problem: [Google issue](https://github.com/p
 
 Other way to not have this issue is to use Native version of this app.
 
-# Advertisement
-<a href="https://www.titanvest.com/?r=7824861d-96fc-4509-bb25-ee8e40daf22e"><img width="50%" height="50%" src="https://user-images.githubusercontent.com/6509604/100786392-14d31200-33e0-11eb-9133-1c03f0b337b4.png" alt="BinaryDecimal.com"></a>
+
