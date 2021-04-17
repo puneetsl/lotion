@@ -77,8 +77,8 @@ cd $installation_folder
 
 # Installation
 echo "$cmd"
-if [[ -f install.sh ]]; then
-    ./install.sh $cmd
+if [[ -f portable.sh ]]; then
+    ./portable.sh $cmd
 else
     echo Specified installment method \($cmd\) is not avaible
     exit 1

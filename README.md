@@ -41,7 +41,7 @@ chmod +x setup.sh
 
 To install into a specific directory (creating a portable linux install) clone the repository and run this in the folder:
 ```bash
-./install.sh 
+./portable.sh 
 ```
 During set up select `web` or `native`. The native version supports offline mode
 while the web version is the most up to date Notion web client.
