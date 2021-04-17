@@ -26,7 +26,7 @@ if [[ $command == 'web' ]]; then
 	wget https://github.com/puneetsl/lotion/releases/download/V-0.05/Lotion-web.tar.xz
 	tar xvf $PD/Lotion-web.tar.xz -C $INSTALL_DIR --strip 1
 	rm Lotion-web.tar.xz
-	/bin/bash $PD/create_shortcut.sh Lotion
+	/bin/bash $PD/create_shortcut.sh $command
 	echo done
 	exit 0
 fi

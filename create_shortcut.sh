@@ -30,7 +30,7 @@ Exec="${FULL_PATH}/Lotion"
 Terminal=false
 Categories=Office;TextEditor;Utility
 Type=Application
-Icon=${WORKING_DIR}/icon.png
+Icon=${WORKING_DIR}/Lotion/resources/app/icon.png
 StartupWMClass=Notion
 EOS
 chmod +x Notion_native.desktop
