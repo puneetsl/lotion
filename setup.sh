@@ -13,19 +13,7 @@ done
 [ "$EUID" -ne 0 ] && locally="yes" || locally="no"
 
 installation_folder=$(pwd)
-case $locally in
-    "yes") 
-        echo "Installing for current user. If you want to install globally, run script as sudo" 
-		installation_folder=~/.local/share/lotion/
-        executable_folder=~/.local/bin/
-        applications_folder=~/.local/share/applications/
-        ;;
-    "no")  echo "Installing program for all users. If you want to install program locally, run script without sudo" 
-        installation_folder=/usr/share/lotion/
-        executable_folder=/usr/bin/
-        applications_folder=/usr/share/applications/
-        ;;
-esac
+
 
 # Select installation type
 cmd=$1
@@ -42,6 +30,19 @@ if [[  ! $cmd =~ native|web ]]; then
 	done
 fi
 
+case $locally in
+    "yes") 
+        echo "Installing for current user. If you want to install globally, run script as sudo" 
+        installation_folder=~/.local/share/lotion-$cmd/
+        executable_folder=~/.local/bin/
+        applications_folder=~/.local/share/applications/
+        ;;
+    "no")  echo "Installing program for all users. If you want to install program locally, run script without sudo" 
+        installation_folder=/usr/share/lotion-$cmd/
+        executable_folder=/usr/bin/
+        applications_folder=/usr/share/applications/
+        ;;
+esac
 # Create and copy current lotion folder
 echo Copying to $installation_folder
 
@@ -55,13 +56,13 @@ if [ -d lotion ];
 then
     echo Do you want to use already cached lotion directory ? [yes/no] && read answer
     case $answer in
-        "N" | "n" | "No" | "no") echo Downloading ... && rm -rf ./lotion && git clone --depth=1 $lotion_mirror ;;
+        "N" | "n" | "No" | "no") echo Downloading ... && rm -rf ./lotion && git clone --branch native-fix --depth=1 $lotion_mirror;;
         "Y" | "y" | "Yes" | "yes") echo Using cached directory ... ;;
         *) echo Invalid response, using cached directory ;;
     esac
 else
     echo Downloading ...
-    git clone --depth=1 $lotion_mirror
+    git clone --branch native-fix --depth=1 $lotion_mirror
 fi
 
 cd ./lotion
@@ -85,8 +86,12 @@ fi
 
 echo Linking executables ...
 # Linking executables for terminal usage
-mkdir -p ${executable_folder}
-ln -s $PWD/Lotion/Lotion ${executable_folder}lotion
+if [ -d ${executable_folder} ]; then
+    echo "folder ${executable_folder} does not exist\n creating now.."
+    echo "please add this folder to your $PATH"
+    mkdir -p ${executable_folder}
+fi
+ln -s $PWD/Lotion/Lotion ${executable_folder}lotion-$cmd
 ln -s $PWD/uninstall.sh ${executable_folder}lotion_uninstall
 
 echo Copying shortcut ...

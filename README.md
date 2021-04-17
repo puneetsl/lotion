@@ -2,7 +2,7 @@
 
 ------
 
-`Version: 0.05` 
+`Version: 0.05.1` 
 
 # Introduction
 
