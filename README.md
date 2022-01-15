@@ -29,6 +29,7 @@ Here is how it looks
 Before you go ahead and install Lotion, I've found a better implementation called [notion-enhancer](https://notion-enhancer.github.io/getting-started/installation) which works seamlessly. You can try it out and if that solution works for you please use that instead. 
 
 Lotion is **Not** actively maintained at this point, I might start working again at a later time. Thanks for all your support!
+
 ---
 
 # Installation
