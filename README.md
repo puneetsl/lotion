@@ -26,10 +26,9 @@ Here is how it looks
 ---
 ⚠️ **NOTE** ⚠️
 
-Before you go ahead and install Lotion, I've found a better implementation called [notion-linux](https://github.com/davidbailey00/notion-linux) by [davidbailey00](https://github.com/davidbailey00) which works seamlessly via apt/yum installers. You can try it out and if that solution works for you please use that instead. 
+Before you go ahead and install Lotion, I've found a better implementation called [notion-enhancer](https://notion-enhancer.github.io/getting-started/installation) which works seamlessly. You can try it out and if that solution works for you please use that instead. 
 
-If you want a portable version, or do not wish to install for all users in that case you can try out Lotion, the web version is lightweight and in my usage a little bit faster than native versions.
-
+Lotion is **Not** actively maintained at this point, I might start working again at a later time. Thanks for all your support!
 ---
 
 # Installation
