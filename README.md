@@ -1,3 +1,18 @@
+----------------------
+# 🚀 Check Out My Side Project: [Precruit's Resume Analyzer](https://resume.precruit.ai/) 🚀
+
+## 🌟 **Why It's Awesome?** 🌟
+- 📝 Personalized Feedback
+- 🤖 AI-Driven
+- 🕒 Quick Turnaround
+
+> **Freely Available!**  
+> [Try it Now](https://resume.precruit.ai/)
+
+Like, share, or comment to help spread the word!
+
+\#ResumeTips \#CareerAdvice \#JobSearch \#AI \#ResumeAnalyzer
+----------------------
 <p align="center"><img width="35%" height="35%" src="http://i.imgur.com/6dtC91m.png" alt="Notion.so"><br>unofficial Notion.so Desktop app for Linux</p>
 
 ------
@@ -89,6 +104,10 @@ Thanks to [sysdrum](https://github.com/sysdrum/notion-app), I used some of his c
 At this point the web version does not support Google SSO logins, this is an issue with [Google](https://security.googleblog.com/2019/04/better-protection-against-man-in-middle.html), they have stopped allowing login from unidentified browser. Earlier this could have been solved by adding a useragent, but now Google is doing sophisticated checks (and rightly so), making it harder for us to bypass. The only solution is to implement our own oAuth, which would require extreme amount of work.
 So a simple solution to this issue is, use email address
 ![image](https://user-images.githubusercontent.com/6509604/114249493-c541bb80-9968-11eb-9a79-fd242aa9010c.png)
+
+
+
+
 
 you will be emailed by Notion a login code that you can use to login.
 
