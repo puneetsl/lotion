@@ -1,18 +1,4 @@
-----------------------
-# 🚀 Check Out My Side Project: [Precruit's Resume Analyzer](https://resume.precruit.ai/) 🚀
 
-## 🌟 **Why It's Awesome?** 🌟
-- 📝 Personalized Feedback
-- 🤖 AI-Driven
-- 🕒 Quick Turnaround
-
-> **Freely Available!**  
-> [Try it Now](https://resume.precruit.ai/)
-
-Like, share, or comment to help spread the word!
-
-\#ResumeTips \#CareerAdvice \#JobSearch \#AI \#ResumeAnalyzer
-----------------------
 <p align="center"><img width="35%" height="35%" src="http://i.imgur.com/6dtC91m.png" alt="Notion.so"><br>unofficial Notion.so Desktop app for Linux</p>
 
 ------
