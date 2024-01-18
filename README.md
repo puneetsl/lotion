@@ -102,3 +102,5 @@ Some helpful issue threads for this problem: [Google issue](https://github.com/p
 Other way to not have this issue is to use Native version of this app.
 
 
+------
+Ad: [Memodiction.com](https://memodiction.com/) - A dictionary that helps you remember words
