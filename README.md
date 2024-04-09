@@ -103,4 +103,26 @@ Other way to not have this issue is to use Native version of this app.
 
 
 ------
+## Books that can help you use Notion more productively
+### 1. Enhancing Productivity with Notion: Save time on projects by supercharging your productivity with Notion's powerful features and templates
+<img width="200px" height="300px" src="https://github.com/puneetsl/lotion/assets/6509604/9f97543b-f541-4b19-b17d-d3bc2f8f0cd1">
+
+[Link to buy](https://amzn.to/3vIaIUR)
+
+### 2. Notion for Novices: A Beginner's Guide
+<img width="200px" height="300px" src="https://github.com/puneetsl/lotion/assets/6509604/e1860cd0-ca3d-4e6c-b308-a7361da53321">
+
+[Link to buy](https://amzn.to/3vTq8FF)
+
+
+### 3. NOTION 2.: STEP BY PAGE
+<img width="200px" height="300px" src="https://github.com/puneetsl/lotion/assets/6509604/66f2b532-92d1-453a-848e-6e746ab33c53">
+
+[Link to buy](https://amzn.to/3PVqtyE)
+
+
+
+------
+
+
 Ad: [Memodiction.com](https://memodiction.com/) - A dictionary that helps you remember words
