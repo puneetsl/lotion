@@ -24,14 +24,6 @@ Here is how it looks
 >
 > Use this [link](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76) to sign up and get ready to manage your life like you have never managed before ([Notion.so](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76))
 
----
-⚠️ **NOTE** ⚠️
-
-Before you go ahead and install Lotion, I've found a better implementation called [notion-enhancer](https://notion-enhancer.github.io/getting-started/installation) which works seamlessly. You can try it out and if that solution works for you please use that instead. 
-
-Lotion is **Not** actively maintained at this point, I might start working again at a later time. Thanks for all your support!
-
----
 
 # Installation
 Download setup script
