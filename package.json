@@ -15,7 +15,7 @@
     "colord": "2.9.3",
     "electron-log": "4.4.8",
     "electron-store": "8.2.0",
-    "electron-updater": "4.1.2",
+    "electron-updater": "^6.6.2",
     "fflate": "0.7.4",
     "fs-extra": "8.1.0",
     "get-port": "5.1.1",
@@ -84,24 +84,16 @@
         "name": "Lotion",
         "executableName": "lotion",
         "icon": "./assets/icon",
-        "asar": true,
-        "platform": [
-          "linux"
-        ],
-        "arch": [
-          "x64",
-          "arm64"
-        ]
+        "asar": true
       },
       "makers": [
         {
           "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "linux"
-          ]
+          "platforms": ["linux", "darwin", "win32"]
         },
         {
           "name": "@electron-forge/maker-deb",
+          "platforms": ["linux"],
           "config": {
             "options": {
               "maintainer": "Lotion Team",
@@ -112,6 +104,7 @@
         },
         {
           "name": "@electron-forge/maker-rpm",
+          "platforms": ["linux"],
           "config": {
             "options": {
               "license": "MIT",
@@ -119,13 +112,29 @@
               "description": "Unofficial Notion.so Desktop app for Linux"
             }
           }
+        },
+        {
+          "name": "@electron-forge/maker-dmg",
+          "platforms": ["darwin"],
+          "config": {
+            "name": "Lotion"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "platforms": ["win32"],
+          "config": {
+            "name": "lotion",
+            "authors": "Lotion Team",
+            "description": "Unofficial Notion.so Desktop app"
+          }
         }
       ],
       "plugins": [
         {
           "name": "@electron-forge/plugin-fuses",
           "config": {
-            "version": "1.8.0",
+            "version": "1",
             "restrictedResourceAccessBlocked": true,
             "runAsNode": false
           }
