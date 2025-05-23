@@ -2,52 +2,34 @@
 
 **Unofficial Notion.so Desktop app for Linux**
 
-A Linux-compatible Electron application based on Notion's desktop app, adapted to work natively on Linux systems.
+A lightweight Linux-compatible Electron application that provides a native desktop experience for Notion.so.
 
 ## 🎉 Current Status
 
 ✅ **WORKING!** The application successfully runs on Linux and loads the full Notion.so web interface in a native desktop window.
 
-🔌 **NEW: Offline Reading Support!** Visit pages while online, then read them offline automatically.
+🖥️ **Native Desktop Integration** with persistent menu bar preferences, keyboard shortcuts, and proper Linux desktop integration.
 
 ## Features
 
-- ✅ Full Notion.so functionality on Linux
-- ✅ **Offline Reading**: Automatically caches visited pages for offline access
-- ✅ **Smart Caching**: API responses and static assets cached automatically  
-- ✅ **Offline Indicators**: Visual indicators when offline with cached content
-- ✅ Native Linux desktop integration
+- ✅ Full Notion.so functionality on Linux  
+- ✅ Native Linux desktop integration with proper icon support
+- ✅ **Persistent Menu Bar Preferences** - Hide/show menu bar with settings saved across sessions
+- ✅ **Customizable Keyboard Shortcuts** for menu bar control
 - ✅ Support for both x64 and ARM64 architectures
 - ✅ Package formats: DEB, RPM, and ZIP
 - ✅ Internationalization support (multiple languages)
-- ✅ Native menu bar and shortcuts
-- ✅ External link handling
-- ✅ Auto-updater ready (for future use)
-
-## How Offline Reading Works
-
-### 🌐 **While Online:**
-- Browse Notion normally
-- All visited pages are **automatically cached**
-- API responses stored for offline access
-- No user action required
-
-### 🔌 **When Offline:**
-- Previously visited pages **load instantly** from cache
-- Window title shows "(Offline)" indicator
-- Read-only access to cached content
-- Graceful handling of non-cached content
-
-### 📊 **Cache Management:**
-- **Menu > Offline > Cache Status**: View cached content stats
-- **Menu > Offline > Clear Cache**: Reset offline cache
-- Automatic cache updates when back online
+- ✅ Native menu bar with navigation controls
+- ✅ External link handling (opens in system browser)
+- ✅ Proper window management and native title bar
+- ✅ Cross-platform icon support (PNG for Linux, ICO for Windows, ICNS for macOS)
 
 ## Requirements
 
 - Node.js 18 or higher
 - npm or yarn
 - Linux operating system
+- For building .deb packages: `dpkg` and `fakeroot`
 
 ## Quick Start
 
@@ -57,9 +39,9 @@ npm install
 npm run start
 ```
 
-### Option 2: Using launch script
+### Option 2: Development mode
 ```bash
-./scripts/launch.sh
+npm run dev
 ```
 
 ## Installation
@@ -87,16 +69,26 @@ npm run dev
 To build packages for Linux:
 
 ```bash
-# Build all Linux packages
-npm run make:linux
+# Build .deb package (recommended)
+npx electron-forge make --targets @electron-forge/maker-deb
 
-# Or use the build script
-node build.js
+# Build all Linux packages (if dependencies are installed)
+npm run make:linux
 
 # This will create packages in the 'out' directory:
 # - .deb package (for Debian/Ubuntu)
-# - .rpm package (for Red Hat/Fedora/openSUSE)
+# - .rpm package (for Red Hat/Fedora/openSUSE) 
 # - .zip archive (universal)
+```
+
+### Installing the .deb Package
+
+```bash
+# Install the built package
+sudo dpkg -i out/make/deb/x64/lotion_1.0.0_amd64.deb
+
+# If there are dependency issues on non-Debian systems:
+sudo dpkg -i --force-depends out/make/deb/x64/lotion_1.0.0_amd64.deb
 ```
 
 ## Development
@@ -116,11 +108,15 @@ node build.js
 lotion/
 ├── src/
 │   ├── main/           # Main process code (Electron backend)
-│   └── renderer/       # Renderer process code + service worker
-├── .webpack/          # Compiled webpack output (includes original Notion code)
-├── assets/            # Application assets (icons, etc.)
+│   └── renderer/       # Renderer process code 
+├── assets/            # Application assets (icons, desktop files)
+│   ├── icon.png       # Linux icon
+│   ├── icon.ico       # Windows icon  
+│   ├── icon.icns      # macOS icon
+│   ├── icons/         # Various icon sizes
+│   └── lotion.desktop # Linux desktop entry
 ├── config/            # Configuration files
-├── i18n/              # Internationalization files (copied from Notion)
+├── i18n/              # Internationalization files
 ├── scripts/           # Build and utility scripts
 └── build.js           # Build script for creating packages
 ```
@@ -130,57 +126,75 @@ lotion/
 Lotion works by:
 
 1. **Main Process**: A custom Electron main process (`src/main/index.js`) that:
-   - Creates a native desktop window
-   - Loads the Notion.so web application
-   - Handles native desktop integration (menus, shortcuts, etc.)
+   - Creates a native desktop window with proper Linux integration
+   - Loads the Notion.so web application directly
+   - Handles native desktop features (menus, shortcuts, preferences)
    - Manages external links and security
-   - **Injects service worker for offline support**
+   - Saves user preferences (menu bar settings) persistently
 
-2. **Service Worker**: (`src/renderer/service-worker.js`) that:
-   - **Automatically caches visited pages**
-   - Intercepts API requests for offline serving
-   - Handles cache management and updates
-   - Provides offline/online status detection
+2. **Web Content**: The full Notion.so web application runs inside the Electron window, providing the complete Notion experience
 
-3. **Web Content**: The full Notion.so web application runs inside the Electron window, providing the complete Notion experience with offline reading capabilities
-
-4. **Native Integration**: Platform-specific features like:
+3. **Native Integration**: Platform-specific features like:
    - Native menus and keyboard shortcuts
-   - **Offline cache management UI**
-   - System tray integration (future)
-   - File system access (future)
-   - Notifications (future)
+   - **Persistent menu bar preferences**
+   - Proper desktop file integration on Linux
+   - Icon support across platforms
 
 ## Configuration
 
 The application configuration is located in `config/config.json`. Key settings include:
 
-- `targetPlatform`: Set to "linux" for Linux builds
 - `domainBaseUrl`: Notion.so domain configuration ("https://www.notion.so")
-- `offline`: Set to `true` to enable offline reading features
-- Various API endpoints and settings inherited from the original Notion app
+
+User preferences (like menu bar settings) are automatically saved using `electron-store`.
 
 ## Keyboard Shortcuts
 
-- `Ctrl+N` (or `Cmd+N` on macOS): New Page
-- `Ctrl+R` (or `Cmd+R` on macOS): Refresh/Reload
-- `Ctrl+Q` (or `Cmd+Q` on macOS): Quit Application
-- `F5`: Reload
-- `Ctrl+Shift+I`: Toggle Developer Tools
+### Navigation
+- `Alt+Left`: Go Back
+- `Alt+Right`: Go Forward  
+- `Ctrl+R`: Refresh/Reload
+- `Ctrl+H`: Go to Home (Notion.so)
+
+### Menu Bar Control
+- `Ctrl+Shift+M`: Toggle Menu Bar Visibility
+- `Ctrl+Alt+M`: Toggle Auto-Hide Menu Bar
+- `Alt`: Show Menu Bar (when auto-hide is enabled)
+
+### Application
+- `Ctrl+Q`: Quit Application
+- `Ctrl+,`: Open Preferences
 - `F11`: Toggle Fullscreen
+- `Ctrl+Shift+I`: Toggle Developer Tools
 
 ## Menu Features
 
-### Offline Menu
-- **Cache Status**: View offline cache statistics
-- **Clear Cache**: Reset offline cache (forces re-caching)
+### Lotion Menu
+- **About Lotion**: Application information
+- **Preferences**: Menu bar settings and keyboard shortcuts
+- **Quit**: Exit the application
+
+### View Menu  
+- **Hide/Show Menu Bar**: Toggle menu bar visibility with persistent setting
+- **Enable/Disable Auto-Hide Menu Bar**: Auto-hide behavior with persistent setting
+- Various zoom and fullscreen options
+
+## Menu Bar Preferences
+
+The application includes a comprehensive menu bar preference system:
+
+- **Persistent Settings**: Menu bar preferences are saved across application restarts
+- **Toggle Visibility**: Hide or show the menu bar completely
+- **Auto-Hide Mode**: Menu bar appears when pressing Alt key
+- **Keyboard Shortcuts**: Quick access via Ctrl+Shift+M and Ctrl+Alt+M
+- **Preferences Dialog**: Access via Ctrl+, or Lotion menu
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Test thoroughly on Linux (including offline functionality)
+4. Test thoroughly on Linux
 5. Submit a pull request
 
 ## License
@@ -196,25 +210,24 @@ This is an unofficial adaptation of Notion's desktop application. It is not affi
 ### Common Issues
 
 1. **App won't start**: Make sure you have Node.js 18+ installed
-2. **Missing dependencies**: Run `npm install` to install all dependencies
+2. **Missing dependencies**: Run `npm install` to install all dependencies  
 3. **Build fails**: Check that you have the required build tools for your Linux distribution
-4. **Offline not working**: Check browser console for service worker registration errors
+4. **Storage errors**: Clear app data with `rm -rf ~/.config/Lotion ~/.cache/lotion`
+5. **Icon not showing**: Make sure the .deb package was installed correctly
 
 ### Known Limitations
 
-- **Offline editing**: Not supported (read-only offline access)
-- **Real-time sync**: Requires internet connection
-- **Large workspaces**: May take time to cache all content
-- Some platform-specific features may not work as expected on Linux
-- Native modules may need recompilation for different Linux distributions
+- Requires internet connection (loads web version of Notion.so)
+- Some Notion features may not work identically to the official desktop app
 - Auto-updater is not yet configured (manual updates required)
 
-### Offline Functionality
+### Building Requirements
 
-- **What works offline**: Previously visited pages, cached API responses, static assets
-- **What doesn't work offline**: Creating new pages, editing content, real-time collaboration
-- **Cache persistence**: Survives app restarts and system reboots
-- **Cache size**: Automatically managed, typically 50-100MB for normal usage
+For **.deb packages**:
+```bash
+sudo dnf install dpkg fakeroot  # Fedora/RHEL
+sudo apt install dpkg fakeroot  # Debian/Ubuntu
+```
 
 ## Support
 
@@ -222,7 +235,6 @@ For issues and questions, please use the GitHub issue tracker at: https://github
 
 ## Acknowledgments
 
-- Based on the original Notion desktop application
 - Built with Electron and modern web technologies
-- Service Worker API for offline functionality
-- Inspired by the need for a native Linux Notion client with offline reading support 
+- Inspired by the need for a native Linux Notion client
+- Icon design and desktop integration for Linux platforms 

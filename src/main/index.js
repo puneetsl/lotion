@@ -5,21 +5,41 @@ const { app, BrowserWindow, Menu, shell, dialog, ipcMain } = require('electron')
 const path = require('path');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
+const Store = require('electron-store');
 
 // Import config
 const config = require('../../config/config.json');
+
+// Initialize store for user preferences
+const store = new Store({
+  defaults: {
+    menuBarVisible: true,
+    autoHideMenuBar: false
+  }
+});
 
 let mainWindow;
 let isQuitting = false;
 
 function createWindow() {
   // Create the browser window
+  const getIconPath = () => {
+    if (process.platform === 'linux') {
+      return path.join(__dirname, '../../assets/icon.png');
+    } else if (process.platform === 'win32') {
+      return path.join(__dirname, '../../assets/icon.ico');
+    } else if (process.platform === 'darwin') {
+      return path.join(__dirname, '../../assets/icon.icns');
+    }
+    return path.join(__dirname, '../../assets/icon.png'); // fallback
+  };
+
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     minWidth: 600,
     minHeight: 400,
-    icon: path.join(__dirname, '../../assets/icon.ico'),
+    icon: getIconPath(),
     // Use fully native title bar
     webPreferences: {
       nodeIntegration: false,
@@ -47,6 +67,13 @@ function createWindow() {
     if (process.platform === 'darwin') {
       app.dock.show();
     }
+
+    // Apply saved menu bar preferences
+    const menuBarVisible = store.get('menuBarVisible', true);
+    const autoHideMenuBar = store.get('autoHideMenuBar', false);
+    
+    mainWindow.setMenuBarVisibility(menuBarVisible);
+    mainWindow.setAutoHideMenuBar(autoHideMenuBar);
 
     // Just update the title, no toolbar injection
     updateWindowTitle();
@@ -89,6 +116,83 @@ function createWindow() {
   });
 }
 
+// Preferences dialog
+function showPreferencesDialog() {
+  const menuBarVisible = store.get('menuBarVisible', true);
+  const autoHideMenuBar = store.get('autoHideMenuBar', false);
+  
+  const options = {
+    type: 'info',
+    title: 'Lotion Preferences',
+    message: 'Menu Bar Settings',
+    detail: `Current Settings:
+• Menu Bar Visible: ${menuBarVisible ? 'Yes' : 'No'}
+• Auto-Hide Menu Bar: ${autoHideMenuBar ? 'Yes' : 'No'}
+
+Keyboard Shortcuts:
+• Ctrl+Shift+M: Toggle Menu Bar Visibility
+• Ctrl+Alt+M: Toggle Auto-Hide Menu Bar
+• Alt: Show Menu Bar (when auto-hide is enabled)
+
+Note: Changes are saved automatically when using the View menu or keyboard shortcuts.`,
+    buttons: ['Close', 'Reset to Defaults'],
+    defaultId: 0
+  };
+
+  dialog.showMessageBox(mainWindow, options).then((result) => {
+    if (result.response === 1) {
+      // Reset to defaults
+      store.set('menuBarVisible', true);
+      store.set('autoHideMenuBar', false);
+      
+      mainWindow.setMenuBarVisibility(true);
+      mainWindow.setAutoHideMenuBar(false);
+      
+      // Recreate menu to update labels
+      createNativeMenuWithNavigation();
+      
+      dialog.showMessageBox(mainWindow, {
+        type: 'info',
+        title: 'Preferences Reset',
+        message: 'Menu bar preferences have been reset to defaults.'
+      });
+    }
+  });
+}
+
+// Menu bar control functions
+function toggleMenuBarVisibility() {
+  if (!mainWindow) return;
+  
+  const isVisible = mainWindow.isMenuBarVisible();
+  const newVisibility = !isVisible;
+  
+  mainWindow.setMenuBarVisibility(newVisibility);
+  store.set('menuBarVisible', newVisibility);
+  
+  // Recreate menu to update the menu item text
+  createNativeMenuWithNavigation();
+}
+
+function toggleAutoHideMenuBar() {
+  if (!mainWindow) return;
+  
+  const autoHide = mainWindow.isMenuBarAutoHide();
+  const newAutoHide = !autoHide;
+  
+  mainWindow.setAutoHideMenuBar(newAutoHide);
+  store.set('autoHideMenuBar', newAutoHide);
+  
+  // If we're enabling auto-hide, make sure menu bar is visible first
+  if (newAutoHide) {
+    mainWindow.setMenuBarVisibility(true);
+    store.set('menuBarVisible', true);
+  }
+  
+  // Recreate menu to update the menu item text
+  createNativeMenuWithNavigation();
+}
+
 // Create a native menu with navigation controls
 function createNativeMenuWithNavigation() {
   const template = [
@@ -104,6 +208,14 @@ function createNativeMenuWithNavigation() {
               message: 'Lotion',
               detail: 'Unofficial Notion.so Desktop app for Linux\nVersion 1.0.0'
             });
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Preferences',
+          accelerator: 'CmdOrCtrl+,',
+          click: () => {
+            showPreferencesDialog();
           }
         },
         { type: 'separator' },
@@ -185,11 +297,31 @@ function createNativeMenuWithNavigation() {
         { role: 'togglefullscreen' },
         { type: 'separator' },
         {
-          label: 'Toggle Menu Bar',
+          label: mainWindow.isMenuBarVisible() ? 'Hide Menu Bar' : 'Show Menu Bar',
+          accelerator: 'CmdOrCtrl+Shift+M',
+          click: toggleMenuBarVisibility
+        },
+        {
+          label: mainWindow.isMenuBarAutoHide() ? 'Disable Auto-Hide Menu Bar' : 'Enable Auto-Hide Menu Bar',
+          accelerator: 'CmdOrCtrl+Alt+M',
+          click: toggleAutoHideMenuBar
+        },
+        { type: 'separator' },
+        {
+          label: 'Toggle Menu Bar (Alt Key)',
           accelerator: 'Alt',
           click: () => {
+            // This provides the traditional Alt key behavior
             const isVisible = mainWindow.isMenuBarVisible();
-            mainWindow.setMenuBarVisibility(!isVisible);
+            const autoHide = mainWindow.isMenuBarAutoHide();
+            
+            if (autoHide) {
+              // If auto-hide is enabled, just show the menu temporarily
+              mainWindow.setMenuBarVisibility(true);
+            } else {
+              // Toggle visibility and save preference
+              toggleMenuBarVisibility();
+            }
           }
         }
       ]
@@ -206,9 +338,7 @@ function createNativeMenuWithNavigation() {
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
   
-  // Keep menu bar visible by default for easy access to navigation
-  mainWindow.setMenuBarVisibility(true);
-  mainWindow.setAutoHideMenuBar(false);
+  // Menu bar visibility is now handled by preferences in ready-to-show event
 }
 
 // Simple window title update without script injection
@@ -345,6 +475,26 @@ ipcMain.handle('navigation-refresh', () => {
   if (mainWindow) {
     mainWindow.webContents.reload();
   }
+});
+
+// Menu bar control handlers
+ipcMain.handle('menu-bar-toggle-visibility', () => {
+  toggleMenuBarVisibility();
+});
+
+ipcMain.handle('menu-bar-toggle-auto-hide', () => {
+  toggleAutoHideMenuBar();
+});
+
+ipcMain.handle('menu-bar-get-status', () => {
+  return {
+    visible: mainWindow ? mainWindow.isMenuBarVisible() : true,
+    autoHide: mainWindow ? mainWindow.isMenuBarAutoHide() : false
+  };
+});
+
+ipcMain.handle('preferences-show', () => {
+  showPreferencesDialog();
 });
 
 // Export for testing

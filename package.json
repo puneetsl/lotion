@@ -98,7 +98,9 @@
             "options": {
               "maintainer": "Lotion Team",
               "homepage": "https://github.com/puneetsl/lotion",
-              "description": "Unofficial Notion.so Desktop app for Linux"
+              "description": "Unofficial Notion.so Desktop app for Linux",
+              "icon": "./assets/icon.png",
+              "categories": ["Office", "TextEditor"]
             }
           }
         },
@@ -109,7 +111,8 @@
             "options": {
               "license": "MIT",
               "homepage": "https://github.com/puneetsl/lotion",
-              "description": "Unofficial Notion.so Desktop app for Linux"
+              "description": "Unofficial Notion.so Desktop app for Linux",
+              "icon": "./assets/icon.png"
             }
           }
         },
