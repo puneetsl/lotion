@@ -2,10 +2,10 @@ name: Build and Release
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, feat/v1 ]
     tags: [ 'v*' ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, feat/v1 ]
 
 jobs:
   build:
@@ -118,7 +118,7 @@ jobs:
   # Optional: Auto-update check
   check-updates:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feat/v1'
     
     steps:
     - name: Checkout code
