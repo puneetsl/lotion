@@ -78,8 +78,10 @@ npm run make:linux
 # This will create packages in the 'out' directory:
 # - .deb package (for Debian/Ubuntu)
 # - .rpm package (for Red Hat/Fedora/openSUSE) 
-# - .zip archive (universal)
+# - .zip archive (universal - also used for macOS distribution)
 ```
+
+**Note**: macOS distribution uses ZIP format instead of DMG to ensure reliable builds in CI environments.
 
 ### Installing the .deb Package
 

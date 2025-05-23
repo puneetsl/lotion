@@ -97,7 +97,7 @@ jobs:
           
           ### Installation
           - **Windows**: Download and run the `.exe` installer
-          - **macOS**: Download the `.dmg` file and drag to Applications
+          - **macOS**: Download the `.zip` file and extract to Applications
           - **Linux**: Download the `.deb` (Ubuntu/Debian) or `.rpm` (RHEL/Fedora) package
           
           ### Changes
