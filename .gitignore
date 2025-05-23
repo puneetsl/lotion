@@ -2,3 +2,5 @@
 .vscode
 node_modules
 out
+notion_native
+docs

@@ -9,7 +9,7 @@
     "@atlaskit/pragmatic-drag-and-drop": "1.4.0",
     "@atlaskit/pragmatic-drag-and-drop-hitbox": "1.0.3",
     "@noble/hashes": "1.7.1",
-    "@reduxjs/toolkit": "2.2.3",
+    "@reduxjs/toolkit": "^2.2.3",
     "better-sqlite3": "11.8.1",
     "bindings": "1.5.0",
     "colord": "2.9.3",
@@ -28,7 +28,8 @@
     "node-addon-api": "6.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-intl": "6.6.8"
+    "react-intl": "6.6.8",
+    "redux": "^5.0.1"
   },
   "scripts": {
     "start": "electron-forge start",
@@ -89,24 +90,35 @@
       "makers": [
         {
           "name": "@electron-forge/maker-zip",
-          "platforms": ["linux", "darwin", "win32"]
+          "platforms": [
+            "linux",
+            "darwin",
+            "win32"
+          ]
         },
         {
           "name": "@electron-forge/maker-deb",
-          "platforms": ["linux"],
+          "platforms": [
+            "linux"
+          ],
           "config": {
             "options": {
               "maintainer": "Lotion Team",
               "homepage": "https://github.com/puneetsl/lotion",
               "description": "Unofficial Notion.so Desktop app for Linux",
               "icon": "./assets/icon.png",
-              "categories": ["Office", "TextEditor"]
+              "categories": [
+                "Office",
+                "TextEditor"
+              ]
             }
           }
         },
         {
           "name": "@electron-forge/maker-rpm",
-          "platforms": ["linux"],
+          "platforms": [
+            "linux"
+          ],
           "config": {
             "options": {
               "license": "MIT",
@@ -118,7 +130,9 @@
         },
         {
           "name": "@electron-forge/maker-squirrel",
-          "platforms": ["win32"],
+          "platforms": [
+            "win32"
+          ],
           "config": {
             "name": "lotion",
             "authors": "Lotion Team",
