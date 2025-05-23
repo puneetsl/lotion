@@ -50,13 +50,18 @@
     "@electron-forge/cli": "7.6.1",
     "@electron-forge/core": "7.6.1",
     "@electron-forge/maker-deb": "7.6.1",
+    "@electron-forge/maker-dmg": "^7.8.1",
     "@electron-forge/maker-rpm": "7.6.1",
+    "@electron-forge/maker-squirrel": "^7.8.1",
     "@electron-forge/maker-zip": "7.6.1",
     "@electron-forge/plugin-fuses": "7.6.1",
     "@electron-forge/plugin-webpack": "7.6.1",
     "@electron-forge/shared-types": "7.6.1",
     "@electron/fuses": "1.8.0",
     "@playwright/test": "1.45.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
     "css-loader": "6.10.0",
     "electron": "34.3.2",
@@ -67,10 +72,7 @@
     "node-loader": "2.0.0",
     "style-loader": "3.3.3",
     "ts-loader": "^9.5.0",
-    "typescript": "^5.0.0",
-    "@types/node": "^20.0.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0"
+    "typescript": "^5.0.0"
   },
   "files": [
     "*.js",
@@ -83,13 +85,20 @@
         "executableName": "lotion",
         "icon": "./assets/icon",
         "asar": true,
-        "platform": ["linux"],
-        "arch": ["x64", "arm64"]
+        "platform": [
+          "linux"
+        ],
+        "arch": [
+          "x64",
+          "arm64"
+        ]
       },
       "makers": [
         {
           "name": "@electron-forge/maker-zip",
-          "platforms": ["linux"]
+          "platforms": [
+            "linux"
+          ]
         },
         {
           "name": "@electron-forge/maker-deb",
@@ -125,4 +134,4 @@
     }
   },
   "productName": "Lotion"
-} 
+}
