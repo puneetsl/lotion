@@ -1,0 +1,82 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version bump type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      release_notes:
+        description: 'Release notes'
+        required: false
+        default: 'Bug fixes and improvements'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Configure git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+    - name: Bump version
+      run: |
+        npm version ${{ github.event.inputs.version_type }} --no-git-tag-version
+        NEW_VERSION=$(node -p "require('./package.json').version")
+        echo "NEW_VERSION=v$NEW_VERSION" >> $GITHUB_ENV
+
+    - name: Update CHANGELOG
+      run: |
+        echo "## ${{ env.NEW_VERSION }} - $(date +'%Y-%m-%d')" > temp_changelog.md
+        echo "" >> temp_changelog.md
+        echo "${{ github.event.inputs.release_notes }}" >> temp_changelog.md
+        echo "" >> temp_changelog.md
+        if [ -f CHANGELOG.md ]; then
+          cat CHANGELOG.md >> temp_changelog.md
+        fi
+        mv temp_changelog.md CHANGELOG.md
+
+    - name: Commit changes
+      run: |
+        git add package.json package-lock.json CHANGELOG.md
+        git commit -m "chore: bump version to ${{ env.NEW_VERSION }}"
+        git push origin main
+
+    - name: Create and push tag
+      run: |
+        git tag ${{ env.NEW_VERSION }}
+        git push origin ${{ env.NEW_VERSION }}
+
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.NEW_VERSION }}
+        release_name: Lotion ${{ env.NEW_VERSION }}
+        body: ${{ github.event.inputs.release_notes }}
+        draft: false
+        prerelease: false 

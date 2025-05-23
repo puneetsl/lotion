@@ -1,0 +1,26 @@
+{
+  "env": "production",
+  "commit": "d504f3b",
+  "isLocalhost": false,
+  "domainName": "www.notion.so",
+  "domainBaseUrl": "https://www.notion.so",
+  "protocol": "notion",
+  "desktopAppId": "notion.id",
+  "offline": true,
+  "desktopS3Url": "https://desktop-release.notion-static.com",
+  "splunkConfig": {
+    "host": "http-inputs-notion.splunkcloud.com",
+    "path": "services/collector/raw",
+    "token": "EA76605A-F565-4B17-A496-34435622A1EB",
+    "maxBatchCount": 0,
+    "port": 443
+  },
+  "mail": {
+    "domainBaseUrl": "https://mail.notion.so"
+  },
+  "syncSession": {
+    "cookieName": "p_sync_session",
+    "domain": ".notion.so"
+  },
+  "targetPlatform": "linux"
+}

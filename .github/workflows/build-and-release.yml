@@ -1,0 +1,136 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            arch: x64
+            platform: win32
+          - os: windows-latest
+            arch: ia32
+            platform: win32
+          - os: macos-latest
+            arch: x64
+            platform: darwin
+          - os: macos-latest
+            arch: arm64
+            platform: darwin
+          - os: ubuntu-latest
+            arch: x64
+            platform: linux
+          - os: ubuntu-latest
+            arch: arm64
+            platform: linux
+
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build application
+      run: npm run make -- --arch=${{ matrix.arch }} --platform=${{ matrix.platform }}
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: lotion-${{ matrix.platform }}-${{ matrix.arch }}
+        path: out/make/**/*
+        retention-days: 30
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts/
+
+    - name: Display structure of downloaded files
+      run: ls -la artifacts/
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: Lotion ${{ github.ref_name }}
+        body: |
+          ## Lotion ${{ github.ref_name }}
+          
+          Unofficial Notion.so Desktop App for Linux, Windows, and macOS.
+          
+          ### Features
+          - Native desktop experience
+          - Cross-platform support
+          - Navigation controls (Back/Forward/Refresh)
+          - Keyboard shortcuts
+          - Native menu integration
+          
+          ### Installation
+          - **Windows**: Download and run the `.exe` installer
+          - **macOS**: Download the `.dmg` file and drag to Applications
+          - **Linux**: Download the `.deb` (Ubuntu/Debian) or `.rpm` (RHEL/Fedora) package
+          
+          ### Changes
+          See commit history for detailed changes.
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Assets
+      run: |
+        # Find and upload all built packages
+        find artifacts/ -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.deb" -o -name "*.rpm" -o -name "*.zip" -o -name "*.tar.gz" \) | while read file; do
+          echo "Uploading $file"
+          gh release upload ${{ github.ref_name }} "$file" --clobber
+        done
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Optional: Auto-update check
+  check-updates:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Check for dependency updates
+      run: |
+        npm outdated || true
+        echo "Consider updating outdated dependencies" 

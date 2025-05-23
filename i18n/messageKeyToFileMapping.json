@@ -1,0 +1,998 @@
+[
+    {
+        "messageKey": "activityMonitor.copyDiagnosticInformation",
+        "filename": "src/desktop/main/activityMonitor.ts"
+    },
+    {
+        "messageKey": "activityMonitor.copyExecutablePath",
+        "filename": "src/desktop/main/activityMonitor.ts"
+    },
+    {
+        "messageKey": "activityMonitor.copyUrl",
+        "filename": "src/desktop/main/activityMonitor.ts"
+    },
+    {
+        "messageKey": "activityMonitor.forceKillProcess",
+        "filename": "src/desktop/main/activityMonitor.ts"
+    },
+    {
+        "messageKey": "activityMonitor.inspectActivityMonitor",
+        "filename": "src/desktop/main/activityMonitor.ts"
+    },
+    {
+        "messageKey": "activityMonitor.killProcess",
+        "filename": "src/desktop/main/activityMonitor.ts"
+    },
+    {
+        "messageKey": "activityMonitor.openDevTools",
+        "filename": "src/desktop/main/activityMonitor.ts"
+    },
+    {
+        "messageKey": "activityMonitor.reload",
+        "filename": "src/desktop/main/activityMonitor.ts"
+    },
+    {
+        "messageKey": "clientPlaceholder.placeholderDescription",
+        "filename": "src/desktop/renderer/clientPlaceholder/ClientPlaceholderContents.tsx"
+    },
+    {
+        "messageKey": "clientPlaceholder.placeholderTitle",
+        "filename": "src/desktop/renderer/clientPlaceholder/ClientPlaceholderContents.tsx"
+    },
+    {
+        "messageKey": "commandSearch.window.title",
+        "filename": "src/desktop/main/QuickSearchController.ts"
+    },
+    {
+        "messageKey": "crashWatchdog.dialog.abnormalExit",
+        "filename": "src/desktop/main/troubleshooting/crashWatchdog.ts"
+    },
+    {
+        "messageKey": "crashWatchdog.dialog.buttonCloseTab",
+        "filename": "src/desktop/main/troubleshooting/crashWatchdog.ts"
+    },
+    {
+        "messageKey": "crashWatchdog.dialog.buttonCloseWindow",
+        "filename": "src/desktop/main/troubleshooting/crashWatchdog.ts"
+    },
+    {
+        "messageKey": "crashWatchdog.dialog.buttonRestartApp",
+        "filename": "src/desktop/main/troubleshooting/crashWatchdog.ts"
+    },
+    {
+        "messageKey": "crashWatchdog.dialog.crashed",
+        "filename": "src/desktop/main/troubleshooting/crashWatchdog.ts"
+    },
+    {
+        "messageKey": "crashWatchdog.dialog.details",
+        "filename": "src/desktop/main/troubleshooting/crashWatchdog.ts"
+    },
+    {
+        "messageKey": "crashWatchdog.dialog.integrityFailure",
+        "filename": "src/desktop/main/troubleshooting/crashWatchdog.ts"
+    },
+    {
+        "messageKey": "crashWatchdog.dialog.killed",
+        "filename": "src/desktop/main/troubleshooting/crashWatchdog.ts"
+    },
+    {
+        "messageKey": "crashWatchdog.dialog.launchFailed",
+        "filename": "src/desktop/main/troubleshooting/crashWatchdog.ts"
+    },
+    {
+        "messageKey": "crashWatchdog.dialog.message",
+        "filename": "src/desktop/main/troubleshooting/crashWatchdog.ts"
+    },
+    {
+        "messageKey": "crashWatchdog.dialog.oom",
+        "filename": "src/desktop/main/troubleshooting/crashWatchdog.ts"
+    },
+    {
+        "messageKey": "crashWatchdog.dialog.title",
+        "filename": "src/desktop/main/troubleshooting/crashWatchdog.ts"
+    },
+    {
+        "messageKey": "crashWatchdog.dialog.urlUnknown",
+        "filename": "src/desktop/main/troubleshooting/crashWatchdog.ts"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.all",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.cpuPercent",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.cpuPercentDescription",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.cpuTime",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.cpuTimeDescription",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.creationTime",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.creationTimeDescription",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.frames",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.framesDescription",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.hidden",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.hideColumns",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.hideFilters",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.idleWakeupsPerSecond",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.idleWakeupsPerSecondDescription",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.loading",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.memCurrent",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.memCurrentDescription",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.memPeak",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.memPeakDescription",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.memPrivate",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.memPrivateDescription",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.memShared",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.memSharedDescription",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.mixed",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.parentWindowId",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.parentWindowIdDescription",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.pid",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.pidDescription",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.processName",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.showColumns",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.showFilters",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.tabId",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.tabIdDescription",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.type",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.url",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.urlDescription",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.visibilityState",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.visibilityStateDescription",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.activityMonitor.visible",
+        "filename": "src/desktop/renderer/activityMonitor/ActivityTable.tsx"
+    },
+    {
+        "messageKey": "desktop.tabBar.backButtonLabel",
+        "filename": "src/desktop/renderer/tabs/messages.tsx"
+    },
+    {
+        "messageKey": "desktop.tabBar.closeSidebarLabel",
+        "filename": "src/desktop/renderer/tabs/messages.tsx"
+    },
+    {
+        "messageKey": "desktop.tabBar.closeTabLabel",
+        "filename": "src/desktop/renderer/tabs/messages.tsx"
+    },
+    {
+        "messageKey": "desktop.tabBar.forwardButtonLabel",
+        "filename": "src/desktop/renderer/tabs/messages.tsx"
+    },
+    {
+        "messageKey": "desktop.tabBar.newTabButtonLabel",
+        "filename": "src/desktop/renderer/tabs/messages.tsx"
+    },
+    {
+        "messageKey": "desktop.tabBar.openSidebarLabel",
+        "filename": "src/desktop/renderer/tabs/messages.tsx"
+    },
+    {
+        "messageKey": "desktop.tabBar.tabSpacesLabel",
+        "filename": "src/desktop/renderer/tabs/messages.tsx"
+    },
+    {
+        "messageKey": "desktopExtensions.install.failed.title",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopExtensions.manage.cancel",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopExtensions.manage.disable",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopExtensions.manage.enable",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopExtensions.manage.message",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopExtensions.manage.title",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopExtensions.manage.uninstall",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopExtensions.openFailed.noPopupMessage",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopExtensions.openFailed.noPopupTitle",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopExtensions.unzip.failed.badFileRead",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopExtensions.unzip.failed.badFileWrite",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopExtensions.unzip.failed.badFolderCreate",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopExtensions.unzip.failed.badManifest",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopExtensions.unzip.failed.badManifestNoName",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopExtensions.unzip.failed.error",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopExtensions.unzip.failed.noManifest",
+        "filename": "src/desktop/main/extensions.ts"
+    },
+    {
+        "messageKey": "desktopInstaller.failedToMove.detail",
+        "filename": "src/desktop/main/checkInstallation.ts"
+    },
+    {
+        "messageKey": "desktopInstaller.failedToMove.title",
+        "filename": "src/desktop/main/checkInstallation.ts"
+    },
+    {
+        "messageKey": "desktopInstaller.invalidInstallDialog.cancelButton.label",
+        "filename": "src/desktop/main/checkInstallation.ts"
+    },
+    {
+        "messageKey": "desktopInstaller.invalidInstallDialog.confirmMove",
+        "filename": "src/desktop/main/checkInstallation.ts"
+    },
+    {
+        "messageKey": "desktopInstaller.invalidInstallDialog.okButton.label",
+        "filename": "src/desktop/main/checkInstallation.ts"
+    },
+    {
+        "messageKey": "desktopInstaller.invalidInstallDialog.title",
+        "filename": "src/desktop/main/checkInstallation.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.appMenu.about",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.appMenu.checkForUpdate",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.appMenu.checkForUpdate.noUpdateAvailable",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.appMenu.checkForUpdate.title",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.appMenu.checkForUpdate.updateAvailable",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.appMenu.checkForUpdate.updateCheckFailed",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.appMenu.downloadingUpdate",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.appMenu.hide",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.appMenu.hideOthers",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.appMenu.preferences",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.appMenu.quit",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.appMenu.quitWithoutSavingTabs",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.appMenu.restartToApplyUpdate",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.appMenu.services",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.appMenu.unhide",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.editMenu.copy",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.editMenu.copyLinkToCurrentPage",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.editMenu.copyLinkToCurrentPageBlockTitle",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.editMenu.cut",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.editMenu.paste",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.editMenu.pasteAndMatchStyle",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.editMenu.redo",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.editMenu.selectAll",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.editMenu.speech",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.editMenu.speech.startSpeaking",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.editMenu.speech.stopSpeaking",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.editMenu.title",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.editMenu.undo",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.extensionsMenu.install",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.extensionsMenu.manage",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.fileMenu.close",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.fileMenu.closeTab",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.fileMenu.newNotionWindow",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.fileMenu.newTab",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.fileMenu.newWindow",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.fileMenu.print",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.fileMenu.quit",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.fileMenu.quitWithoutSavingTabs",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.fileMenu.reopenClosedTab",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.fileMenu.title",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.copyInstallId",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.disableDebugLogging",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.disableHardwareAcceleration",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.enableDebugLogging",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.enableHardwareAcceleration",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.openActivityMonitor",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.openConsole",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.openHelpAndSupport",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.recordNetLog",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.recordNetLogConfirmation",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.recordNetLogFailed",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.recordNetLogFailedMessage",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.recordNetLogFailedTitle",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.recordNetLogStop",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.recordPerformanceTrace",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.recordPerformanceTraceConfirm",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.recordPerformanceTraceConfirmCancel",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.recordPerformanceTraceConfirmOk",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.recordPerformanceTraceConfirmTitle",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.recordingNetLog",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.resetAndEraseAllLocalData",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.showLogsInExplorer",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.showLogsInFinder",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.helpMenu.title",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.historyMenu.historyBack",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.historyMenu.historyForward",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.historyMenu.title",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.toggleDevTools",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.toggleWindowDevTools",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.troubleshootingMenu.title",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.viewMenu.actualSize",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.viewMenu.forceReload",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.viewMenu.forceReloadDialog.cancel",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.viewMenu.forceReloadDialog.message",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.viewMenu.forceReloadDialog.ok",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.viewMenu.forceReloadDialog.title",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.viewMenu.reload",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.viewMenu.showHideSidebar",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.viewMenu.showHideTabSpaceButton",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.viewMenu.title",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.viewMenu.togglefullscreen",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.viewMenu.zoomIn",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.viewMenu.zoomOut",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.whatsNewMac.title",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.whatsNewWindows.title",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.windowMenu.close",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.windowMenu.front",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.windowMenu.maximize",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.windowMenu.minimize",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.windowMenu.showNextTab",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.windowMenu.showPreviousTab",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.windowMenu.title",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTopbar.windowMenu.zoom",
+        "filename": "src/desktop/main/systemMenu.ts"
+    },
+    {
+        "messageKey": "desktopTroubleshooting.resetData.cancel",
+        "filename": "src/desktop/main/troubleshooting/resetAndErase.ts"
+    },
+    {
+        "messageKey": "desktopTroubleshooting.resetData.closingWindows",
+        "filename": "src/desktop/main/troubleshooting/resetAndErase.ts"
+    },
+    {
+        "messageKey": "desktopTroubleshooting.resetData.deletingFiles",
+        "filename": "src/desktop/main/troubleshooting/resetAndErase.ts"
+    },
+    {
+        "messageKey": "desktopTroubleshooting.resetData.done",
+        "filename": "src/desktop/main/troubleshooting/resetAndErase.ts"
+    },
+    {
+        "messageKey": "desktopTroubleshooting.resetData.doneMessage",
+        "filename": "src/desktop/main/troubleshooting/resetAndErase.ts"
+    },
+    {
+        "messageKey": "desktopTroubleshooting.resetData.failed",
+        "filename": "src/desktop/main/troubleshooting/resetAndErase.ts"
+    },
+    {
+        "messageKey": "desktopTroubleshooting.resetData.message",
+        "filename": "src/desktop/main/troubleshooting/resetAndErase.ts"
+    },
+    {
+        "messageKey": "desktopTroubleshooting.resetData.reset",
+        "filename": "src/desktop/main/troubleshooting/resetAndErase.ts"
+    },
+    {
+        "messageKey": "desktopTroubleshooting.resetData.restart",
+        "filename": "src/desktop/main/troubleshooting/resetAndErase.ts"
+    },
+    {
+        "messageKey": "desktopTroubleshooting.resetData.title",
+        "filename": "src/desktop/main/troubleshooting/resetAndErase.ts"
+    },
+    {
+        "messageKey": "desktopTroubleshooting.showLogs.error.message.mac",
+        "filename": "src/desktop/main/troubleshooting/getLogs.ts"
+    },
+    {
+        "messageKey": "desktopTroubleshooting.showLogs.error.message.windows",
+        "filename": "src/desktop/main/troubleshooting/getLogs.ts"
+    },
+    {
+        "messageKey": "desktopTroubleshooting.showLogs.error.title",
+        "filename": "src/desktop/main/troubleshooting/getLogs.ts"
+    },
+    {
+        "messageKey": "menuBarIcon.menu.changeCommandSearchAndNotionAiShortcut",
+        "filename": "src/desktop/main/trayMenuTemplate.ts"
+    },
+    {
+        "messageKey": "menuBarIcon.menu.changeCommandSearchShortcut",
+        "filename": "src/desktop/main/trayMenuTemplate.ts"
+    },
+    {
+        "messageKey": "menuBarIcon.menu.enableQuickSearch",
+        "filename": "src/desktop/main/trayMenuTemplate.ts"
+    },
+    {
+        "messageKey": "menuBarIcon.menu.keepInBackground",
+        "filename": "src/desktop/main/trayMenuTemplate.ts"
+    },
+    {
+        "messageKey": "menuBarIcon.menu.launchPreferences",
+        "filename": "src/desktop/main/trayMenuTemplate.ts"
+    },
+    {
+        "messageKey": "menuBarIcon.menu.openOnLogin",
+        "filename": "src/desktop/main/trayMenuTemplate.ts"
+    },
+    {
+        "messageKey": "menuBarIcon.menu.quitNotion",
+        "filename": "src/desktop/main/trayMenuTemplate.ts"
+    },
+    {
+        "messageKey": "menuBarIcon.menu.showImmediately",
+        "filename": "src/desktop/main/trayMenuTemplate.ts"
+    },
+    {
+        "messageKey": "menuBarIcon.menu.showNotionInMenuBar",
+        "filename": "src/desktop/main/trayMenuTemplate.ts"
+    },
+    {
+        "messageKey": "menuBarIcon.menu.toggleCommandSearch",
+        "filename": "src/desktop/main/trayMenuTemplate.ts"
+    },
+    {
+        "messageKey": "menuBarIcon.menu.toggleNotionAi",
+        "filename": "src/desktop/main/trayMenuTemplate.ts"
+    },
+    {
+        "messageKey": "openAtLogin.dialog.detail",
+        "filename": "src/desktop/main/openAtLoginDialog.ts"
+    },
+    {
+        "messageKey": "openAtLogin.dialog.title",
+        "filename": "src/desktop/main/openAtLoginDialog.ts"
+    },
+    {
+        "messageKey": "tabSpaces.deleteDialog.cancelButton",
+        "filename": "src/desktop/main/rendererListeners.ts"
+    },
+    {
+        "messageKey": "tabSpaces.deleteDialog.deleteButton",
+        "filename": "src/desktop/main/rendererListeners.ts"
+    },
+    {
+        "messageKey": "tabSpaces.deleteDialog.detail",
+        "filename": "src/desktop/main/rendererListeners.ts"
+    },
+    {
+        "messageKey": "tabSpaces.deleteDialog.title",
+        "filename": "src/desktop/main/rendererListeners.ts"
+    },
+    {
+        "messageKey": "tabSpaces.snackbar.switchedToTabGroup",
+        "filename": "src/desktop/main/state/selectors/helpers.ts"
+    },
+    {
+        "messageKey": "tabSpaces.snackbar.switchedToUngroupedTabs",
+        "filename": "src/desktop/main/state/selectors/helpers.ts"
+    },
+    {
+        "messageKey": "tabSpaces.snackbar.tabGroupPlaceholder",
+        "filename": "src/desktop/main/state/selectors/helpers.ts"
+    },
+    {
+        "messageKey": "updatePrompt.detail",
+        "filename": "src/desktop/main/autoUpdater.ts"
+    },
+    {
+        "messageKey": "updatePrompt.installAndRelaunch",
+        "filename": "src/desktop/main/autoUpdater.ts"
+    },
+    {
+        "messageKey": "updatePrompt.message",
+        "filename": "src/desktop/main/autoUpdater.ts"
+    },
+    {
+        "messageKey": "updatePrompt.remindMeLater",
+        "filename": "src/desktop/main/autoUpdater.ts"
+    },
+    {
+        "messageKey": "window.closeDialog.cancelButton",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.closeDialog.confirmButton",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.closeDialog.title.app",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.closeDialog.title.tab",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.closeDialog.title.window",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.loadingError.message",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.loadingError.reload",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.movedTabSnackbarMessage",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabLoadingError.cancel",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.closeOtherTabs",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.closeTab",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.closeTabsToLeft",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.closeTabsToRight",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.copyLink",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.duplicateTab",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.moveTo",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.moveToNewWindow",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.moveToSubmenuNewWindow",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.pinTab",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.refresh",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.reopenClosedTab",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.replacePinnedTabUrl",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.returnToPinnedTabUrl",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.ungroupTab",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabMenu.unpinTab",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.tabTitlePlaceholder",
+        "filename": "src/desktop/main/WindowController.ts"
+    },
+    {
+        "messageKey": "window.ungroupedTabSnackbarMessage",
+        "filename": "src/desktop/main/WindowController.ts"
+    }
+]
