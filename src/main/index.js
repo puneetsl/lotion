@@ -8,6 +8,7 @@ const log = require('electron-log');
 const Store = require('electron-store'); // This is electron-store, for persistence
 const reduxStore = require('./store/store');
 const AppController = require('./controllers/AppController');
+const { getSpellCheckMenu } = require('./spellCheckMenu');
 
 // Set custom user data path for development to avoid conflicts
 if (process.env.NODE_ENV === 'development') {
@@ -27,6 +28,10 @@ const localStore = new Store({
     autoHideMenuBar: false
   }
 });
+
+// --- Initialize spell check dictionaries in Redux from electron-store before anything else ---
+const spellCheckDictionaries = localStore.get('spellCheckDictionaries', ['en-US']);
+reduxStore.dispatch({ type: 'app/setDictionaries', payload: spellCheckDictionaries });
 
 // let mainWindow; // No longer managed here
 // let isQuitting = false; // Managed by AppController
@@ -148,7 +153,7 @@ function createNativeMenuWithNavigation() {
         {
           label: 'Quit',
           accelerator: process.platform === 'darwin' ? 'Cmd+Q' : 'Ctrl+Q',
-          click: () => { appController.requestQuit(); }
+          click: () => { appController.requestQuit()}
         }
       ]
     },
@@ -226,6 +231,12 @@ function createNativeMenuWithNavigation() {
       submenu: [
         { role: 'minimize' }, // Operates on focused window
         { role: 'close' }      // Operates on focused window
+      ]
+    },
+    {
+      label: 'Settings',
+      submenu: [
+        getSpellCheckMenu(appController)
       ]
     }
   ];
@@ -322,4 +333,4 @@ ipcMain.handle('preferences-show', showPreferencesDialog);
 // Add command line switches
 app.commandLine.appendSwitch('disable-gpu-vsync');
 app.commandLine.appendSwitch('disable-gpu-sandbox');
-app.commandLine.appendSwitch('disable-software-rasterizer'); 
+app.commandLine.appendSwitch('disable-software-rasterizer');

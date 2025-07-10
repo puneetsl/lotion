@@ -59,11 +59,29 @@ class WindowController {
         allowRunningInsecureContent: false,
         experimentalFeatures: false,
         preload: path.join(__dirname, '../../renderer/preload.js'), // Adjust path
+        spellcheck: true // Enable Electron's built-in spell check
       },
       show: false, // Start hidden, show when ready
       title: this.initialTitle, // Set initial title
     });
     log.info(`BrowserWindow created for ${this.windowId}`);
+
+    // Always use the persisted value from electron-store for spell checker languages
+    const Store = require('electron-store');
+    const localStore = new Store();
+    let dictionaries = localStore.get('spellCheckDictionaries', ['en-US']);
+    if (!dictionaries || !Array.isArray(dictionaries) || dictionaries.length === 0) {
+      dictionaries = ['en-US'];
+      localStore.set('spellCheckDictionaries', dictionaries);
+    }
+    this.store.dispatch({ type: 'app/setDictionaries', payload: dictionaries });
+    log.info(`[SpellCheck] Setting spell checker languages: ${JSON.stringify(dictionaries)}`);
+    try {
+      const result = this.browserWindow.webContents.session.setSpellCheckerLanguages(dictionaries);
+      log.info(`[SpellCheck] setSpellCheckerLanguages result: ${result}`);
+    } catch (err) {
+      log.error(`[SpellCheck] Error setting spell checker languages: ${err}`);
+    }  
   }
 
   setupBrowserWindowListeners() {
@@ -191,4 +209,4 @@ class WindowController {
   // These methods would typically dispatch to Redux first or update BrowserWindow and then dispatch.
 }
 
-module.exports = WindowController; 
+module.exports = WindowController;

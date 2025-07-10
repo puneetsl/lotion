@@ -21,8 +21,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Navigation
   goBack: () => ipcRenderer.invoke('navigation-back'),
   goForward: () => ipcRenderer.invoke('navigation-forward'),
-  refresh: () => ipcRenderer.invoke('navigation-refresh')
+  refresh: () => ipcRenderer.invoke('navigation-refresh'),
+
+  // Spell check dictionary selection
+  setDictionary: (dictionary) => ipcRenderer.invoke('set-dictionary', dictionary)
 });
 
 // Log when preload script is loaded
-console.log('✅ Preload script loaded successfully'); 
+console.log('✅ Preload script loaded successfully');
