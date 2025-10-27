@@ -434,6 +434,23 @@ ipcMain.handle('show-logo-menu', async (event) => {
         {
           label: currentTheme === 'gruvbox-dark' ? '✓ Gruvbox Dark' : 'Gruvbox Dark',
           click: () => switchTheme('gruvbox-dark')
+        },
+        { type: 'separator' },
+        {
+          label: currentTheme === 'catppuccin-mocha' ? '✓ Catppuccin Mocha' : 'Catppuccin Mocha',
+          click: () => switchTheme('catppuccin-mocha')
+        },
+        {
+          label: currentTheme === 'catppuccin-macchiato' ? '✓ Catppuccin Macchiato' : 'Catppuccin Macchiato',
+          click: () => switchTheme('catppuccin-macchiato')
+        },
+        {
+          label: currentTheme === 'catppuccin-frappe' ? '✓ Catppuccin Frappe' : 'Catppuccin Frappe',
+          click: () => switchTheme('catppuccin-frappe')
+        },
+        {
+          label: currentTheme === 'catppuccin-latte' ? '✓ Catppuccin Latte' : 'Catppuccin Latte',
+          click: () => switchTheme('catppuccin-latte')
         }
       ]
     },

@@ -38,8 +38,9 @@ Lotion is an unofficial Electron-based desktop application that brings Notion.so
 - **Frameless Window Design** - Modern, seamless interface with custom title bar
 - **Tab Management** - Multiple tabs with drag-and-drop reordering, pinning, and favicon support
 - **Navigation Controls** - Integrated back, forward, and refresh buttons
+- **Built-in Themes** - 8 beautiful themes including Dracula, Nord, Gruvbox, and Catppuccin variants
 - **Dark Mode Support** - Automatic theme detection and switching
-- **Logo Menu** - Quick access to project links and GitHub repository
+- **Logo Menu** - Quick access to themes, project links, and GitHub repository
 
 ### Core Functionality
 - **Full Notion.so Integration** - Complete access to all Notion features on Linux
@@ -61,6 +62,64 @@ Lotion is an unofficial Electron-based desktop application that brings Notion.so
 - **WebContentsView API** - Efficient multi-tab implementation
 - **Multiple Package Formats** - DEB, RPM, and ZIP packages
 - **Multi-architecture** - x64 and ARM64 builds available
+
+---
+
+## Themes
+
+Lotion includes beautiful built-in themes that transform Notion's appearance while keeping content readable. Access themes via the Lotion logo menu in the top-left corner.
+
+<p align="center">
+  <img src="./assets/theme.png" alt="Catppuccin Mocha Theme" width="90%">
+  <br>
+  <em>Catppuccin Mocha theme with synchronized tab bar</em>
+</p>
+
+### Available Themes
+
+- **Default (Notion)** - Uses Notion's default theme with system-aware tab bar
+- **Dracula** - Popular dark theme with purple and cyan accents
+- **Nord** - Arctic, north-bluish color palette
+- **Gruvbox Dark** - Retro groove colors with warm earth tones
+- **Catppuccin Mocha** - Warm dark theme with purple accents (shown above)
+- **Catppuccin Macchiato** - Slightly lighter than Mocha
+- **Catppuccin Frappe** - Cool dark theme with blue tones
+- **Catppuccin Latte** - Light theme option for bright environments
+
+### Theme Features
+
+- **Unified Theming** - Both page content and tab bar match the selected theme
+- **Minimal Design** - Themes style UI chrome (sidebar, topbar) while preserving content readability
+- **Instant Switching** - Change themes on the fly without restarting
+- **Custom CSS Support** - Add your own themes to `~/.config/Lotion/themes/`
+- **System Theme Integration** - Default theme respects your system's dark/light mode preference
+
+### Creating Custom Themes
+
+Create a new CSS file in `~/.config/Lotion/themes/your-theme.css`:
+
+```css
+/* My Custom Theme */
+:root {
+  --custom-bg: #1a1b26;
+  --custom-accent: #7aa2f7;
+}
+
+.notion-frame,
+body {
+  background: var(--custom-bg) !important;
+}
+
+.notion-sidebar {
+  background: var(--custom-bg) !important;
+}
+
+h1, h2, h3 {
+  color: var(--custom-accent) !important;
+}
+```
+
+Then select "Reload Custom CSS" from the logo menu to load your theme.
 
 ---
 
