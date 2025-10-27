@@ -9,7 +9,7 @@ let windowId = null;
 document.addEventListener('DOMContentLoaded', async () => {
   await loadInitialState();
   setupEventListeners();
-  detectTheme();
+  await loadInitialTheme();
   render();
 });
 
@@ -38,6 +38,14 @@ function setupEventListeners() {
     activeTabId = tabId;
     render();
   });
+
+  // Listen for theme changes
+  if (window.tabBarAPI.onThemeChanged) {
+    window.tabBarAPI.onThemeChanged((themeName) => {
+      console.log('Theme changed to:', themeName);
+      applyLotionTheme(themeName);
+    });
+  }
 }
 
 // Render tab bar UI
@@ -214,5 +222,27 @@ function applyTheme(isDark) {
     document.body.classList.add('dark-mode');
   } else {
     document.body.classList.remove('dark-mode');
+  }
+}
+
+function applyLotionTheme(themeName) {
+  // Remove all theme classes
+  document.body.classList.remove('dark-mode', 'theme-dracula', 'theme-nord', 'theme-gruvbox-dark');
+
+  // Apply new theme class (default theme has no class)
+  if (themeName && themeName !== 'default' && themeName !== 'none') {
+    document.body.classList.add(`theme-${themeName}`);
+  }
+}
+
+async function loadInitialTheme() {
+  try {
+    if (window.tabBarAPI.getTheme) {
+      const theme = await window.tabBarAPI.getTheme();
+      console.log('Initial theme loaded:', theme);
+      applyLotionTheme(theme);
+    }
+  } catch (error) {
+    console.error('Failed to load initial theme:', error);
   }
 }

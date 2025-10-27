@@ -29,6 +29,9 @@ contextBridge.exposeInMainWorld('tabBarAPI', {
   // Show logo menu
   showLogoMenu: () => ipcRenderer.invoke('show-logo-menu'),
 
+  // Get current theme
+  getTheme: () => ipcRenderer.invoke('get-current-theme'),
+
   // Listen for tab state changes from main process
   onTabsUpdated: (callback) => {
     const listener = (event, data) => callback(data);
@@ -40,5 +43,12 @@ contextBridge.exposeInMainWorld('tabBarAPI', {
     const listener = (event, tabId) => callback(tabId);
     ipcRenderer.on('tab-bar:tab-activated', listener);
     return () => ipcRenderer.removeListener('tab-bar:tab-activated', listener);
+  },
+
+  // Listen for theme changes
+  onThemeChanged: (callback) => {
+    const listener = (event, themeName) => callback(themeName);
+    ipcRenderer.on('tab-bar:theme-changed', listener);
+    return () => ipcRenderer.removeListener('tab-bar:theme-changed', listener);
   },
 });

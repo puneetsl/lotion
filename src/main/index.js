@@ -338,6 +338,12 @@ ipcMain.handle('open-external', async (event, url) => {
   return { success: true };
 });
 
+// Get current theme
+ipcMain.handle('get-current-theme', () => {
+  const store = new Store();
+  return store.get('theme', 'default');
+});
+
 // Show logo menu as native popup
 ipcMain.handle('show-logo-menu', async (event) => {
   const { Menu, shell } = require('electron');
@@ -361,6 +367,12 @@ ipcMain.handle('show-logo-menu', async (event) => {
     if (focusedWindowController) {
       const windowId = focusedWindowController.windowId;
       const tabManager = require('./managers/TabManager').getInstance();
+
+      // Notify tab bar about theme change
+      if (focusedWindowController.tabBarView && focusedWindowController.tabBarView.webContents) {
+        focusedWindowController.tabBarView.webContents.send('tab-bar:theme-changed', themeName);
+        console.log(`Sent theme change to tab bar: ${themeName}`);
+      }
 
       // Get all tabs and filter by window
       const allTabs = tabManager.getAllTabs();
