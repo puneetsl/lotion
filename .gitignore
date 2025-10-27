@@ -9,5 +9,9 @@ docs
 *.pkg.tar.zst
 *.pkg.tar.xz
 pkg/
-src/
+# Note: AUR creates a src/ directory during build, but we need to track our actual src/ code
+# So we'll ignore AUR src files specifically, not the entire src/ directory
+# /src/ would ignore root-level src during AUR build (but we need to track it)
+# Instead, ignore common AUR src patterns:
+*.src.tar.gz
 .SRCINFO
