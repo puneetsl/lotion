@@ -62,9 +62,6 @@ Lotion is an unofficial Electron-based desktop application that brings Notion.so
 - **Multiple Package Formats** - DEB, RPM, and ZIP packages
 - **Multi-architecture** - x64 and ARM64 builds available
 
-### Icon Design
-Custom icon design by [Konrad Kolasa](https://dribbble.com/shots/4886987-Notion-Icon-Replacement)
-
 ---
 
 ## Installation
@@ -282,8 +279,6 @@ If you're maintaining the AUR package, see [AUR_SUBMISSION.md](AUR_SUBMISSION.md
 ## Acknowledgments
 
 - Thanks to [sysdrum/notion-app](https://github.com/sysdrum/notion-app) for inspiration and initial code
-- Icon design by [Konrad Kolasa](https://dribbble.com/shots/4886987-Notion-Icon-Replacement)
-- Spell check functionality inspired by the community
 - Built with Electron and modern web technologies
 
 ---
