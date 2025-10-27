@@ -332,8 +332,9 @@ class TabController {
     const store = new Store();
 
     // First, inject theme if one is selected
-    const currentTheme = store.get('theme', 'none');
-    if (currentTheme !== 'none') {
+    const currentTheme = store.get('theme', 'default');
+    // Check if theme is not default (also support legacy 'none' value)
+    if (currentTheme !== 'default' && currentTheme !== 'none') {
       const themePath = path.join(app.getPath('userData'), 'themes', `${currentTheme}.css`);
       if (fs.existsSync(themePath)) {
         try {
@@ -350,7 +351,7 @@ class TabController {
         }
       }
     } else {
-      // Remove theme if switching to "none"
+      // Remove theme if switching to "default" (or legacy "none")
       if (this.injectedThemeKey) {
         try {
           await this.webContentsView.webContents.removeInsertedCSS(this.injectedThemeKey);
@@ -409,8 +410,8 @@ class TabController {
       }
     }
 
-    // Load new theme if not "none"
-    if (themeName !== 'none') {
+    // Load new theme if not "default" (also support legacy "none")
+    if (themeName !== 'default' && themeName !== 'none') {
       const themePath = path.join(app.getPath('userData'), 'themes', `${themeName}.css`);
       if (fs.existsSync(themePath)) {
         try {
@@ -424,7 +425,7 @@ class TabController {
         log.warn(`Tab ${this.tabId}: Theme file not found: ${themePath}`);
       }
     } else {
-      log.info(`Theme removed for tab ${this.tabId}`);
+      log.info(`Theme removed for tab ${this.tabId} (using default Notion theme)`);
     }
   }
 

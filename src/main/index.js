@@ -350,17 +350,29 @@ ipcMain.handle('show-logo-menu', async (event) => {
   // Get current spell check setting
   const store = new Store();
   const spellCheckEnabled = store.get('spellCheckEnabled', true); // Default to enabled
-  const currentTheme = store.get('theme', 'none'); // Default to no theme
+  const currentTheme = store.get('theme', 'default'); // Default to Notion's default theme
 
   // Theme switcher helper function
   const switchTheme = async (themeName) => {
     store.set('theme', themeName);
+    console.log(`Switching theme to: ${themeName}`);
 
     // Apply theme to all tabs in focused window
     if (focusedWindowController) {
-      const tabs = focusedWindowController.tabControllers || [];
+      const windowId = focusedWindowController.windowId;
+      const tabManager = require('./managers/TabManager').getInstance();
+
+      // Get all tabs and filter by window
+      const allTabs = tabManager.getAllTabs();
+      const tabs = allTabs.filter(tab => tab.windowId === windowId);
+
+      console.log(`Found ${tabs.length} tabs to apply theme to`);
+
       for (const tabController of tabs) {
-        await tabController.loadTheme(themeName);
+        // Reload the page to apply theme
+        if (tabController.webContentsView && tabController.webContentsView.webContents) {
+          tabController.webContentsView.webContents.reload();
+        }
       }
     }
   };
@@ -395,8 +407,8 @@ ipcMain.handle('show-logo-menu', async (event) => {
       label: '🎨 Theme',
       submenu: [
         {
-          label: currentTheme === 'none' ? '✓ None (Default)' : 'None (Default)',
-          click: () => switchTheme('none')
+          label: currentTheme === 'default' ? '✓ Default (Notion)' : 'Default (Notion)',
+          click: () => switchTheme('default')
         },
         { type: 'separator' },
         {
@@ -420,8 +432,11 @@ ipcMain.handle('show-logo-menu', async (event) => {
         store.set('spellCheckEnabled', newValue);
 
         // Apply to all existing tabs
-        if (focusedWindowController && focusedWindowController.currentActiveTabController) {
-          const tabs = focusedWindowController.tabControllers || [];
+        if (focusedWindowController) {
+          const windowId = focusedWindowController.windowId;
+          const tabManager = require('./managers/TabManager').getInstance();
+          const tabs = tabManager.getTabsForWindow(windowId);
+
           tabs.forEach(tabController => {
             if (tabController.webContentsView && tabController.webContentsView.webContents) {
               tabController.webContentsView.webContents.session.setSpellCheckerEnabled(newValue);
@@ -435,7 +450,10 @@ ipcMain.handle('show-logo-menu', async (event) => {
       click: async () => {
         // Reload CSS for all tabs in focused window
         if (focusedWindowController) {
-          const tabs = focusedWindowController.tabControllers || [];
+          const windowId = focusedWindowController.windowId;
+          const tabManager = require('./managers/TabManager').getInstance();
+          const tabs = tabManager.getTabsForWindow(windowId);
+
           for (const tabController of tabs) {
             await tabController.reloadCustomCSS();
           }
