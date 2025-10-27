@@ -69,15 +69,27 @@ function renderTab(tab) {
   const isPinned = tab.isPinned;
   const title = truncateTitle(tab.title || 'New Tab', 20);
 
+  // Use favicon if available, otherwise show a default icon or emoji
+  const faviconHtml = tab.favicon
+    ? `<img src="${escapeHtml(tab.favicon)}" class="favicon" alt="" onerror="this.style.display='none'">`
+    : '<span class="favicon">📄</span>';
+
   return `
     <div class="tab ${isActive ? 'active' : ''} ${isPinned ? 'pinned' : ''}"
          data-tab-id="${tab.tabId}"
-         title="${tab.title || 'Untitled'}">
-      ${tab.favicon ? `<img src="${tab.favicon}" class="favicon" alt="">` : ''}
-      <span class="tab-title">${title}</span>
+         title="${escapeHtml(tab.title || 'Untitled')}">
+      ${faviconHtml}
+      <span class="tab-title">${escapeHtml(title)}</span>
       ${!isPinned ? `<button class="close-btn" data-tab-id="${tab.tabId}" title="Close Tab">×</button>` : ''}
     </div>
   `;
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 // Add click event listeners
