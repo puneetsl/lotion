@@ -173,6 +173,104 @@ class TabController {
       // TODO: Show crash recovery UI
     });
 
+    // Context menu with spell check
+    webContents.on('context-menu', (event, params) => {
+      const { Menu, MenuItem } = require('electron');
+      const menu = new Menu();
+
+      // Add spell check suggestions if there's a misspelled word
+      if (params.misspelledWord) {
+        // Add suggestions
+        params.dictionarySuggestions.forEach((suggestion) => {
+          menu.append(
+            new MenuItem({
+              label: suggestion,
+              click: () => webContents.replaceMisspelling(suggestion),
+            })
+          );
+        });
+
+        // Add separator if there are suggestions
+        if (params.dictionarySuggestions.length > 0) {
+          menu.append(new MenuItem({ type: 'separator' }));
+        }
+
+        // Add to dictionary
+        menu.append(
+          new MenuItem({
+            label: 'Add to Dictionary',
+            click: () => webContents.session.addWordToSpellCheckerDictionary(params.misspelledWord),
+          })
+        );
+
+        menu.append(new MenuItem({ type: 'separator' }));
+      }
+
+      // Standard editing commands
+      if (params.isEditable) {
+        menu.append(new MenuItem({ label: 'Cut', role: 'cut', enabled: params.editFlags.canCut }));
+        menu.append(new MenuItem({ label: 'Copy', role: 'copy', enabled: params.editFlags.canCopy }));
+        menu.append(new MenuItem({ label: 'Paste', role: 'paste', enabled: params.editFlags.canPaste }));
+        menu.append(new MenuItem({ type: 'separator' }));
+        menu.append(new MenuItem({ label: 'Select All', role: 'selectAll' }));
+      } else if (params.selectionText) {
+        // If there's selected text but not editable, show copy
+        menu.append(new MenuItem({ label: 'Copy', role: 'copy' }));
+      }
+
+      // Link context menu
+      if (params.linkURL) {
+        menu.append(new MenuItem({ type: 'separator' }));
+        menu.append(
+          new MenuItem({
+            label: 'Open Link in Browser',
+            click: () => require('electron').shell.openExternal(params.linkURL),
+          })
+        );
+        menu.append(
+          new MenuItem({
+            label: 'Copy Link Address',
+            click: () => require('electron').clipboard.writeText(params.linkURL),
+          })
+        );
+      }
+
+      // Image context menu
+      if (params.hasImageContents) {
+        menu.append(new MenuItem({ type: 'separator' }));
+        menu.append(
+          new MenuItem({
+            label: 'Copy Image',
+            click: () => webContents.copyImageAt(params.x, params.y),
+          })
+        );
+        if (params.srcURL) {
+          menu.append(
+            new MenuItem({
+              label: 'Copy Image Address',
+              click: () => require('electron').clipboard.writeText(params.srcURL),
+            })
+          );
+        }
+      }
+
+      // Show developer tools option in development mode
+      if (process.env.NODE_ENV !== 'production') {
+        menu.append(new MenuItem({ type: 'separator' }));
+        menu.append(
+          new MenuItem({
+            label: 'Inspect Element',
+            click: () => webContents.inspectElement(params.x, params.y),
+          })
+        );
+      }
+
+      // Only show menu if it has items
+      if (menu.items.length > 0) {
+        menu.popup();
+      }
+    });
+
     log.debug(`Event listeners set up for tab: ${this.tabId}`);
   }
 
