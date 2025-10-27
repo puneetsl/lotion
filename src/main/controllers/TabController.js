@@ -162,21 +162,43 @@ class TabController {
       }
     });
 
-    // Handle external links
+    // Handle external links - allow Notion domains, open others externally
     webContents.setWindowOpenHandler(({ url }) => {
-      require('electron').shell.openExternal(url);
-      return { action: 'deny' };
+      const parsedUrl = new URL(url);
+
+      // Check if URL is a Notion domain (notion.so or notion.com)
+      const isNotionDomain =
+        parsedUrl.hostname === 'notion.so' ||
+        parsedUrl.hostname === 'www.notion.so' ||
+        parsedUrl.hostname.endsWith('.notion.so') ||
+        parsedUrl.hostname === 'notion.com' ||
+        parsedUrl.hostname === 'www.notion.com' ||
+        parsedUrl.hostname.endsWith('.notion.com');
+
+      if (isNotionDomain) {
+        // Allow Notion links to open in new tab within app
+        log.debug(`Tab ${this.tabId}: Allowing new window for Notion URL: ${url}`);
+        return { action: 'allow' };
+      } else {
+        // Open non-Notion links in external browser
+        require('electron').shell.openExternal(url);
+        log.debug(`Tab ${this.tabId}: Opening external URL in browser: ${url}`);
+        return { action: 'deny' };
+      }
     });
 
     // Allow navigation within Notion, block external sites
     webContents.on('will-navigate', (event, navigationUrl) => {
       const parsedUrl = new URL(navigationUrl);
 
-      // Check if URL is a Notion domain
+      // Check if URL is a Notion domain (notion.so or notion.com)
       const isNotionDomain =
         parsedUrl.hostname === 'notion.so' ||
         parsedUrl.hostname === 'www.notion.so' ||
-        parsedUrl.hostname.endsWith('.notion.so');
+        parsedUrl.hostname.endsWith('.notion.so') ||
+        parsedUrl.hostname === 'notion.com' ||
+        parsedUrl.hostname === 'www.notion.com' ||
+        parsedUrl.hostname.endsWith('.notion.com');
 
       // Only block if it's NOT a Notion URL
       if (!isNotionDomain) {
