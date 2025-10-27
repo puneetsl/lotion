@@ -1,7 +1,7 @@
 {
   "name": "lotion",
   "author": "Lotion Team",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "private": true,
   "description": "Unofficial Notion.so Desktop app for Linux",
   "main": "./src/main/index.js",
