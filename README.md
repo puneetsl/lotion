@@ -1,9 +1,9 @@
 <p align="center">
-  <img width="15%" height="15%"  src="./assets/Banner.png" alt="Lotion - Unofficial Notion.so Desktop App for Linux">
+  <img width="35%" height="35%"  src="./assets/Banner.png" alt="Lotion - Unofficial Notion.so Desktop App for Linux">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.0-blue.svg" alt="Version">
+  <img src="https://img.shields.io/badge/version-1.5.0-blue.svg" alt="Version">
   <img src="https://img.shields.io/badge/platform-linux-lightgrey.svg" alt="Platform">
   <img src="https://img.shields.io/badge/electron-34.3.2-9feaf9.svg" alt="Electron">
   <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
@@ -258,58 +258,6 @@ npm run make:linux # Create Linux-specific packages
 - Native context menus with spell check integration
 
 ---
-
-## Troubleshooting
-
-### Common Issues
-
-**App won't start:**
-- Make sure you have Node.js 18+ installed: `node --version`
-- Try: `rm -rf node_modules && npm install`
-
-**Missing dependencies:**
-- Run: `npm install`
-
-**Build fails:**
-- Install required tools:
-  ```bash
-  # Debian/Ubuntu
-  sudo apt install dpkg fakeroot
-
-  # Fedora/RHEL
-  sudo dnf install dpkg fakeroot
-  ```
-
-**Storage errors:**
-- Clear app data: `rm -rf ~/.config/Lotion ~/.cache/lotion`
-
-**Icon not showing:**
-- Reinstall the .deb package
-- Update icon cache: `sudo update-icon-caches /usr/share/icons/*`
-
-### Login Issues
-
-If you're having trouble logging in with Google SSO:
-
-Google has [stopped allowing logins](https://security.googleblog.com/2019/04/better-protection-against-man-in-middle.html) from unidentified browsers. The solution is simple:
-
-1. **Use email login** instead of "Continue with Google"
-2. Enter your email address
-3. Notion will email you a login code
-4. Enter the code to log in
-
-![Email Login](https://user-images.githubusercontent.com/6509604/114249493-c541bb80-9968-11eb-9a79-fd242aa9010c.png)
-
-**Note:** The native version doesn't have this issue!
-
-Related issues: [Google issue #78](https://github.com/puneetsl/lotion/issues/78), [Apple issue #70](https://github.com/puneetsl/lotion/issues/70)
-
-### Known Limitations
-
-- Requires internet connection (web version loads from Notion.so)
-- Some Notion features may differ slightly from the official desktop app
-- Auto-updater not yet configured (manual updates required)
-
 
 ## Contributing
 
