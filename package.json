@@ -1,0 +1,144 @@
+{
+  "name": "lotion",
+  "author": "Lotion Team",
+  "version": "1.5.0",
+  "private": true,
+  "description": "Unofficial Notion.so Desktop app for Linux",
+  "main": "./src/main/index.js",
+  "dependencies": {
+    "@atlaskit/pragmatic-drag-and-drop": "1.4.0",
+    "@atlaskit/pragmatic-drag-and-drop-hitbox": "1.0.3",
+    "@noble/hashes": "1.7.1",
+    "@reduxjs/toolkit": "2.2.3",
+    "better-sqlite3": "11.8.1",
+    "bindings": "1.5.0",
+    "colord": "2.9.3",
+    "electron-log": "4.4.8",
+    "electron-store": "8.2.0",
+    "electron-updater": "^6.6.2",
+    "fflate": "0.7.4",
+    "fs-extra": "8.1.0",
+    "get-port": "5.1.1",
+    "intl-messageformat": "10.5.0",
+    "lodash": "4.17.21",
+    "loudness": "0.4.2",
+    "luxon": "^3.4.4",
+    "md5": "2.2.1",
+    "native-progress-bar": "1.0.3",
+    "node-addon-api": "6.1.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-intl": "6.6.8",
+    "redux": "^5.0.1",
+    "uuid": "^9.0.0"
+  },
+  "scripts": {
+    "start": "electron-forge start",
+    "dev": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "make:linux": "electron-forge make --platform=linux",
+    "dist": "electron-forge make --platform=linux",
+    "playwright": "playwright test",
+    "postinstall": "echo 'Lotion postinstall complete'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "overrides": {
+    "asar": "3.2.6",
+    "@electron/universal": "2.0.1",
+    "webpack": "5.98.0"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "7.6.1",
+    "@electron-forge/core": "7.6.1",
+    "@electron-forge/maker-deb": "7.6.1",
+    "@electron-forge/maker-dmg": "^7.8.1",
+    "@electron-forge/maker-rpm": "7.6.1",
+    "@electron-forge/maker-squirrel": "^7.8.1",
+    "@electron-forge/maker-zip": "7.6.1",
+    "@electron-forge/plugin-fuses": "7.6.1",
+    "@electron-forge/plugin-webpack": "7.6.1",
+    "@electron-forge/shared-types": "7.6.1",
+    "@electron/fuses": "1.8.0",
+    "@playwright/test": "1.45.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vercel/webpack-asset-relocator-loader": "1.7.3",
+    "css-loader": "6.10.0",
+    "electron": "34.3.2",
+    "electron-packager": "17.1.2",
+    "electron-reload": "^1.5.0",
+    "electron-updater-yaml": "1.1.2",
+    "fork-ts-checker-webpack-plugin": "^9.0.0",
+    "node-loader": "2.0.0",
+    "style-loader": "3.3.3",
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "*.js",
+    "*.html"
+  ],
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "name": "Lotion",
+        "executableName": "lotion",
+        "icon": "./assets/icon",
+        "asar": true
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": ["linux", "darwin", "win32"]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "platforms": ["linux"],
+          "config": {
+            "options": {
+              "maintainer": "Lotion Team",
+              "homepage": "https://github.com/puneetsl/lotion",
+              "description": "Unofficial Notion.so Desktop app for Linux",
+              "icon": "./assets/icon.png",
+              "categories": ["Office", "TextEditor"]
+            }
+          }
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "platforms": ["linux"],
+          "config": {
+            "options": {
+              "license": "MIT",
+              "homepage": "https://github.com/puneetsl/lotion",
+              "description": "Unofficial Notion.so Desktop app for Linux",
+              "icon": "./assets/icon.png"
+            }
+          }
+        },
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "platforms": ["win32"],
+          "config": {
+            "name": "lotion",
+            "authors": "Lotion Team",
+            "description": "Unofficial Notion.so Desktop app"
+          }
+        }
+      ],
+      "plugins": [
+        {
+          "name": "@electron-forge/plugin-fuses",
+          "config": {
+            "version": "1",
+            "restrictedResourceAccessBlocked": true,
+            "runAsNode": false
+          }
+        }
+      ]
+    }
+  },
+  "productName": "Lotion"
+}

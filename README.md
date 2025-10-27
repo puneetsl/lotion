@@ -1,120 +1,406 @@
+<p align="center">
+  <img width="35%" height="35%"  src="./assets/Banner.png" alt="Lotion - Unofficial Notion.so Desktop App for Linux">
+</p>
 
-<p align="center"><img width="35%" height="35%" src="http://i.imgur.com/6dtC91m.png" alt="Notion.so"><br>unofficial Notion.so Desktop app for Linux</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/version-1.5.0-blue.svg" alt="Version">
+  <img src="https://img.shields.io/badge/platform-linux-lightgrey.svg" alt="Platform">
+  <img src="https://img.shields.io/badge/electron-34.3.2-9feaf9.svg" alt="Electron">
+  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
+</p>
 
-------
+---
 
-`Version: 0.05.1` 
+## Introduction
 
-# Introduction
+Lotion is an unofficial Electron-based desktop application that brings Notion.so to Linux. While NotionHQ continues to focus on feature development for other platforms, Linux support remains a lower priority. This project aims to fill that gap by providing a native desktop experience with modern UI and comprehensive features.
 
-Welcome! This is an unofficial version of `Notion.so` electron app. Since NotionHQ is busy doing other amazing feature developments, Linux is low on its priority. Here is the tweet from them explaining that
+<blockquote>
+"Hey we don't want to release on platforms that we cannot ensure the quality – the team is still small and we don't use Linux ourselves"
+<br>— Notion (@NotionHQ)
+</blockquote>
 
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Hey we don&#39;t want to release on platforms that we cannot ensure the quality – the team is still small and we don&#39;t use Linux ourselves </p>&mdash; Notion (@NotionHQ) <a href="https://twitter.com/NotionHQ/status/912737143327301634?ref_src=twsrc%5Etfw">September 26, 2017</a></blockquote>
+### Application Preview
 
+<p align="center">
+  <img src="./assets/screenshot.png" alt="Lotion Application Screenshot" width="90%">
+</p>
 
-So I decided to build my own app using `nativefier` 
-
-Here is how it looks
-
-![image](https://user-images.githubusercontent.com/6509604/115094341-2e867900-9eeb-11eb-8305-a0cc50426283.png)
-
-
-
-> Is it your first time finding out about the Notion app? 
+> **First time hearing about Notion?**
 >
-> Use this [link](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76) to sign up and get ready to manage your life like you have never managed before ([Notion.so](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76))
+> Use this [link](https://www.notion.so/?r=55d4c384b54a457490f6cc1799bedc76) to sign up and get ready to manage your life like you have never managed before!
 
+---
 
-# Installation
-Download setup script
-```bash
-wget https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh 
-# Or
-curl https://raw.githubusercontent.com/puneetsl/lotion/master/setup.sh > setup.sh
+## Features
 
-# Make the script executable
-chmod +x setup.sh
+### User Interface
+- **Frameless Window Design** - Modern, seamless interface with custom title bar
+- **Tab Management** - Multiple tabs with drag-and-drop reordering, pinning, and favicon support
+- **Navigation Controls** - Integrated back, forward, and refresh buttons
+- **Built-in Themes** - 8 beautiful themes including Dracula, Nord, Gruvbox, and Catppuccin variants
+- **Dark Mode Support** - Automatic theme detection and switching
+- **Logo Menu** - Quick access to themes, project links, and GitHub repository
 
-# Run (with sudo for global installation, without sudo for local installation)
-[sudo] ./setup.sh native
-# Or for web installation
-[sudo] ./setup.sh web
+### Core Functionality
+- **Full Notion.so Integration** - Complete access to all Notion features on Linux
+- **Native Linux Desktop Integration** - Proper icon support and system integration
+- **Cross-platform Compatibility** - Linux, macOS, and Windows support
+
+### Navigation & Interaction
+- **Context Menu** - Right-click menu with Cut, Copy, Paste, Select All, and link handling
+- **External Links** - Automatically open links in default browser
+
+### Spell Check
+- **English Language Support** - Built-in spell checking for English (US)
+- **Real-time Suggestions** - Right-click on misspelled words for suggestions
+- **Custom Dictionary** - Add words to your personal dictionary
+
+### Architecture
+- **Modern Electron Stack** - Built with Electron 34.3.2 and Electron Forge
+- **Redux State Management** - Centralized state for tabs, windows, and preferences
+- **WebContentsView API** - Efficient multi-tab implementation
+- **Multiple Package Formats** - DEB, RPM, and ZIP packages
+- **Multi-architecture** - x64 and ARM64 builds available
+
+---
+
+## Themes
+
+Lotion includes beautiful built-in themes that transform Notion's appearance while keeping content readable. Access themes via the Lotion logo menu in the top-left corner.
+
+<p align="center">
+  <img src="./assets/theme.png" alt="Catppuccin Mocha Theme" width="90%">
+  <br>
+  <em>Catppuccin Mocha theme with synchronized tab bar</em>
+</p>
+
+### Available Themes
+
+- **Default (Notion)** - Uses Notion's default theme with system-aware tab bar
+- **Dracula** - Popular dark theme with purple and cyan accents
+- **Nord** - Arctic, north-bluish color palette
+- **Gruvbox Dark** - Retro groove colors with warm earth tones
+- **Catppuccin Mocha** - Warm dark theme with purple accents (shown above)
+- **Catppuccin Macchiato** - Slightly lighter than Mocha
+- **Catppuccin Frappe** - Cool dark theme with blue tones
+- **Catppuccin Latte** - Light theme option for bright environments
+
+### Theme Features
+
+- **Unified Theming** - Both page content and tab bar match the selected theme
+- **Minimal Design** - Themes style UI chrome (sidebar, topbar) while preserving content readability
+- **Instant Switching** - Change themes on the fly without restarting
+- **Custom CSS Support** - Add your own themes to `~/.config/Lotion/themes/`
+- **System Theme Integration** - Default theme respects your system's dark/light mode preference
+
+### Creating Custom Themes
+
+Create a new CSS file in `~/.config/Lotion/themes/your-theme.css`:
+
+```css
+/* My Custom Theme */
+:root {
+  --custom-bg: #1a1b26;
+  --custom-accent: #7aa2f7;
+}
+
+.notion-frame,
+body {
+  background: var(--custom-bg) !important;
+}
+
+.notion-sidebar {
+  background: var(--custom-bg) !important;
+}
+
+h1, h2, h3 {
+  color: var(--custom-accent) !important;
+}
 ```
 
-To install into a specific directory (creating a portable linux install) clone the repository and run this in the folder:
-```bash
-./portable.sh 
-```
-During set up select `web` or `native`. The native version supports offline mode
-while the web version is the most up to date Notion web client.
+Then select "Reload Custom CSS" from the logo menu to load your theme.
 
-If the script has errors or you would like to install
-manually, you can refer to [these](https://github.com/puneetsl/lotion/issues/1) instructions.
+---
 
-# Features
+## Installation
 
-- Better Icon (courtesy: [Konrad Kolasa](https://dribbble.com/shots/4886987-Notion-Icon-Replacement) )
+### Arch Linux (AUR)
 
-  <img width="15%" height="15%" src="https://github.com/puneetsl/lotion/blob/master/icon.png?raw=true" alt="Notion Icon">
-<br>looks stunning in actual usage:<br>
-
-<img width="75%" height="75%" src="https://user-images.githubusercontent.com/6509604/115094448-86bd7b00-9eeb-11eb-9be5-2ac125825fa1.png">
-- Everything you would expect from Windows or Mac application 
-
-  -  [Here](https://github.com/puneetsl/lotion/issues/1) are the instructions to manually install natively if the
-  installer script doesn't work.
-- Tray icon
-
- -------
- 
-Thanks to [sysdrum](https://github.com/sysdrum/notion-app), I used some of his code and improved upon it
-
--------
-
-
-# Uninstall
+For Arch Linux users, install from the AUR:
 
 ```bash
-./uninstall.sh
+# Using yay
+yay -S lotion
+
+# Using paru
+paru -S lotion
+
+# Using makepkg manually
+git clone https://aur.archlinux.org/lotion.git
+cd lotion
+makepkg -si
 ```
 
-# Login issues
-At this point the web version does not support Google SSO logins, this is an issue with [Google](https://security.googleblog.com/2019/04/better-protection-against-man-in-middle.html), they have stopped allowing login from unidentified browser. Earlier this could have been solved by adding a useragent, but now Google is doing sophisticated checks (and rightly so), making it harder for us to bypass. The only solution is to implement our own oAuth, which would require extreme amount of work.
-So a simple solution to this issue is, use email address
-![image](https://user-images.githubusercontent.com/6509604/114249493-c541bb80-9968-11eb-9a79-fd242aa9010c.png)
+### Debian/Ubuntu (.deb package)
 
+Download the latest `.deb` package from [Releases](https://github.com/puneetsl/lotion/releases):
 
+```bash
+sudo dpkg -i lotion_1.0.0_amd64.deb
 
+# If you have dependency issues:
+sudo apt install -f
+```
 
+### Fedora/RHEL (.rpm package)
 
-you will be emailed by Notion a login code that you can use to login.
+Download the latest `.rpm` package from [Releases](https://github.com/puneetsl/lotion/releases):
 
-Some helpful issue threads for this problem: [Google issue](https://github.com/puneetsl/lotion/issues/78), [Apple issue](https://github.com/puneetsl/lotion/issues/70)
+```bash
+sudo rpm -i lotion-1.0.0.x86_64.rpm
 
-Other way to not have this issue is to use Native version of this app.
+# Or using dnf:
+sudo dnf install ./lotion-1.0.0.x86_64.rpm
+```
 
+### From Source
 
-------
-## Books that can help you use Notion more productively
-### 1. Enhancing Productivity with Notion: Save time on projects by supercharging your productivity with Notion's powerful features and templates
-<img width="200px" height="300px" src="https://github.com/puneetsl/lotion/assets/6509604/9f97543b-f541-4b19-b17d-d3bc2f8f0cd1">
+1. **Clone the repository:**
+```bash
+git clone git@github.com:puneetsl/lotion.git
+cd lotion
+```
 
-[Link to buy](https://amzn.to/3vIaIUR)
+2. **Install dependencies:**
+```bash
+npm install
+```
 
-### 2. Notion for Novices: A Beginner's Guide
-<img width="200px" height="300px" src="https://github.com/puneetsl/lotion/assets/6509604/e1860cd0-ca3d-4e6c-b308-a7361da53321">
+3. **Run in development mode:**
+```bash
+npm run dev
+```
 
-[Link to buy](https://amzn.to/3vTq8FF)
+### Build Packages
 
+To build distribution packages:
 
-### 3. NOTION 2.: STEP BY PAGE
-<img width="200px" height="300px" src="https://github.com/puneetsl/lotion/assets/6509604/66f2b532-92d1-453a-848e-6e746ab33c53">
+```bash
+# Build .deb package (recommended for Debian/Ubuntu)
+npx electron-forge make --targets @electron-forge/maker-deb
 
-[Link to buy](https://amzn.to/3PVqtyE)
+# Build all Linux packages
+npm run make:linux
 
+# Packages will be in the 'out' directory:
+# - .deb package (Debian/Ubuntu)
+# - .rpm package (Red Hat/Fedora/openSUSE)
+# - .zip archive (universal)
+```
 
+### Install the .deb Package
 
-------
+```bash
+sudo dpkg -i out/make/deb/x64/lotion_1.0.0_amd64.deb
 
+# If you have dependency issues on non-Debian systems:
+sudo dpkg -i --force-depends out/make/deb/x64/lotion_1.0.0_amd64.deb
+```
 
-Ad: [Memodiction.com](https://memodiction.com/) - A dictionary that helps you remember words
+### Portable Installation
+
+For a portable install (no system installation required):
+
+```bash
+./portable.sh
+```
+
+---
+
+## Configuration
+
+The application stores configuration in `config/config.json`:
+
+```json
+{
+  "domainBaseUrl": "https://www.notion.so"
+}
+```
+
+User data and preferences are automatically saved in:
+- **Linux**: `~/.config/Lotion/`
+
+---
+
+## Keyboard Shortcuts
+
+### Navigation
+Use the navigation buttons in the tab bar:
+- Back button (‹) - Go back
+- Forward button (›) - Go forward
+- Refresh button (↻) - Reload page
+
+### Development
+- `Ctrl+Shift+I` / `F12` - Toggle Developer Tools (dev mode only)
+
+---
+
+## Spell Check
+
+Lotion includes built-in spell checking with support for English (US):
+
+### How to Use:
+1. Type text in any editable field in Notion
+2. Right-click on any misspelled word (underlined in red)
+3. Select from the suggested corrections
+4. Or choose "Add to Dictionary" to remember the word
+
+Spell check works automatically in all text fields and is always enabled.
+
+---
+
+## Development
+
+### Project Structure
+
+```
+lotion/
+├── src/
+│   ├── main/
+│   │   ├── controllers/      # WindowController, TabController, AppController
+│   │   ├── store/            # Redux store & slices (tabs, windows, settings)
+│   │   ├── index.js          # Main process entry point
+│   │   └── spellCheckMenu.js # Spell check menu functionality
+│   └── renderer/
+│       ├── tab-bar/          # Custom tab bar UI (vanilla JS)
+│       │   ├── index.html    # Tab bar HTML & CSS
+│       │   ├── renderer.js   # Tab bar rendering logic
+│       │   └── preload.js    # Tab bar IPC bridge
+│       └── preload.js        # Main preload script
+├── assets/                   # Application icons and images
+├── config/                   # Configuration files
+├── i18n/                     # Internationalization support
+└── build.js                  # Build configuration script
+```
+
+### Development Scripts
+
+```bash
+npm run start      # Start in development mode
+npm run dev        # Alias for start
+npm run package    # Package the application
+npm run make       # Create distribution packages
+npm run make:linux # Create Linux-specific packages
+```
+
+### Architecture Overview
+
+**Main Process**
+- **AppController**: Application lifecycle and multi-window orchestration
+- **WindowController**: Manages frameless windows with custom tab bars
+- **TabController**: Individual tab lifecycle and WebContentsView management
+- **Redux Store**: Centralized state for tabs, windows, and user preferences
+
+**Renderer Process**
+- **Tab Bar**: Custom vanilla JavaScript UI for tab management
+- **Web Content**: Loads Notion.so web application in WebContentsView instances
+- **IPC Bridge**: Secure communication between main and renderer processes
+
+**Key Technologies**
+- WebContentsView API for efficient tab rendering
+- Electron context isolation for security
+- Redux Toolkit for state management
+- Native context menus with spell check integration
+
+---
+
+## Contributing
+
+Contributions are welcome! Here's how you can help:
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes and test thoroughly on Linux
+4. Commit your changes: `git commit -m 'Add amazing feature'`
+5. Push to the branch: `git push origin feature/amazing-feature`
+6. Open a Pull Request
+
+### For Maintainers
+
+If you're maintaining the AUR package, see [AUR_SUBMISSION.md](AUR_SUBMISSION.md) for detailed instructions on:
+- Submitting to AUR for the first time
+- Updating the package for new releases
+- Testing and troubleshooting
+
+---
+
+## Acknowledgments
+
+- Thanks to [sysdrum/notion-app](https://github.com/sysdrum/notion-app) for inspiration and initial code
+- Built with Electron and modern web technologies
+
+---
+
+## License
+
+This project is for educational and personal use. Please respect Notion's terms of service.
+
+### Disclaimer
+
+This is an unofficial adaptation of Notion's desktop application. It is not affiliated with, endorsed by, or supported by Notion Labs, Inc.
+
+---
+
+## Uninstall
+
+### For .deb Package Installation
+
+```bash
+# Using dpkg
+sudo dpkg -r lotion
+
+# Or using apt
+sudo apt remove lotion
+```
+
+### For .rpm Package Installation
+
+```bash
+# Using rpm
+sudo rpm -e lotion
+
+# Or using dnf/yum
+sudo dnf remove lotion
+# or
+sudo yum remove lotion
+```
+
+### For Source/Portable Installation
+
+Simply delete the application directory:
+
+```bash
+rm -rf /path/to/lotion
+
+# Also remove user data (optional)
+rm -rf ~/.config/Lotion ~/.cache/lotion
+```
+
+---
+
+## Support
+
+For issues and questions, please use the GitHub issue tracker:
+- [Report a bug](https://github.com/puneetsl/lotion/issues)
+- [Request a feature](https://github.com/puneetsl/lotion/issues)
+- [Ask a question](https://github.com/puneetsl/lotion/discussions)
+
+---
+
+### Advertisement: [Memodiction.com](https://memodiction.com/)
+*A dictionary that helps you remember words*
+
+---
+
+<p align="center">Made for the Linux community</p>

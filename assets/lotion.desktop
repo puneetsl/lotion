@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Lotion
+Comment=Unofficial Notion.so Desktop app for Linux
+Exec=/usr/bin/lotion %U
+Icon=lotion
+Type=Application
+StartupNotify=true
+Categories=Office;TextEditor;
+MimeType=x-scheme-handler/notion;
+StartupWMClass=Lotion 

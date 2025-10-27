@@ -1,0 +1,998 @@
+{
+    "activityMonitor.copyDiagnosticInformation": {
+        "defaultMessage": "Copy Diagnostic Information",
+        "description": "Copy diagnostic information for the given process"
+    },
+    "activityMonitor.copyExecutablePath": {
+        "defaultMessage": "Copy Executable Path",
+        "description": "Copy the executable path of the given process"
+    },
+    "activityMonitor.copyUrl": {
+        "defaultMessage": "Copy URL",
+        "description": "Copy the URL of the given process"
+    },
+    "activityMonitor.forceKillProcess": {
+        "defaultMessage": "Force Kill Process",
+        "description": "Force kill the given process"
+    },
+    "activityMonitor.inspectActivityMonitor": {
+        "defaultMessage": "Inspect Activity Monitor",
+        "description": "Open DevTools for the Activity Monitor window"
+    },
+    "activityMonitor.killProcess": {
+        "defaultMessage": "Kill Process",
+        "description": "Kill the given process"
+    },
+    "activityMonitor.openDevTools": {
+        "defaultMessage": "Open DevTools",
+        "description": "Open DevTools for the given process"
+    },
+    "activityMonitor.reload": {
+        "defaultMessage": "Reload",
+        "description": "Reload the given process"
+    },
+    "clientPlaceholder.placeholderDescription": {
+        "defaultMessage": "Click to display in this window",
+        "description": "Description of the client placeholder. Lets users know that clicking this window will bring the tab's content to this window."
+    },
+    "clientPlaceholder.placeholderTitle": {
+        "defaultMessage": "Currently viewing content in another window",
+        "description": "Title of the client placeholder. Shown when a tab's content is being viewed in another window."
+    },
+    "commandSearch.window.title": {
+        "defaultMessage": "Notion - Command Search",
+        "description": "Title of the Command Search modal. We want Notion to be in there because this shows up at the OS level"
+    },
+    "crashWatchdog.dialog.abnormalExit": {
+        "defaultMessage": "Abnormal Exit: The page exited with a non-zero exit code.",
+        "description": "The message of the dialog that is shown when the renderer process crashes due to an abnormal exit."
+    },
+    "crashWatchdog.dialog.buttonCloseTab": {
+        "defaultMessage": "Close Tab",
+        "description": "The label of the button that'll close the crashed tab without further action."
+    },
+    "crashWatchdog.dialog.buttonCloseWindow": {
+        "defaultMessage": "Close Window",
+        "description": "The label of the button that'll close the crashed window without further action."
+    },
+    "crashWatchdog.dialog.buttonRestartApp": {
+        "defaultMessage": "Restart Notion",
+        "description": "The label of the button that'll restart the app."
+    },
+    "crashWatchdog.dialog.crashed": {
+        "defaultMessage": "Crashed: The page crashed due to an unknown reason.",
+        "description": "The message of the dialog that is shown when the renderer process crashes due to an unknown reason."
+    },
+    "crashWatchdog.dialog.details": {
+        "defaultMessage": "Page URL: {url} Reason: {reason} Exit code: {exitCode}",
+        "description": "The details of the page that crashed."
+    },
+    "crashWatchdog.dialog.integrityFailure": {
+        "defaultMessage": "Integrity Failure: The page failed code integrity checks.",
+        "description": "The message of the dialog that is shown when the renderer process crashes due to failing code integrity checks."
+    },
+    "crashWatchdog.dialog.killed": {
+        "defaultMessage": "Killed: The page was killed by an external process.",
+        "description": "The message of the dialog that is shown when the renderer process crashes due to being killed by an external process."
+    },
+    "crashWatchdog.dialog.launchFailed": {
+        "defaultMessage": "Launch Failed: The process failed to launch.",
+        "description": "The message of the dialog that is shown when the renderer process crashes due to failing to launch."
+    },
+    "crashWatchdog.dialog.message": {
+        "defaultMessage": "Something went wrong while displaying this tab and we could not automatically recover it.",
+        "description": "The message of the dialog that is shown when the renderer process crashes."
+    },
+    "crashWatchdog.dialog.oom": {
+        "defaultMessage": "OOM: The page ran out of memory and crashed.",
+        "description": "The message of the dialog that is shown when the renderer process crashes due to an OOM error."
+    },
+    "crashWatchdog.dialog.title": {
+        "defaultMessage": "Something went wrong",
+        "description": "The title of the dialog that is shown when the renderer process crashes."
+    },
+    "crashWatchdog.dialog.urlUnknown": {
+        "defaultMessage": "Unknown",
+        "description": "The URL of the webContents is not available."
+    },
+    "desktop.activityMonitor.all": {
+        "defaultMessage": "All",
+        "description": "Label for the dropdown option that displays all processes without filtering"
+    },
+    "desktop.activityMonitor.cpuPercent": {
+        "defaultMessage": "% CPU",
+        "description": "The CPU percentage"
+    },
+    "desktop.activityMonitor.cpuPercentDescription": {
+        "defaultMessage": "The fraction of available CPU time used by the process.",
+        "description": "Description used to explain '% CPU'."
+    },
+    "desktop.activityMonitor.cpuTime": {
+        "defaultMessage": "CPU Time",
+        "description": "The CPU time"
+    },
+    "desktop.activityMonitor.cpuTimeDescription": {
+        "defaultMessage": "The total seconds of CPU time used since process startup.",
+        "description": "Description used to explain 'CPU Time'."
+    },
+    "desktop.activityMonitor.creationTime": {
+        "defaultMessage": "Created",
+        "description": "The creation time of the process"
+    },
+    "desktop.activityMonitor.creationTimeDescription": {
+        "defaultMessage": "The amount of time since the process was created.",
+        "description": "Description used to explain 'Created'."
+    },
+    "desktop.activityMonitor.frames": {
+        "defaultMessage": "Frames",
+        "description": "The number of frames of the process"
+    },
+    "desktop.activityMonitor.framesDescription": {
+        "defaultMessage": "The number of frames managed by the process. Many renderer processes are responsible for multiple frames.",
+        "description": "Description used to explain 'Frames'."
+    },
+    "desktop.activityMonitor.hidden": {
+        "defaultMessage": "Hidden",
+        "description": "The visibility state of the process"
+    },
+    "desktop.activityMonitor.hideColumns": {
+        "defaultMessage": "Hide Columns",
+        "description": "Button label to hide column manager"
+    },
+    "desktop.activityMonitor.hideFilters": {
+        "defaultMessage": "Hide Filters",
+        "description": "Button label to hide filter controls"
+    },
+    "desktop.activityMonitor.idleWakeupsPerSecond": {
+        "defaultMessage": "Idle Wakeups",
+        "description": "The number of times the process has woken up the CPU."
+    },
+    "desktop.activityMonitor.idleWakeupsPerSecondDescription": {
+        "defaultMessage": "The number of times the process has woken up the CPU since the last activity monitor update.",
+        "description": "Description used to explain 'Idle Wakeups per Second'."
+    },
+    "desktop.activityMonitor.loading": {
+        "defaultMessage": "Loading activity data",
+        "description": "The loading state of the activity monitor"
+    },
+    "desktop.activityMonitor.memCurrent": {
+        "defaultMessage": "Memory (Current)",
+        "description": "The current memory"
+    },
+    "desktop.activityMonitor.memCurrentDescription": {
+        "defaultMessage": "The \"working set\" size of the process, which is the set of pages currently resident in RAM. This number does not account for the operating system's memory compression, management of inactive and cached pages, or other memory management techniques. The amount of physical memory used by the process is likely much smaller.",
+        "description": "Description used to explain 'Memory (Current)'."
+    },
+    "desktop.activityMonitor.memPeak": {
+        "defaultMessage": "Memory (Peak)",
+        "description": "The peak memory"
+    },
+    "desktop.activityMonitor.memPeakDescription": {
+        "defaultMessage": "The peak working set size of the process, which is the maximum amount of physical memory used by the process since it was launched. The \"working set\" size of the process, which is the set of pages currently resident in RAM. This number does not account for the operating system's memory compression, management of inactive and cached pages, or other memory management techniques. The amount of physical memory used by the process is likely much smaller.",
+        "description": "Description used to explain 'Memory (Peak)'."
+    },
+    "desktop.activityMonitor.memPrivate": {
+        "defaultMessage": "Memory (Private)",
+        "description": "The private memory"
+    },
+    "desktop.activityMonitor.memPrivateDescription": {
+        "defaultMessage": "The amount of physical memory allocated by the process that is not shared with other processes, such as JS heap or HTML content.",
+        "description": "Description used to explain 'Memory (Private)'."
+    },
+    "desktop.activityMonitor.memShared": {
+        "defaultMessage": "Memory (Shared)",
+        "description": "The shared memory"
+    },
+    "desktop.activityMonitor.memSharedDescription": {
+        "defaultMessage": "The amount of physical memory allocated by the process that is shared with other processes, such as shared libraries or mapped files.",
+        "description": "Description used to explain 'Memory (Shared)'."
+    },
+    "desktop.activityMonitor.mixed": {
+        "defaultMessage": "Mixed",
+        "description": "The visibility state of the process"
+    },
+    "desktop.activityMonitor.parentWindowId": {
+        "defaultMessage": "Parent Window ID",
+        "description": "The ID of the parent window"
+    },
+    "desktop.activityMonitor.parentWindowIdDescription": {
+        "defaultMessage": "The unique identifier of the window containing this tab.",
+        "description": "Description used to explain 'Parent Window ID'."
+    },
+    "desktop.activityMonitor.pid": {
+        "defaultMessage": "PID",
+        "description": "The PID of the process"
+    },
+    "desktop.activityMonitor.pidDescription": {
+        "defaultMessage": "The process ID of the process as used by the operating system.",
+        "description": "Description used to explain 'PID'."
+    },
+    "desktop.activityMonitor.processName": {
+        "defaultMessage": "Process Name",
+        "description": "The name of the process"
+    },
+    "desktop.activityMonitor.showColumns": {
+        "defaultMessage": "Show Columns",
+        "description": "Button label to show column manager"
+    },
+    "desktop.activityMonitor.showFilters": {
+        "defaultMessage": "Show Filters",
+        "description": "Button label to show filter controls"
+    },
+    "desktop.activityMonitor.tabId": {
+        "defaultMessage": "Tab ID",
+        "description": "The ID of the tab"
+    },
+    "desktop.activityMonitor.tabIdDescription": {
+        "defaultMessage": "The unique identifier of the tab in the Notion app.",
+        "description": "Description used to explain 'Tab ID'."
+    },
+    "desktop.activityMonitor.type": {
+        "defaultMessage": "Type",
+        "description": "The type of the process"
+    },
+    "desktop.activityMonitor.url": {
+        "defaultMessage": "URL",
+        "description": "The URL of the process"
+    },
+    "desktop.activityMonitor.urlDescription": {
+        "defaultMessage": "The URL of the process. Many renderer processes are responsible for multiple frames, please see the Frames column for more information.",
+        "description": "Description used to explain 'URL'."
+    },
+    "desktop.activityMonitor.visibilityState": {
+        "defaultMessage": "Visibility",
+        "description": "The visibility state of the process"
+    },
+    "desktop.activityMonitor.visibilityStateDescription": {
+        "defaultMessage": "The visibility state of the process. If the process is a renderer process, this will be the visibility state of the main frame.",
+        "description": "Description used to explain 'Visibility'."
+    },
+    "desktop.activityMonitor.visible": {
+        "defaultMessage": "Visible",
+        "description": "The visibility state of the process"
+    },
+    "desktop.tabBar.backButtonLabel": {
+        "defaultMessage": "Back",
+        "description": "Label for the button that goes back in the tab bar"
+    },
+    "desktop.tabBar.closeSidebarLabel": {
+        "defaultMessage": "Close Sidebar",
+        "description": "Label for the button that closes the sidebar in the tab bar"
+    },
+    "desktop.tabBar.closeTabLabel": {
+        "defaultMessage": "Close Tab, {tabTitle}",
+        "description": "Label for the button that closes a tab in the tab bar, followed by the tab title"
+    },
+    "desktop.tabBar.forwardButtonLabel": {
+        "defaultMessage": "Forward",
+        "description": "Label for the button that goes forward in the tab bar"
+    },
+    "desktop.tabBar.newTabButtonLabel": {
+        "defaultMessage": "New Tab",
+        "description": "Label for the button that opens a new tab in the tab bar"
+    },
+    "desktop.tabBar.openSidebarLabel": {
+        "defaultMessage": "Open Sidebar",
+        "description": "Label for the button that opens the sidebar in the tab bar"
+    },
+    "desktop.tabBar.tabSpacesLabel": {
+        "defaultMessage": "Tab Spaces",
+        "description": "Label for the button that opens the tab spaces menu in the tab bar"
+    },
+    "desktopExtensions.install.failed.title": {
+        "defaultMessage": "Failed to install extension",
+        "description": "Failed to install extension dialog"
+    },
+    "desktopExtensions.manage.cancel": {
+        "defaultMessage": "Cancel",
+        "description": "Cancel button for the manage extension dialog"
+    },
+    "desktopExtensions.manage.disable": {
+        "defaultMessage": "Disable",
+        "description": "Disable button for the manage extension dialog"
+    },
+    "desktopExtensions.manage.enable": {
+        "defaultMessage": "Enable",
+        "description": "Enable button for the manage extension dialog"
+    },
+    "desktopExtensions.manage.message": {
+        "defaultMessage": "What would you like to do with {extensionTitle} {extensionVersion}?",
+        "description": "Message for the manage extension dialog"
+    },
+    "desktopExtensions.manage.title": {
+        "defaultMessage": "Manage Extension",
+        "description": "Title for the manage extension dialog"
+    },
+    "desktopExtensions.manage.uninstall": {
+        "defaultMessage": "Uninstall",
+        "description": "Uninstall button for the manage extension dialog"
+    },
+    "desktopExtensions.openFailed.noPopupMessage": {
+        "defaultMessage": "This extension did not specify a popup (action.default_popup)",
+        "description": "Failed to open extension dialog message"
+    },
+    "desktopExtensions.openFailed.noPopupTitle": {
+        "defaultMessage": "Failed to open extension",
+        "description": "Failed to open extension dialog title"
+    },
+    "desktopExtensions.unzip.failed.badFileRead": {
+        "defaultMessage": "Failed to read CRX file: {error}",
+        "description": "Failed to read CRX file"
+    },
+    "desktopExtensions.unzip.failed.badFileWrite": {
+        "defaultMessage": "Failed to write file {filePath}: {error}",
+        "description": "Failed to write file"
+    },
+    "desktopExtensions.unzip.failed.badFolderCreate": {
+        "defaultMessage": "Failed to create extensions folder at {extensionPath}: {error}",
+        "description": "Failed to create extensions folder"
+    },
+    "desktopExtensions.unzip.failed.badManifest": {
+        "defaultMessage": "The manifest.json in this extension could not be parsed. Is this a valid extension? The error was: {error}",
+        "description": "Invalid manifest.json found"
+    },
+    "desktopExtensions.unzip.failed.badManifestNoName": {
+        "defaultMessage": "No name found in manifest.json",
+        "description": "No name found in manifest.json"
+    },
+    "desktopExtensions.unzip.failed.error": {
+        "defaultMessage": "Failed to unzip CRX file: {error}",
+        "description": "Failed to unzip extension error"
+    },
+    "desktopExtensions.unzip.failed.noManifest": {
+        "defaultMessage": "No manifest.json found in CRX. Is this a valid extension?",
+        "description": "No manifest.json found in CRX"
+    },
+    "desktopInstaller.failedToMove.detail": {
+        "defaultMessage": "We failed to move the app to your Applications folder. Please move it manually.",
+        "description": "Text of the dialog shown when we failed to move the app to the Applications folder"
+    },
+    "desktopInstaller.failedToMove.title": {
+        "defaultMessage": "Failed to move app",
+        "description": "Title of the dialog shown when we failed to move the app to the Applications folder"
+    },
+    "desktopInstaller.invalidInstallDialog.cancelButton.label": {
+        "defaultMessage": "Cancel",
+        "description": "Label of the Cancel button in the dialog shown when the app is not installed properly"
+    },
+    "desktopInstaller.invalidInstallDialog.confirmMove": {
+        "defaultMessage": "Your Notion application is not installed properly. Can we move your Notion app into your Applications folder?",
+        "description": "Text of the dialog shown when the app is not installed properly"
+    },
+    "desktopInstaller.invalidInstallDialog.okButton.label": {
+        "defaultMessage": "OK",
+        "description": "Label of the OK button in the dialog shown when the app is not installed properly"
+    },
+    "desktopInstaller.invalidInstallDialog.title": {
+        "defaultMessage": "Invalid Install",
+        "description": "Title of the dialog shown when the app is not installed properly"
+    },
+    "desktopTopbar.appMenu.about": {
+        "defaultMessage": "About Notion",
+        "description": ""
+    },
+    "desktopTopbar.appMenu.checkForUpdate": {
+        "defaultMessage": "Check for Updates…",
+        "description": "Menu item to check for updates. The ellipsis should be the Unicode U+2026 and not three periods."
+    },
+    "desktopTopbar.appMenu.checkForUpdate.noUpdateAvailable": {
+        "defaultMessage": "You're on the latest version of Notion!",
+        "description": "A message displayed in a little dialog when the user wanted to check for an update but there was none."
+    },
+    "desktopTopbar.appMenu.checkForUpdate.title": {
+        "defaultMessage": "Check for Updates",
+        "description": "The title of a message box displaying whether or not a new version of Notion is available."
+    },
+    "desktopTopbar.appMenu.checkForUpdate.updateAvailable": {
+        "defaultMessage": "A new version of Notion is available and currently being downloaded in the background. Thanks for staying up to date!",
+        "description": "A message displayed in a little dialog when the user wanted to check for an update and one is available."
+    },
+    "desktopTopbar.appMenu.checkForUpdate.updateCheckFailed": {
+        "defaultMessage": "Notion failed to make a connection with the update server, either because of a problem with your Internet connection or the update server itself. Please try again later.",
+        "description": "A message displayed in a little dialog when the user wanted to check for an update but we failed to connect to Notion's update server."
+    },
+    "desktopTopbar.appMenu.downloadingUpdate": {
+        "defaultMessage": "Downloading Update ({percentage}%)",
+        "description": "Menu item to show that an update is being downloaded."
+    },
+    "desktopTopbar.appMenu.hide": {
+        "defaultMessage": "Hide Notion",
+        "description": ""
+    },
+    "desktopTopbar.appMenu.hideOthers": {
+        "defaultMessage": "Hide Others",
+        "description": ""
+    },
+    "desktopTopbar.appMenu.preferences": {
+        "defaultMessage": "Preferences…",
+        "description": "Standard macOS 'Preferences' menu. The ellipsis should be the Unicode U+2026 and not three periods. Ideally, if you have access to a Mac, this word should match what is present in the menu of other apps."
+    },
+    "desktopTopbar.appMenu.quit": {
+        "defaultMessage": "Quit",
+        "description": ""
+    },
+    "desktopTopbar.appMenu.quitWithoutSavingTabs": {
+        "defaultMessage": "Quit Without Saving Tabs",
+        "description": "Menu item to quit and exit without saving existing tabs on Mac"
+    },
+    "desktopTopbar.appMenu.restartToApplyUpdate": {
+        "defaultMessage": "Restart to Apply Update",
+        "description": "Menu item to restart the app to apply an update."
+    },
+    "desktopTopbar.appMenu.services": {
+        "defaultMessage": "Services",
+        "description": ""
+    },
+    "desktopTopbar.appMenu.unhide": {
+        "defaultMessage": "Show All",
+        "description": ""
+    },
+    "desktopTopbar.editMenu.copy": {
+        "defaultMessage": "Copy",
+        "description": ""
+    },
+    "desktopTopbar.editMenu.copyLinkToCurrentPage": {
+        "defaultMessage": "Copy Link to Current Page",
+        "description": "Menu item for copying a link to the current page"
+    },
+    "desktopTopbar.editMenu.copyLinkToCurrentPageBlockTitle": {
+        "defaultMessage": "Copy Name of Current Page",
+        "description": "Menu item for copying a linkified name of the current page"
+    },
+    "desktopTopbar.editMenu.cut": {
+        "defaultMessage": "Cut",
+        "description": ""
+    },
+    "desktopTopbar.editMenu.paste": {
+        "defaultMessage": "Paste",
+        "description": ""
+    },
+    "desktopTopbar.editMenu.pasteAndMatchStyle": {
+        "defaultMessage": "Paste and Match Style",
+        "description": ""
+    },
+    "desktopTopbar.editMenu.redo": {
+        "defaultMessage": "Redo",
+        "description": ""
+    },
+    "desktopTopbar.editMenu.selectAll": {
+        "defaultMessage": "Select All",
+        "description": ""
+    },
+    "desktopTopbar.editMenu.speech": {
+        "defaultMessage": "Speech",
+        "description": ""
+    },
+    "desktopTopbar.editMenu.speech.startSpeaking": {
+        "defaultMessage": "Start Speaking",
+        "description": ""
+    },
+    "desktopTopbar.editMenu.speech.stopSpeaking": {
+        "defaultMessage": "Stop Speaking",
+        "description": ""
+    },
+    "desktopTopbar.editMenu.title": {
+        "defaultMessage": "Edit",
+        "description": ""
+    },
+    "desktopTopbar.editMenu.undo": {
+        "defaultMessage": "Undo",
+        "description": ""
+    },
+    "desktopTopbar.extensionsMenu.install": {
+        "defaultMessage": "Install Extension...",
+        "description": "Menu item to install an extension"
+    },
+    "desktopTopbar.extensionsMenu.manage": {
+        "defaultMessage": "Manage Extensions",
+        "description": "Menu item to manage an extension"
+    },
+    "desktopTopbar.fileMenu.close": {
+        "defaultMessage": "Close Window",
+        "description": ""
+    },
+    "desktopTopbar.fileMenu.closeTab": {
+        "defaultMessage": "Close Tab",
+        "description": "Menu item for closing the current tab in the current window"
+    },
+    "desktopTopbar.fileMenu.newNotionWindow": {
+        "defaultMessage": "New Notion Window",
+        "description": "Menu item for opening a new Notion window"
+    },
+    "desktopTopbar.fileMenu.newTab": {
+        "defaultMessage": "New Tab",
+        "description": "Menu item for opening a new tab in the current window"
+    },
+    "desktopTopbar.fileMenu.newWindow": {
+        "defaultMessage": "New Window",
+        "description": ""
+    },
+    "desktopTopbar.fileMenu.print": {
+        "defaultMessage": "Print…",
+        "description": "Menu item that allows user to print current page. The ellipsis should be the Unicode U+2026 and not three periods."
+    },
+    "desktopTopbar.fileMenu.quit": {
+        "defaultMessage": "Exit",
+        "description": ""
+    },
+    "desktopTopbar.fileMenu.quitWithoutSavingTabs": {
+        "defaultMessage": "Exit Without Saving Tabs",
+        "description": "Menu item to quit and exit without saving existing tabs"
+    },
+    "desktopTopbar.fileMenu.reopenClosedTab": {
+        "defaultMessage": "Reopen Last Closed Tab",
+        "description": "Menu item for reopening the last close tab(s) including their window if needed"
+    },
+    "desktopTopbar.fileMenu.title": {
+        "defaultMessage": "File",
+        "description": ""
+    },
+    "desktopTopbar.helpMenu.copyInstallId": {
+        "defaultMessage": "Copy Install ID",
+        "description": "Menu item for copying the install ID"
+    },
+    "desktopTopbar.helpMenu.disableDebugLogging": {
+        "defaultMessage": "Disable Advanced Logging and Restart",
+        "description": "Button that disables advanced (debug) logging"
+    },
+    "desktopTopbar.helpMenu.disableHardwareAcceleration": {
+        "defaultMessage": "Disable Hardware Acceleration and Restart",
+        "description": "Button that disables hardware (GPU) acceleration"
+    },
+    "desktopTopbar.helpMenu.enableDebugLogging": {
+        "defaultMessage": "Enable Advanced Logging and Restart",
+        "description": "Button that enables advanced (debug) logging"
+    },
+    "desktopTopbar.helpMenu.enableHardwareAcceleration": {
+        "defaultMessage": "Enable Hardware Acceleration and Restart",
+        "description": "Button that enables hardware (GPU) acceleration"
+    },
+    "desktopTopbar.helpMenu.openActivityMonitor": {
+        "defaultMessage": "Open Activity Monitor",
+        "description": "Used as the label for a button that shows the Activity Monitor"
+    },
+    "desktopTopbar.helpMenu.openConsole": {
+        "defaultMessage": "Open Console",
+        "description": "Button that opens the developer console for the currently focused window"
+    },
+    "desktopTopbar.helpMenu.openHelpAndSupport": {
+        "defaultMessage": "Open Help & Documentation",
+        "description": ""
+    },
+    "desktopTopbar.helpMenu.recordNetLog": {
+        "defaultMessage": "Record Network Log…",
+        "description": "The label for the menu item that starts recording the network log."
+    },
+    "desktopTopbar.helpMenu.recordNetLogConfirmation": {
+        "defaultMessage": "A net log is now being recorded to your Downloads folder. To stop the recording, click the 'Stop Recording Network Log' button in the Troubleshooting menu or quit the app.",
+        "description": "The label for the text field in a confirmation dialog opened after a network log recording was started"
+    },
+    "desktopTopbar.helpMenu.recordNetLogFailed": {
+        "defaultMessage": "Recording network log failed. Please try again or inspect the logs for more information.",
+        "description": "The label for the menu item that failed to start recording the network log."
+    },
+    "desktopTopbar.helpMenu.recordNetLogFailedMessage": {
+        "defaultMessage": "Please try again or inspect the logs for more information. The error was:",
+        "description": "The label for the menu item that failed to start recording the network log."
+    },
+    "desktopTopbar.helpMenu.recordNetLogFailedTitle": {
+        "defaultMessage": "Recording network log failed",
+        "description": "The title for the dialog that shows when a network log recording fails"
+    },
+    "desktopTopbar.helpMenu.recordNetLogStop": {
+        "defaultMessage": "Stop Recording Network Log…",
+        "description": "The label for the menu item that is recording the network log."
+    },
+    "desktopTopbar.helpMenu.recordPerformanceTrace": {
+        "defaultMessage": "Record Performance Trace…",
+        "description": "Used as the label for a button that triggers a performance trace recording"
+    },
+    "desktopTopbar.helpMenu.recordPerformanceTraceConfirm": {
+        "defaultMessage": "Do you want to record a performance trace for the next 30 seconds? Once done, it will be placed in your Downloads folder.",
+        "description": "Label for the text field in a confirmation dialog that triggers a performance trace recording"
+    },
+    "desktopTopbar.helpMenu.recordPerformanceTraceConfirmCancel": {
+        "defaultMessage": "Cancel",
+        "description": "Label for the 'cancel' button in a confirmation dialog that triggers a performance trace recording"
+    },
+    "desktopTopbar.helpMenu.recordPerformanceTraceConfirmOk": {
+        "defaultMessage": "Record performance trace",
+        "description": "Label for the 'ok' button in a confirmation dialog that triggers a performance trace recording"
+    },
+    "desktopTopbar.helpMenu.recordPerformanceTraceConfirmTitle": {
+        "defaultMessage": "Record a performance trace?",
+        "description": "Label for the title field in a confirmation dialog that triggers a performance trace recording"
+    },
+    "desktopTopbar.helpMenu.recordingNetLog": {
+        "defaultMessage": "Recording network log…",
+        "description": "The label for the title indicating that a network log is being recorded."
+    },
+    "desktopTopbar.helpMenu.resetAndEraseAllLocalData": {
+        "defaultMessage": "Reset & Erase All Local Data",
+        "description": "Button that completely resets the app, as if it were just installed."
+    },
+    "desktopTopbar.helpMenu.showLogsInExplorer": {
+        "defaultMessage": "Show Logs in Explorer",
+        "description": "Used as the label for a button that shows the logs in Windows Explorer"
+    },
+    "desktopTopbar.helpMenu.showLogsInFinder": {
+        "defaultMessage": "Show Logs in Finder",
+        "description": "Used as the label for a button that shows the logs in macOS Finder"
+    },
+    "desktopTopbar.helpMenu.title": {
+        "defaultMessage": "Help",
+        "description": ""
+    },
+    "desktopTopbar.historyMenu.historyBack": {
+        "defaultMessage": "Back",
+        "description": "Move back one page (similar to the back button in a browser)"
+    },
+    "desktopTopbar.historyMenu.historyForward": {
+        "defaultMessage": "Forward",
+        "description": "Move forward one page (similar to the forward button in a browser)"
+    },
+    "desktopTopbar.historyMenu.title": {
+        "defaultMessage": "History",
+        "description": "Menu for navigating the history of Notion documents"
+    },
+    "desktopTopbar.toggleDevTools": {
+        "defaultMessage": "Toggle Developer Tools",
+        "description": ""
+    },
+    "desktopTopbar.toggleWindowDevTools": {
+        "defaultMessage": "Toggle Window Developer Tools",
+        "description": ""
+    },
+    "desktopTopbar.troubleshootingMenu.title": {
+        "defaultMessage": "Troubleshooting",
+        "description": "The title of the menu that contains troubleshooting options"
+    },
+    "desktopTopbar.viewMenu.actualSize": {
+        "defaultMessage": "Actual Size",
+        "description": "Menu item to let the user reset zoom to default (like a web browser)"
+    },
+    "desktopTopbar.viewMenu.forceReload": {
+        "defaultMessage": "Force Reload",
+        "description": "Button that refreshes all windows, clearing caches in the process."
+    },
+    "desktopTopbar.viewMenu.forceReloadDialog.cancel": {
+        "defaultMessage": "Cancel",
+        "description": "Label for the 'cancel' button in a confirmation dialog that triggers a force reload of the app"
+    },
+    "desktopTopbar.viewMenu.forceReloadDialog.message": {
+        "defaultMessage": "You are currently offline. Force reloading this page will cause you to lose access to it until you’re back online.",
+        "description": "Label for the message field in a confirmation dialog that triggers a force reload of the app"
+    },
+    "desktopTopbar.viewMenu.forceReloadDialog.ok": {
+        "defaultMessage": "Reload anyway",
+        "description": "Label for the 'ok' button in a confirmation dialog that triggers a force reload of the app"
+    },
+    "desktopTopbar.viewMenu.forceReloadDialog.title": {
+        "defaultMessage": "Are you sure you want to force reload?",
+        "description": "Label for the title field in a confirmation dialog that triggers a force reload of the app"
+    },
+    "desktopTopbar.viewMenu.reload": {
+        "defaultMessage": "Reload",
+        "description": ""
+    },
+    "desktopTopbar.viewMenu.showHideSidebar": {
+        "defaultMessage": "Show/Hide Sidebar",
+        "description": "Button to let the user show/hide the sidebar that shows pages"
+    },
+    "desktopTopbar.viewMenu.showHideTabSpaceButton": {
+        "defaultMessage": "Show/Hide Tab Groups",
+        "description": "Button to let the user show/hide the tab groups button in the topbar"
+    },
+    "desktopTopbar.viewMenu.title": {
+        "defaultMessage": "View",
+        "description": ""
+    },
+    "desktopTopbar.viewMenu.togglefullscreen": {
+        "defaultMessage": "Toggle Full Screen",
+        "description": ""
+    },
+    "desktopTopbar.viewMenu.zoomIn": {
+        "defaultMessage": "Zoom In",
+        "description": "Menu item to let the user zoom in all pages in the app (like a web browser)"
+    },
+    "desktopTopbar.viewMenu.zoomOut": {
+        "defaultMessage": "Zoom Out",
+        "description": "Menu item to let the user zoom out all pages in the app (like a web browser)"
+    },
+    "desktopTopbar.whatsNewMac.title": {
+        "defaultMessage": "Open What's New in Notion for macOS",
+        "description": "The title for the link containing new desktop updates"
+    },
+    "desktopTopbar.whatsNewWindows.title": {
+        "defaultMessage": "Open What's New in Notion for Windows",
+        "description": "The title for the link containing new desktop updates"
+    },
+    "desktopTopbar.windowMenu.close": {
+        "defaultMessage": "Close",
+        "description": ""
+    },
+    "desktopTopbar.windowMenu.front": {
+        "defaultMessage": "Front",
+        "description": ""
+    },
+    "desktopTopbar.windowMenu.maximize": {
+        "defaultMessage": "Maximize",
+        "description": ""
+    },
+    "desktopTopbar.windowMenu.minimize": {
+        "defaultMessage": "Minimize",
+        "description": ""
+    },
+    "desktopTopbar.windowMenu.showNextTab": {
+        "defaultMessage": "Show Next Tab",
+        "description": "Shows the tab to the right of the currently shown one (or loops around)"
+    },
+    "desktopTopbar.windowMenu.showPreviousTab": {
+        "defaultMessage": "Show Previous Tab",
+        "description": "Shows the tab to the left of the currently shown one (or loops around)"
+    },
+    "desktopTopbar.windowMenu.title": {
+        "defaultMessage": "Window",
+        "description": ""
+    },
+    "desktopTopbar.windowMenu.zoom": {
+        "defaultMessage": "Zoom",
+        "description": ""
+    },
+    "desktopTroubleshooting.resetData.cancel": {
+        "defaultMessage": "Cancel",
+        "description": "The label of the cancel button in the dialog that asks the user if they're sure they want to reset all local data."
+    },
+    "desktopTroubleshooting.resetData.closingWindows": {
+        "defaultMessage": "Closing Notion windows",
+        "description": "The title of the progress dialog that informs the user that we're closing Notion windows."
+    },
+    "desktopTroubleshooting.resetData.deletingFiles": {
+        "defaultMessage": "Deleting files",
+        "description": "The title of the progress dialog that informs the user that we're deleting files."
+    },
+    "desktopTroubleshooting.resetData.done": {
+        "defaultMessage": "Done",
+        "description": "The message of the progress dialog that informs the user that we're done deleting files."
+    },
+    "desktopTroubleshooting.resetData.doneMessage": {
+        "defaultMessage": "The app has been reset.",
+        "description": "The message of the progress dialog that informs the user that we're done deleting files."
+    },
+    "desktopTroubleshooting.resetData.failed": {
+        "defaultMessage": "Our recovery process failed to delete some files. We apologize for the trouble - please visit https://www.notion.so/help for assistance. To force a full reset of the app manually, please close Notion entirely. Then, delete the following path: {userDataPath}",
+        "description": "The message of the progress dialog that informs the user that we failed to delete some files."
+    },
+    "desktopTroubleshooting.resetData.message": {
+        "defaultMessage": "This will delete all local and internal data, including the cache and local settings, restoring the Notion app to a freshly installed state. It will also log you out of Notion. Your pages and other in-app content will be left untouched. Do you want to continue?",
+        "description": "The message of the dialog that asks the user if they're sure they want to reset all local data."
+    },
+    "desktopTroubleshooting.resetData.reset": {
+        "defaultMessage": "Reset all local data",
+        "description": "The label of the reset button in the dialog that asks the user if they're sure they want to reset all local data."
+    },
+    "desktopTroubleshooting.resetData.restart": {
+        "defaultMessage": "Restart",
+        "description": "The message of the progress dialog that informs the user that we're done deleting files."
+    },
+    "desktopTroubleshooting.resetData.title": {
+        "defaultMessage": "Resetting and erasing all local data",
+        "description": "The title of the dialog that asks the user if they're sure they want to reset all local data."
+    },
+    "desktopTroubleshooting.showLogs.error.message.mac": {
+        "defaultMessage": "Notion encountered an error while trying to show the logs in Finder:",
+        "description": "When the `Show logs in Finder` fails, we show an error dialog. This message labels the message of that box. The message will be followed by the actual error."
+    },
+    "desktopTroubleshooting.showLogs.error.message.windows": {
+        "defaultMessage": "Notion encountered an error while trying to show the logs in Explorer:",
+        "description": "When the `Show logs in Explorer` fails, we show an error dialog. This message labels the message of that box. The message will be followed by the actual error."
+    },
+    "desktopTroubleshooting.showLogs.error.title": {
+        "defaultMessage": "Showing the logs failed",
+        "description": "When the `Show logs in Finder/Explorer` fails, we show an error dialog. This message labels the title of that box."
+    },
+    "menuBarIcon.menu.changeCommandSearchAndNotionAiShortcut": {
+        "defaultMessage": "Edit Shortcuts",
+        "description": "Menu item (when right clicking the icon in the menu bar or Windows tray) that lets users change the global shortcuts for Notion's AI assistant window and search window"
+    },
+    "menuBarIcon.menu.changeCommandSearchShortcut": {
+        "defaultMessage": "Change Command Search Shortcut",
+        "description": "Menu item (when right clicking the icon in the menu bar or Windows tray) that lets users pick the global shortcut "
+    },
+    "menuBarIcon.menu.enableQuickSearch": {
+        "defaultMessage": "Enable Quick Search",
+        "description": "Menu item (when right clicking the icon in the Windows tray) that toggles whether or not Quick Search is enabled"
+    },
+    "menuBarIcon.menu.keepInBackground": {
+        "defaultMessage": "Keep in Background",
+        "description": "Menu item (when right clicking the icon in the Windows tray) that toggles whether or not Notion stays open when the user closes the last window"
+    },
+    "menuBarIcon.menu.launchPreferences": {
+        "defaultMessage": "Launch Preferences",
+        "description": "A drop-down menu shown (when right clicking the icon in the Windows tray) that controls how Notion launches and runs"
+    },
+    "menuBarIcon.menu.openOnLogin": {
+        "defaultMessage": "Open Notion at Login",
+        "description": "Menu item (when right clicking the icon in the Windows tray) that toggles whether or not Notion opens when the user logs into their computer"
+    },
+    "menuBarIcon.menu.quitNotion": {
+        "defaultMessage": "Quit Notion",
+        "description": "Menu item (when right clicking the icon in the top left) to quit the Notion app"
+    },
+    "menuBarIcon.menu.showImmediately": {
+        "defaultMessage": "Show Immediately",
+        "description": "Menu item (when right clicking the icon in the Windows tray) that toggles whether or not Notion stays open when the user closes the last window"
+    },
+    "menuBarIcon.menu.showNotionInMenuBar": {
+        "defaultMessage": "Show Notion in menu bar",
+        "description": "Menu item (when right clicking the icon in the menu bar or Windows tray) that enables/disables showing that icon"
+    },
+    "menuBarIcon.menu.toggleCommandSearch": {
+        "defaultMessage": "Toggle Command Search",
+        "description": "Menu item (when right clicking the icon in the menu bar or Windows tray) that opens/hides Notion's AI-enabled search window"
+    },
+    "menuBarIcon.menu.toggleNotionAi": {
+        "defaultMessage": "Toggle Notion AI",
+        "description": "Menu item (when right clicking the icon in the menu bar or Windows tray) that opens/hides Notion's AI assistant window"
+    },
+    "openAtLogin.dialog.detail": {
+        "defaultMessage": "{operatingSystem} prevented Notion from configuring the 'Open at Login' setting. This usually happens when Notion's startup has been configured in the system settings or if you have insufficient permissions. You can still configure this setting manually in the system settings.",
+        "description": "Message for an error dialog informing the user that we failed to set the app's 'open at login' preference with the operating system"
+    },
+    "openAtLogin.dialog.title": {
+        "defaultMessage": "Open at Login",
+        "description": "Title for an error dialog informing the user that we failed to set the app's 'open at login' preference with the operating system"
+    },
+    "tabSpaces.deleteDialog.cancelButton": {
+        "defaultMessage": "Cancel",
+        "description": "Cancel button text in the tab group deletion confirmation dialog"
+    },
+    "tabSpaces.deleteDialog.deleteButton": {
+        "defaultMessage": "Delete",
+        "description": "Delete button text in the tab group deletion confirmation dialog"
+    },
+    "tabSpaces.deleteDialog.detail": {
+        "defaultMessage": "All tabs in this tab group will be closed.",
+        "description": "Detail message explaining the consequences of deleting a tab group"
+    },
+    "tabSpaces.deleteDialog.title": {
+        "defaultMessage": "Delete your ’{title}’ tab group?",
+        "description": "Title of the confirmation dialog when deleting a tab group"
+    },
+    "tabSpaces.snackbar.switchedToTabGroup": {
+        "defaultMessage": "Switched to {title}",
+        "description": "Message shown when switching to a tab group, where title is the group name"
+    },
+    "tabSpaces.snackbar.switchedToUngroupedTabs": {
+        "defaultMessage": "Switched to ungrouped tabs",
+        "description": "Message shown when switching to ungrouped tabs section"
+    },
+    "tabSpaces.snackbar.tabGroupPlaceholder": {
+        "defaultMessage": "Tab Group",
+        "description": "Placeholder for tab group name"
+    },
+    "updatePrompt.detail": {
+        "defaultMessage": "Would you like to install it now? We'll reopen your windows and tabs for you.",
+        "description": "Detail text for the dialog telling the user that a new update is available"
+    },
+    "updatePrompt.installAndRelaunch": {
+        "defaultMessage": "Install and relaunch",
+        "description": "Button to install an app update and relaunch the app"
+    },
+    "updatePrompt.message": {
+        "defaultMessage": "A new version of Notion is available!",
+        "description": "Message for the dialog telling the user that a new update is available"
+    },
+    "updatePrompt.remindMeLater": {
+        "defaultMessage": "Remind me later",
+        "description": "Button to remind the user later (1 day) to install their update"
+    },
+    "window.closeDialog.cancelButton": {
+        "defaultMessage": "Cancel",
+        "description": "Label of button for cancelling the closing of a tab/window with unsaved changes"
+    },
+    "window.closeDialog.confirmButton": {
+        "defaultMessage": "Close",
+        "description": "Label of button for confirming the closing of a tab/window with unsaved changes"
+    },
+    "window.closeDialog.title.app": {
+        "defaultMessage": "Close Notion?",
+        "description": "Title of dialog window to show user when they are about to close Notion with unsaved changes"
+    },
+    "window.closeDialog.title.tab": {
+        "defaultMessage": "Close Notion tab?",
+        "description": "Title of dialog window to show user when they are about to close/reload a tab with unsaved changes"
+    },
+    "window.closeDialog.title.window": {
+        "defaultMessage": "Close Notion window?",
+        "description": "Title of dialog window to show user when they are about to close/reload a window with unsaved changes"
+    },
+    "window.loadingError.message": {
+        "defaultMessage": "Error loading Notion, connect to the internet to get started.",
+        "description": "Dialog message shown to the user when there's an error loading a page."
+    },
+    "window.loadingError.reload": {
+        "defaultMessage": "Reload",
+        "description": "Dialog action allowing the user to reload page that previous had a loading error"
+    },
+    "window.movedTabSnackbarMessage": {
+        "defaultMessage": "Moved {tabTitle} to {tabSpaceTitle}",
+        "description": "Snackbar message shown when a tab is moved to a different tab space"
+    },
+    "window.tabLoadingError.cancel": {
+        "defaultMessage": "Cancel",
+        "description": "Dialog action allowing the user to dismiss the loading error dialog"
+    },
+    "window.tabMenu.closeOtherTabs": {
+        "defaultMessage": "Close Other Tabs",
+        "description": "Right-click menu item to close all tabs except for the one clicked"
+    },
+    "window.tabMenu.closeTab": {
+        "defaultMessage": "Close Tab",
+        "description": "Right-click menu item to close a tab"
+    },
+    "window.tabMenu.closeTabsToLeft": {
+        "defaultMessage": "Close Tabs to the Left",
+        "description": "Right-click menu item to close tabs to the left of the current one"
+    },
+    "window.tabMenu.closeTabsToRight": {
+        "defaultMessage": "Close Tabs to the Right",
+        "description": "Right-click menu item to close tabs to the right of the current one"
+    },
+    "window.tabMenu.copyLink": {
+        "defaultMessage": "Copy Link",
+        "description": "Right-click menu item to copy the URL for a Notion page"
+    },
+    "window.tabMenu.duplicateTab": {
+        "defaultMessage": "Duplicate Tab",
+        "description": "Right-click menu item to make a new tab with the same page (i.e. duplicate it)"
+    },
+    "window.tabMenu.moveTo": {
+        "defaultMessage": "Move to",
+        "description": "Right-click menu item to move a tab to a tab space"
+    },
+    "window.tabMenu.moveToNewWindow": {
+        "defaultMessage": "Move Tab to New Window",
+        "description": "Right-click menu item to make open a new window with this tab"
+    },
+    "window.tabMenu.moveToSubmenuNewWindow": {
+        "defaultMessage": "New Window",
+        "description": "Right-click menu in the Move to section to open a new window with this tab"
+    },
+    "window.tabMenu.pinTab": {
+        "defaultMessage": "Pin Tab",
+        "description": "Right-click menu item to pin this tab in the window"
+    },
+    "window.tabMenu.refresh": {
+        "defaultMessage": "Refresh Tab",
+        "description": "Right-click menu item to refresh a tab's page contents"
+    },
+    "window.tabMenu.reopenClosedTab": {
+        "defaultMessage": "Reopen Last Closed Tab",
+        "description": "Right-click menu item to reopen the last tab"
+    },
+    "window.tabMenu.replacePinnedTabUrl": {
+        "defaultMessage": "Replace Pinned URL with Current",
+        "description": "Right-click menu item that sets the pinned url to the tab's current url"
+    },
+    "window.tabMenu.returnToPinnedTabUrl": {
+        "defaultMessage": "Return to Pinned URL",
+        "description": "Right-click menu item that navigates a user back to their pinned url"
+    },
+    "window.tabMenu.ungroupTab": {
+        "defaultMessage": "Ungroup Tab",
+        "description": "Right-click menu item to ungroup a tab"
+    },
+    "window.tabMenu.unpinTab": {
+        "defaultMessage": "Unpin Tab",
+        "description": "Right-click menu item to unpin this tab in the window"
+    },
+    "window.tabTitlePlaceholder": {
+        "defaultMessage": "Tab",
+        "description": "Placeholder for tab name"
+    },
+    "window.ungroupedTabSnackbarMessage": {
+        "defaultMessage": "Ungrouped {tabTitle}",
+        "description": "Snackbar message shown when a tab is ungrouped"
+    }
+}
