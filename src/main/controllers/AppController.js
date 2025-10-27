@@ -2,6 +2,7 @@ const { app, BrowserWindow } = require('electron');
 const log = require('electron-log').scope('AppController');
 const { addWindow } = require('../store/slices/windowsSlice'); // Import addWindow
 const WindowController = require('./WindowController'); // Import WindowController
+const TabManager = require('../managers/TabManager'); // Import TabManager
 const { v4: uuidv4 } = require('uuid'); // For generating unique window IDs
 
 let instance = null; // For singleton pattern
@@ -11,6 +12,7 @@ class AppController {
     this.store = store;
     this.electronApp = app;
     this.windowControllers = new Map(); // Map of windowId to WindowController instance
+    this.tabManager = null; // TabManager singleton instance
     this.isQuitting = false;
     // this.createWindowCallback = null; // No longer needed from index.js
 
@@ -28,6 +30,10 @@ class AppController {
   init(/*{ createWindowCallback }*/) { // createWindowCallback no longer needed
     log.info('Initializing app event handlers in AppController');
     // this.createWindowCallback = createWindowCallback; // Removed
+
+    // Initialize TabManager singleton
+    this.tabManager = new TabManager(this.store);
+    log.info('TabManager initialized');
 
     this.electronApp.whenReady().then(() => {
       log.info('Electron app is ready via AppController');

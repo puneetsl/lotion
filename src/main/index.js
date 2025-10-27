@@ -374,6 +374,207 @@ ipcMain.handle('preferences-show', () => {
   showPreferencesDialog();
 });
 
+// --- Tab Bar IPC Handlers --- //
+
+// Get initial tab state for tab bar renderer
+ipcMain.handle('tab-bar:get-initial-state', (event) => {
+  const webContents = event.sender;
+
+  // Find which window this tab bar belongs to
+  let windowController = null;
+  for (const wc of appController.windowControllers.values()) {
+    if (wc.tabBarView && wc.tabBarView.webContents === webContents) {
+      windowController = wc;
+      break;
+    }
+  }
+
+  if (!windowController) {
+    log.warn('Tab bar requested initial state but could not find parent window');
+    return { tabs: [], activeTabId: null, windowId: null };
+  }
+
+  // Get tabs for this window from Redux state
+  const state = reduxStore.getState();
+  const windowState = state.windows.windows[windowController.windowId];
+
+  if (!windowState) {
+    return { tabs: [], activeTabId: null, windowId: windowController.windowId };
+  }
+
+  // Build tab list with details
+  const tabs = windowState.tabIds.map((tabId) => {
+    const tabState = state.tabs.tabs[tabId];
+    return tabState || { tabId };
+  });
+
+  return {
+    tabs,
+    activeTabId: windowState.activeTabId,
+    windowId: windowController.windowId,
+  };
+});
+
+// Create new tab
+ipcMain.handle('tab-bar:create-tab', async (event, options = {}) => {
+  const webContents = event.sender;
+
+  // Find parent window
+  let windowController = null;
+  for (const wc of appController.windowControllers.values()) {
+    if (wc.tabBarView && wc.tabBarView.webContents === webContents) {
+      windowController = wc;
+      break;
+    }
+  }
+
+  if (!windowController) {
+    log.warn('Tab bar create-tab: could not find parent window');
+    return { success: false };
+  }
+
+  const TabManager = require('./managers/TabManager');
+  const tabManager = TabManager.getInstance();
+
+  const tabController = tabManager.createTab({
+    windowId: windowController.windowId,
+    url: options.url || config.domainBaseUrl,
+    title: options.title || 'New Tab',
+    makeActive: true,
+  });
+
+  // Switch to the new tab
+  windowController.setActiveTab(tabController);
+
+  // Notify tab bar of update
+  notifyTabBarUpdate(windowController.windowId);
+
+  return { success: true, tabId: tabController.tabId };
+});
+
+// Close tab
+ipcMain.handle('tab-bar:close-tab', async (event, tabId) => {
+  const TabManager = require('./managers/TabManager');
+  const tabManager = TabManager.getInstance();
+
+  const tabController = tabManager.getTab(tabId);
+  if (!tabController) {
+    log.warn(`Cannot close tab ${tabId}: not found`);
+    return { success: false };
+  }
+
+  const windowId = tabController.windowId;
+  const windowController = appController.windowControllers.get(windowId);
+
+  // Destroy the tab
+  tabManager.destroyTab(tabId);
+
+  // If this was the active tab, switch to another tab
+  if (windowController && windowController.currentActiveTabController?.tabId === tabId) {
+    const state = reduxStore.getState();
+    const windowState = state.windows.windows[windowId];
+
+    if (windowState && windowState.tabIds.length > 0) {
+      // Switch to first available tab
+      const nextTabId = windowState.tabIds[0];
+      windowController.switchToTab(nextTabId);
+    }
+  }
+
+  // Notify tab bar of update
+  if (windowController) {
+    notifyTabBarUpdate(windowId);
+  }
+
+  return { success: true };
+});
+
+// Switch to tab
+ipcMain.handle('tab-bar:switch-tab', async (event, tabId) => {
+  const TabManager = require('./managers/TabManager');
+  const tabManager = TabManager.getInstance();
+
+  const tabController = tabManager.getTab(tabId);
+  if (!tabController) {
+    log.warn(`Cannot switch to tab ${tabId}: not found`);
+    return { success: false };
+  }
+
+  const windowController = appController.windowControllers.get(tabController.windowId);
+  if (windowController) {
+    windowController.switchToTab(tabId);
+    return { success: true };
+  }
+
+  return { success: false };
+});
+
+// Reorder tabs
+ipcMain.handle('tab-bar:reorder-tabs', async (event, { windowId, tabIds }) => {
+  const { reorderTabsInWindow } = require('./store/slices/windowsSlice');
+  reduxStore.dispatch(reorderTabsInWindow({ windowId, tabIds }));
+
+  notifyTabBarUpdate(windowId);
+  return { success: true };
+});
+
+// Pin tab
+ipcMain.handle('tab-bar:pin-tab', async (event, tabId) => {
+  const { pinTab } = require('./store/slices/tabsSlice');
+  reduxStore.dispatch(pinTab(tabId));
+
+  const TabManager = require('./managers/TabManager');
+  const tabManager = TabManager.getInstance();
+  const tabController = tabManager.getTab(tabId);
+
+  if (tabController) {
+    notifyTabBarUpdate(tabController.windowId);
+  }
+
+  return { success: true };
+});
+
+// Unpin tab
+ipcMain.handle('tab-bar:unpin-tab', async (event, tabId) => {
+  const { unpinTab } = require('./store/slices/tabsSlice');
+  reduxStore.dispatch(unpinTab(tabId));
+
+  const TabManager = require('./managers/TabManager');
+  const tabManager = TabManager.getInstance();
+  const tabController = tabManager.getTab(tabId);
+
+  if (tabController) {
+    notifyTabBarUpdate(tabController.windowId);
+  }
+
+  return { success: true };
+});
+
+// Helper function to notify tab bar of updates
+function notifyTabBarUpdate(windowId) {
+  const windowController = appController.windowControllers.get(windowId);
+  if (!windowController || !windowController.tabBarView) return;
+
+  const state = reduxStore.getState();
+  const windowState = state.windows.windows[windowId];
+
+  if (!windowState) return;
+
+  // Build tab list
+  const tabs = windowState.tabIds.map((tabId) => {
+    const tabState = state.tabs.tabs[tabId];
+    return tabState || { tabId };
+  });
+
+  // Send update to tab bar
+  windowController.tabBarView.webContents.send('tab-bar:tabs-updated', { tabs });
+
+  // Send active tab update
+  if (windowState.activeTabId) {
+    windowController.tabBarView.webContents.send('tab-bar:tab-activated', windowState.activeTabId);
+  }
+}
+
 // Add command line switches to potentially reduce graphics errors on Linux
 app.commandLine.appendSwitch('disable-gpu-vsync');
 app.commandLine.appendSwitch('disable-gpu-sandbox');

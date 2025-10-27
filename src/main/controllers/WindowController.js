@@ -1,4 +1,4 @@
-const { BrowserWindow } = require('electron');
+const { BrowserWindow, WebContentsView } = require('electron');
 const path = require('path');
 const log = require('electron-log').scope('WindowController');
 const { addWindow, removeWindow, setWindowFocus, updateWindowBounds, updateWindowTitle } = require('../store/slices/windowsSlice');
@@ -9,19 +9,24 @@ class WindowController {
     this.windowId = windowId;
     this.store = store;
     this.browserWindow = null;
+    this.tabBarView = null; // WebContentsView for tab bar UI
+    this.currentActiveTabController = null; // Reference to active tab's controller
     this.initialUrl = initialUrl || config.domainBaseUrl;
     this.initialTitle = title || 'Lotion';
     this.initialBounds = bounds || { width: 1200, height: 800 };
+
+    // Tab bar height in pixels
+    this.TAB_BAR_HEIGHT = 40;
 
     log.info(`WindowController initialized for windowId: ${this.windowId}`);
   }
 
   init() {
     log.info(`Initializing window: ${this.windowId}`);
-    // BrowserWindow creation and event handling will be added here (Task 1.3.3, 1.3.4)
     this.createBrowserWindow();
+    this.createTabBarView();
     this.setupBrowserWindowListeners();
-    this.loadInitialContent();
+    this.createInitialTab();
 
     // Dispatch action to add this window to the Redux store
     this.store.dispatch(addWindow({
@@ -117,6 +122,8 @@ class WindowController {
         const bounds = this.browserWindow.getBounds();
         log.debug(`Window ${this.windowId} resized`, bounds);
         this.store.dispatch(updateWindowBounds({ windowId: this.windowId, bounds }));
+        // Update tab bar and content area layout
+        this.updateViewBounds();
       }
     });
 
@@ -127,40 +134,110 @@ class WindowController {
         this.store.dispatch(updateWindowBounds({ windowId: this.windowId, bounds }));
       }
     });
-
-    // Page title updated (e.g. from Notion itself)
-    this.browserWindow.webContents.on('page-title-updated', (event, title) => {
-        event.preventDefault(); // Prevent default title setting by Electron
-        const cleanTitle = title.replace(' | Notion', '').trim();
-        const finalTitle = `${cleanTitle} - Lotion`;
-        if (this.browserWindow) {
-            this.browserWindow.setTitle(finalTitle);
-        }
-        this.store.dispatch(updateWindowTitle({ windowId: this.windowId, title: finalTitle }));
-    });
-
-    // Handle external links and navigation blocking as in index.js
-    this.browserWindow.webContents.setWindowOpenHandler(({ url }) => {
-      require('electron').shell.openExternal(url);
-      return { action: 'deny' };
-    });
-
-    this.browserWindow.webContents.on('will-navigate', (event, navigationUrl) => {
-      const parsedUrl = new URL(navigationUrl);
-      if (parsedUrl.origin !== config.domainBaseUrl) {
-        event.preventDefault();
-        require('electron').shell.openExternal(navigationUrl);
-      }
-    });
-
-    // Handle did-navigate for potential URL updates to store (if needed for tabs later)
-    // this.browserWindow.webContents.on('did-navigate', (event, url) => { ... });
   }
 
-  loadInitialContent() {
-    if (this.browserWindow) {
-      log.info(`Loading URL ${this.initialUrl} for window ${this.windowId}`);
-      this.browserWindow.loadURL(this.initialUrl);
+  /**
+   * Create tab bar WebContentsView
+   */
+  createTabBarView() {
+    log.info(`Creating tab bar for window ${this.windowId}`);
+
+    this.tabBarView = new WebContentsView({
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        preload: path.join(__dirname, '../../renderer/tab-bar/preload.js'),
+      },
+    });
+
+    // Add tab bar to window
+    this.browserWindow.contentView.addChildView(this.tabBarView);
+
+    // Load tab bar HTML
+    const tabBarPath = path.join(__dirname, '../../renderer/tab-bar/index.html');
+    this.tabBarView.webContents.loadFile(tabBarPath);
+
+    // Update bounds
+    this.updateViewBounds();
+  }
+
+  /**
+   * Update tab bar and content area bounds based on window size
+   */
+  updateViewBounds() {
+    if (!this.browserWindow || !this.tabBarView) return;
+
+    const { width, height } = this.browserWindow.getContentBounds();
+
+    // Tab bar at top
+    this.tabBarView.setBounds({
+      x: 0,
+      y: 0,
+      width: width,
+      height: this.TAB_BAR_HEIGHT,
+    });
+
+    // Update active tab content area (below tab bar)
+    if (this.currentActiveTabController && this.currentActiveTabController.webContentsView) {
+      this.currentActiveTabController.webContentsView.setBounds({
+        x: 0,
+        y: this.TAB_BAR_HEIGHT,
+        width: width,
+        height: height - this.TAB_BAR_HEIGHT,
+      });
+    }
+  }
+
+  /**
+   * Create initial tab when window opens
+   */
+  createInitialTab() {
+    const TabManager = require('../managers/TabManager');
+    const tabManager = TabManager.getInstance();
+
+    log.info(`Creating initial tab for window ${this.windowId}`);
+    const tabController = tabManager.createTab({
+      windowId: this.windowId,
+      url: this.initialUrl,
+      title: this.initialTitle,
+      makeActive: true,
+    });
+
+    this.setActiveTab(tabController);
+  }
+
+  /**
+   * Set active tab and display its WebContentsView
+   * @param {TabController} tabController - The tab to activate
+   */
+  setActiveTab(tabController) {
+    if (!tabController) {
+      log.warn(`Cannot set active tab: tabController is null`);
+      return;
+    }
+
+    log.info(`Setting active tab ${tabController.tabId} for window ${this.windowId}`);
+
+    // Hide current active tab if exists
+    if (this.currentActiveTabController && this.currentActiveTabController !== tabController) {
+      this.currentActiveTabController.hide();
+
+      // Remove from window's content view
+      if (this.currentActiveTabController.webContentsView) {
+        this.browserWindow.contentView.removeChildView(
+          this.currentActiveTabController.webContentsView
+        );
+      }
+    }
+
+    // Set new active tab
+    this.currentActiveTabController = tabController;
+
+    // Add to window's content view
+    if (tabController.webContentsView) {
+      this.browserWindow.contentView.addChildView(tabController.webContentsView);
+      this.updateViewBounds(); // Position it correctly
+      tabController.show();
     }
   }
 
@@ -197,16 +274,71 @@ class WindowController {
   }
 
   loadURL(url) {
-    if (this.browserWindow) {
-      log.info(`Window ${this.windowId} loading URL: ${url}`);
-      this.browserWindow.loadURL(url);
-      // Potentially update Redux store with new URL if tracking per window
-      // this.store.dispatch(updateWindowUrl({ windowId: this.windowId, url }));
+    // Load URL in active tab instead of window
+    if (this.currentActiveTabController) {
+      log.info(`Window ${this.windowId} loading URL in active tab: ${url}`);
+      this.currentActiveTabController.loadURL(url);
+    } else {
+      log.warn(`Window ${this.windowId} has no active tab to load URL`);
     }
   }
 
-  // Add other methods like close, setBounds, setTitle, etc.
-  // These methods would typically dispatch to Redux first or update BrowserWindow and then dispatch.
+  /**
+   * Get tab controller by tab ID
+   * @param {string} tabId - Tab ID to find
+   * @returns {TabController|null}
+   */
+  getTabController(tabId) {
+    const TabManager = require('../managers/TabManager');
+    const tabManager = TabManager.getInstance();
+    return tabManager.getTab(tabId);
+  }
+
+  /**
+   * Switch to a different tab
+   * @param {string} tabId - Tab ID to switch to
+   */
+  switchToTab(tabId) {
+    const tabController = this.getTabController(tabId);
+    if (tabController && tabController.windowId === this.windowId) {
+      this.setActiveTab(tabController);
+
+      // Update Redux store
+      const { setActiveTabForWindow } = require('../store/slices/windowsSlice');
+      this.store.dispatch(setActiveTabForWindow({ windowId: this.windowId, tabId }));
+    } else {
+      log.warn(`Cannot switch to tab ${tabId}: not found or belongs to different window`);
+    }
+  }
+
+  /**
+   * Get the currently active tab controller
+   * @returns {TabController|null}
+   */
+  getActiveTabController() {
+    return this.currentActiveTabController;
+  }
+
+  /**
+   * Clean up when window closes
+   */
+  destroy() {
+    log.info(`Destroying WindowController ${this.windowId}`);
+
+    // Clean up tab bar
+    if (this.tabBarView) {
+      this.tabBarView.webContents.close();
+      this.tabBarView = null;
+    }
+
+    // Clean up browser window
+    if (this.browserWindow) {
+      this.browserWindow.destroy();
+      this.browserWindow = null;
+    }
+
+    this.currentActiveTabController = null;
+  }
 }
 
 module.exports = WindowController;
