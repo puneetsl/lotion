@@ -17,7 +17,32 @@
       overflow: hidden;
       user-select: none;
       -webkit-app-region: drag; /* Make tab bar draggable like title bar */
-      background-color: #f5f5f5;
+
+      /* Light mode (default) */
+      --bg-primary: #f5f5f5;
+      --bg-tab: #e0e0e0;
+      --bg-tab-hover: #d5d5d5;
+      --bg-tab-active: #fff;
+      --border-color: #ddd;
+      --border-tab: #ccc;
+      --text-primary: #333;
+      --text-secondary: #666;
+      --accent-color: #007AFF;
+
+      background-color: var(--bg-primary);
+    }
+
+    /* Dark mode */
+    body.dark-mode {
+      --bg-primary: #191919;
+      --bg-tab: #2f2f2f;
+      --bg-tab-hover: #3f3f3f;
+      --bg-tab-active: #252525;
+      --border-color: #3f3f3f;
+      --border-tab: #404040;
+      --text-primary: #e0e0e0;
+      --text-secondary: #9b9b9b;
+      --accent-color: #4A9EFF;
     }
 
     #root {
@@ -29,8 +54,8 @@
       display: flex;
       width: 100%;
       height: 40px;
-      background-color: #f5f5f5;
-      border-bottom: 1px solid #ddd;
+      background-color: var(--bg-primary);
+      border-bottom: 1px solid var(--border-color);
     }
 
     .tab-list {
@@ -58,12 +83,12 @@
       background: transparent;
       cursor: pointer;
       font-size: 14px;
-      color: #666;
+      color: var(--text-secondary);
       transition: background-color 0.2s;
     }
 
     .window-control-btn:hover {
-      background-color: #e0e0e0;
+      background-color: var(--bg-tab);
     }
 
     .window-control-btn.close:hover {
@@ -83,20 +108,20 @@
       padding: 6px 12px;
       min-width: 120px;
       max-width: 200px;
-      background-color: #e0e0e0;
-      border-right: 1px solid #ccc;
+      background-color: var(--bg-tab);
+      border-right: 1px solid var(--border-tab);
       cursor: pointer;
       transition: background-color 0.2s;
       white-space: nowrap;
     }
 
     .tab:hover {
-      background-color: #d5d5d5;
+      background-color: var(--bg-tab-hover);
     }
 
     .tab.active {
-      background-color: #fff;
-      border-bottom: 2px solid #007AFF;
+      background-color: var(--bg-tab-active);
+      border-bottom: 2px solid var(--accent-color);
     }
 
     .tab.pinned {
@@ -117,7 +142,7 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       font-size: 13px;
-      color: #333;
+      color: var(--text-primary);
     }
 
     .tab.pinned .tab-title {
@@ -134,7 +159,7 @@
       background: transparent;
       cursor: pointer;
       font-size: 18px;
-      color: #666;
+      color: var(--text-secondary);
       border-radius: 3px;
       transition: background-color 0.2s;
       flex-shrink: 0;
@@ -142,7 +167,11 @@
 
     .close-btn:hover {
       background-color: rgba(0, 0, 0, 0.1);
-      color: #000;
+      color: var(--text-primary);
+    }
+
+    body.dark-mode .close-btn:hover {
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
     .new-tab-btn {
@@ -155,13 +184,13 @@
       background: transparent;
       cursor: pointer;
       font-size: 20px;
-      color: #666;
+      color: var(--text-secondary);
       transition: background-color 0.2s;
       flex-shrink: 0;
     }
 
     .new-tab-btn:hover {
-      background-color: #e0e0e0;
+      background-color: var(--bg-tab);
     }
   </style>
 </head>

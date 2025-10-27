@@ -9,6 +9,7 @@ let windowId = null;
 document.addEventListener('DOMContentLoaded', async () => {
   await loadInitialState();
   setupEventListeners();
+  detectTheme();
   render();
 });
 
@@ -136,4 +137,28 @@ function addEventListeners() {
 function truncateTitle(title, maxLength) {
   if (title.length <= maxLength) return title;
   return title.substring(0, maxLength - 3) + '...';
+}
+
+// Detect and apply theme
+function detectTheme() {
+  // Check system dark mode preference
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  // Apply theme
+  applyTheme(prefersDark);
+
+  // Listen for system theme changes
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      applyTheme(e.matches);
+    });
+  }
+}
+
+function applyTheme(isDark) {
+  if (isDark) {
+    document.body.classList.add('dark-mode');
+  } else {
+    document.body.classList.remove('dark-mode');
+  }
 }
