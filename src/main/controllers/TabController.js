@@ -328,8 +328,42 @@ class TabController {
 
     const { app } = require('electron');
     const fs = require('fs');
-    const customCSSPath = path.join(app.getPath('userData'), 'custom.css');
+    const Store = require('electron-store');
+    const store = new Store();
 
+    // First, inject theme if one is selected
+    const currentTheme = store.get('theme', 'none');
+    if (currentTheme !== 'none') {
+      const themePath = path.join(app.getPath('userData'), 'themes', `${currentTheme}.css`);
+      if (fs.existsSync(themePath)) {
+        try {
+          const themeCSS = fs.readFileSync(themePath, 'utf8');
+          // Remove old theme CSS if exists
+          if (this.injectedThemeKey) {
+            await this.webContentsView.webContents.removeInsertedCSS(this.injectedThemeKey);
+          }
+          // Inject theme CSS
+          this.injectedThemeKey = await this.webContentsView.webContents.insertCSS(themeCSS);
+          log.info(`Theme "${currentTheme}" injected for tab ${this.tabId}`);
+        } catch (err) {
+          log.error(`Tab ${this.tabId}: Error injecting theme:`, err);
+        }
+      }
+    } else {
+      // Remove theme if switching to "none"
+      if (this.injectedThemeKey) {
+        try {
+          await this.webContentsView.webContents.removeInsertedCSS(this.injectedThemeKey);
+          this.injectedThemeKey = null;
+          log.info(`Theme removed for tab ${this.tabId}`);
+        } catch (err) {
+          log.error(`Tab ${this.tabId}: Error removing theme:`, err);
+        }
+      }
+    }
+
+    // Then, inject custom.css (user's personal overrides)
+    const customCSSPath = path.join(app.getPath('userData'), 'custom.css');
     if (fs.existsSync(customCSSPath)) {
       try {
         const css = fs.readFileSync(customCSSPath, 'utf8');
@@ -351,6 +385,47 @@ class TabController {
    */
   async reloadCustomCSS() {
     await this.injectCustomCSS();
+  }
+
+  /**
+   * Load a theme by name
+   */
+  async loadTheme(themeName) {
+    if (this.isDestroyed || !this.webContentsView) {
+      log.warn(`Cannot load theme in destroyed tab: ${this.tabId}`);
+      return;
+    }
+
+    const { app } = require('electron');
+    const fs = require('fs');
+
+    // Remove old theme if exists
+    if (this.injectedThemeKey) {
+      try {
+        await this.webContentsView.webContents.removeInsertedCSS(this.injectedThemeKey);
+        this.injectedThemeKey = null;
+      } catch (err) {
+        log.error(`Tab ${this.tabId}: Error removing old theme:`, err);
+      }
+    }
+
+    // Load new theme if not "none"
+    if (themeName !== 'none') {
+      const themePath = path.join(app.getPath('userData'), 'themes', `${themeName}.css`);
+      if (fs.existsSync(themePath)) {
+        try {
+          const themeCSS = fs.readFileSync(themePath, 'utf8');
+          this.injectedThemeKey = await this.webContentsView.webContents.insertCSS(themeCSS);
+          log.info(`Theme "${themeName}" loaded for tab ${this.tabId}`);
+        } catch (err) {
+          log.error(`Tab ${this.tabId}: Error loading theme "${themeName}":`, err);
+        }
+      } else {
+        log.warn(`Tab ${this.tabId}: Theme file not found: ${themePath}`);
+      }
+    } else {
+      log.info(`Theme removed for tab ${this.tabId}`);
+    }
   }
 
   /**

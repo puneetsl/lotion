@@ -350,6 +350,20 @@ ipcMain.handle('show-logo-menu', async (event) => {
   // Get current spell check setting
   const store = new Store();
   const spellCheckEnabled = store.get('spellCheckEnabled', true); // Default to enabled
+  const currentTheme = store.get('theme', 'none'); // Default to no theme
+
+  // Theme switcher helper function
+  const switchTheme = async (themeName) => {
+    store.set('theme', themeName);
+
+    // Apply theme to all tabs in focused window
+    if (focusedWindowController) {
+      const tabs = focusedWindowController.tabControllers || [];
+      for (const tabController of tabs) {
+        await tabController.loadTheme(themeName);
+      }
+    }
+  };
 
   const menu = Menu.buildFromTemplate([
     {
@@ -377,6 +391,28 @@ ipcMain.handle('show-logo-menu', async (event) => {
       }
     },
     { type: 'separator' },
+    {
+      label: '🎨 Theme',
+      submenu: [
+        {
+          label: currentTheme === 'none' ? '✓ None (Default)' : 'None (Default)',
+          click: () => switchTheme('none')
+        },
+        { type: 'separator' },
+        {
+          label: currentTheme === 'dracula' ? '✓ Dracula' : 'Dracula',
+          click: () => switchTheme('dracula')
+        },
+        {
+          label: currentTheme === 'nord' ? '✓ Nord' : 'Nord',
+          click: () => switchTheme('nord')
+        },
+        {
+          label: currentTheme === 'gruvbox-dark' ? '✓ Gruvbox Dark' : 'Gruvbox Dark',
+          click: () => switchTheme('gruvbox-dark')
+        }
+      ]
+    },
     {
       label: spellCheckEnabled ? '✓ Spell Check Enabled' : 'Spell Check Disabled',
       click: () => {
