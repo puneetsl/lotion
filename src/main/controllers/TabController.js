@@ -67,6 +67,13 @@ class TabController {
     try {
       this.webContentsView.webContents.session.setSpellCheckerLanguages(dictionaries);
       log.debug(`Tab ${this.tabId}: Spell checker languages set to ${dictionaries}`);
+
+      // Check if spell check is enabled in settings
+      const Store = require('electron-store');
+      const store = new Store();
+      const spellCheckEnabled = store.get('spellCheckEnabled', true);
+      this.webContentsView.webContents.session.setSpellCheckerEnabled(spellCheckEnabled);
+      log.debug(`Tab ${this.tabId}: Spell checker enabled: ${spellCheckEnabled}`);
     } catch (err) {
       log.error(`Tab ${this.tabId}: Error setting spell checker languages:`, err);
     }
@@ -115,6 +122,9 @@ class TabController {
           isLoaded: true,
         })
       );
+
+      // Inject custom CSS after page loads
+      this.injectCustomCSS();
     });
 
     // Navigation started
@@ -158,12 +168,23 @@ class TabController {
       return { action: 'deny' };
     });
 
-    // Block navigation to external sites
+    // Allow navigation within Notion, block external sites
     webContents.on('will-navigate', (event, navigationUrl) => {
       const parsedUrl = new URL(navigationUrl);
-      if (parsedUrl.origin !== config.domainBaseUrl) {
+
+      // Check if URL is a Notion domain
+      const isNotionDomain =
+        parsedUrl.hostname === 'notion.so' ||
+        parsedUrl.hostname === 'www.notion.so' ||
+        parsedUrl.hostname.endsWith('.notion.so');
+
+      // Only block if it's NOT a Notion URL
+      if (!isNotionDomain) {
         event.preventDefault();
         require('electron').shell.openExternal(navigationUrl);
+        log.debug(`Tab ${this.tabId}: Blocked external navigation to ${navigationUrl}`);
+      } else {
+        log.debug(`Tab ${this.tabId}: Allowing internal navigation to ${navigationUrl}`);
       }
     });
 
@@ -272,6 +293,42 @@ class TabController {
     });
 
     log.debug(`Event listeners set up for tab: ${this.tabId}`);
+  }
+
+  /**
+   * Inject custom CSS from user's config directory
+   */
+  async injectCustomCSS() {
+    if (this.isDestroyed || !this.webContentsView) {
+      log.warn(`Cannot inject CSS in destroyed tab: ${this.tabId}`);
+      return;
+    }
+
+    const { app } = require('electron');
+    const fs = require('fs');
+    const customCSSPath = path.join(app.getPath('userData'), 'custom.css');
+
+    if (fs.existsSync(customCSSPath)) {
+      try {
+        const css = fs.readFileSync(customCSSPath, 'utf8');
+        // Remove old CSS if exists
+        if (this.injectedCSSKey) {
+          await this.webContentsView.webContents.removeInsertedCSS(this.injectedCSSKey);
+        }
+        // Inject new CSS
+        this.injectedCSSKey = await this.webContentsView.webContents.insertCSS(css);
+        log.info(`Custom CSS injected for tab ${this.tabId}`);
+      } catch (err) {
+        log.error(`Tab ${this.tabId}: Error injecting custom CSS:`, err);
+      }
+    }
+  }
+
+  /**
+   * Reload custom CSS
+   */
+  async reloadCustomCSS() {
+    await this.injectCustomCSS();
   }
 
   /**

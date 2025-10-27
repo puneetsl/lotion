@@ -347,6 +347,10 @@ ipcMain.handle('show-logo-menu', async (event) => {
     return { success: false, error: 'No focused window' };
   }
 
+  // Get current spell check setting
+  const store = new Store();
+  const spellCheckEnabled = store.get('spellCheckEnabled', true); // Default to enabled
+
   const menu = Menu.buildFromTemplate([
     {
       label: 'About Lotion',
@@ -370,6 +374,36 @@ ipcMain.handle('show-logo-menu', async (event) => {
       label: '📂 View Repository',
       click: () => {
         shell.openExternal('https://github.com/puneetsl/lotion');
+      }
+    },
+    { type: 'separator' },
+    {
+      label: spellCheckEnabled ? '✓ Spell Check Enabled' : 'Spell Check Disabled',
+      click: () => {
+        const newValue = !spellCheckEnabled;
+        store.set('spellCheckEnabled', newValue);
+
+        // Apply to all existing tabs
+        if (focusedWindowController && focusedWindowController.currentActiveTabController) {
+          const tabs = focusedWindowController.tabControllers || [];
+          tabs.forEach(tabController => {
+            if (tabController.webContentsView && tabController.webContentsView.webContents) {
+              tabController.webContentsView.webContents.session.setSpellCheckerEnabled(newValue);
+            }
+          });
+        }
+      }
+    },
+    {
+      label: 'Reload Custom CSS',
+      click: async () => {
+        // Reload CSS for all tabs in focused window
+        if (focusedWindowController) {
+          const tabs = focusedWindowController.tabControllers || [];
+          for (const tabController of tabs) {
+            await tabController.reloadCustomCSS();
+          }
+        }
       }
     }
   ]);
