@@ -16,11 +16,18 @@ contextBridge.exposeInMainWorld('tabBarAPI', {
   // Navigation operations
   navigateBack: () => ipcRenderer.invoke('tab-bar:navigate-back'),
   navigateForward: () => ipcRenderer.invoke('tab-bar:navigate-forward'),
+  refresh: () => ipcRenderer.invoke('tab-bar:refresh'),
 
   // Window control operations
   minimizeWindow: () => ipcRenderer.invoke('window-minimize'),
   maximizeWindow: () => ipcRenderer.invoke('window-toggle-maximize'),
   closeWindow: () => ipcRenderer.invoke('window-close'),
+
+  // External link operations
+  openExternal: (url) => ipcRenderer.invoke('open-external', url),
+
+  // Show logo menu
+  showLogoMenu: () => ipcRenderer.invoke('show-logo-menu'),
 
   // Listen for tab state changes from main process
   onTabsUpdated: (callback) => {

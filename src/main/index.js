@@ -331,6 +331,57 @@ ipcMain.handle('window-close', () => {
   }
 });
 
+// Open external URL in default browser
+ipcMain.handle('open-external', async (event, url) => {
+  const { shell } = require('electron');
+  await shell.openExternal(url);
+  return { success: true };
+});
+
+// Show logo menu as native popup
+ipcMain.handle('show-logo-menu', async (event) => {
+  const { Menu, shell } = require('electron');
+  const focusedWindowController = appController.getFocusedWindowController();
+
+  if (!focusedWindowController) {
+    return { success: false, error: 'No focused window' };
+  }
+
+  const menu = Menu.buildFromTemplate([
+    {
+      label: 'About Lotion',
+      enabled: false
+    },
+    { type: 'separator' },
+    {
+      label: '⭐ Star on GitHub',
+      click: () => {
+        shell.openExternal('https://github.com/puneetsl/lotion');
+      }
+    },
+    {
+      label: '👤 Follow @puneetsl',
+      click: () => {
+        shell.openExternal('https://github.com/puneetsl');
+      }
+    },
+    { type: 'separator' },
+    {
+      label: '📂 View Repository',
+      click: () => {
+        shell.openExternal('https://github.com/puneetsl/lotion');
+      }
+    }
+  ]);
+
+  // Popup the menu at the mouse cursor position
+  menu.popup({
+    window: focusedWindowController.browserWindow
+  });
+
+  return { success: true };
+});
+
 // Navigation handlers
 ipcMain.handle('navigation-back', () => {
   const focusedWindow = appController.getFocusedWindowController()?.getInternalBrowserWindow();
@@ -554,6 +605,16 @@ ipcMain.handle('tab-bar:navigate-forward', async (event) => {
     if (webContents.canGoForward()) {
       webContents.goForward();
     }
+  }
+  return { success: true };
+});
+
+// Refresh active tab
+ipcMain.handle('tab-bar:refresh', async (event) => {
+  const focusedWindowController = appController.getFocusedWindowController();
+  if (focusedWindowController && focusedWindowController.currentActiveTabController) {
+    const webContents = focusedWindowController.currentActiveTabController.webContentsView.webContents;
+    webContents.reload();
   }
   return { success: true };
 });

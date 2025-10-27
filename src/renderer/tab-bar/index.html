@@ -69,9 +69,77 @@
     }
 
     .app-logo {
-      width: 18px;
-      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
       margin-right: 4px;
+      cursor: pointer;
+      border-radius: 3px;
+      transition: background-color 0.2s;
+      -webkit-app-region: no-drag; /* Allow clicking on logo */
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--text-primary);
+    }
+
+    .app-logo:hover {
+      background-color: var(--bg-tab);
+    }
+
+    .logo-menu {
+      position: absolute;
+      top: 32px;
+      left: 8px;
+      background-color: var(--bg-tab-active);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      min-width: 220px;
+      padding: 8px 0;
+      z-index: 1000;
+      display: none;
+    }
+
+    .logo-menu.show {
+      display: block;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text-primary);
+      font-size: 13px;
+      transition: background-color 0.2s;
+      -webkit-app-region: no-drag;
+    }
+
+    .menu-item:hover {
+      background-color: var(--bg-tab-hover);
+    }
+
+    .menu-item-icon {
+      font-size: 16px;
+    }
+
+    .menu-divider {
+      height: 1px;
+      background-color: var(--border-color);
+      margin: 4px 0;
+    }
+
+    .menu-header {
+      padding: 8px 16px 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .nav-btn {

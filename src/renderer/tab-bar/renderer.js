@@ -48,9 +48,12 @@ function render() {
   container.innerHTML = `
     <div class="tab-bar">
       <div class="nav-controls">
-        <img src="./logo.png" class="app-logo" alt="Lotion" title="Lotion" onerror="this.style.display='none'">
+        <div class="app-logo" id="app-logo" title="Lotion">
+          <img src="./logo.png" alt="L" style="width: 100%; height: 100%;" onerror="this.parentElement.textContent='L'">
+        </div>
         <button class="nav-btn" id="back-btn" title="Go Back">‹</button>
         <button class="nav-btn" id="forward-btn" title="Go Forward">›</button>
+        <button class="nav-btn" id="refresh-btn" title="Refresh">↻</button>
       </div>
       <div class="tab-list">
         ${tabs.map(tab => renderTab(tab)).join('')}
@@ -129,6 +132,7 @@ function addEventListeners() {
   // Navigation buttons
   const backBtn = document.getElementById('back-btn');
   const forwardBtn = document.getElementById('forward-btn');
+  const refreshBtn = document.getElementById('refresh-btn');
 
   if (backBtn) {
     backBtn.addEventListener('click', () => {
@@ -139,6 +143,12 @@ function addEventListeners() {
   if (forwardBtn) {
     forwardBtn.addEventListener('click', () => {
       window.tabBarAPI.navigateForward();
+    });
+  }
+
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', () => {
+      window.tabBarAPI.refresh();
     });
   }
 
@@ -162,6 +172,17 @@ function addEventListeners() {
   if (closeBtn) {
     closeBtn.addEventListener('click', () => {
       window.tabBarAPI.closeWindow();
+    });
+  }
+
+  // Logo menu - show native popup menu
+  const appLogo = document.getElementById('app-logo');
+
+  if (appLogo) {
+    appLogo.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      window.tabBarAPI.showLogoMenu();
     });
   }
 }
