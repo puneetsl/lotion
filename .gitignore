@@ -2,3 +2,12 @@
 .vscode
 node_modules
 out
+official_notion
+docs
+
+# AUR build artifacts
+*.pkg.tar.zst
+*.pkg.tar.xz
+pkg/
+src/
+.SRCINFO

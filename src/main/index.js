@@ -1,126 +1,54 @@
 // This file serves as the entry point for the main process
 // Simple Notion desktop app for Linux
 
-const { app, BrowserWindow, Menu, shell, dialog, ipcMain } = require('electron');
+const { app, Menu, shell, dialog, ipcMain } = require('electron');
 const path = require('path');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 const Store = require('electron-store');
+const reduxStore = require('./store/store');
+const AppController = require('./controllers/AppController');
+const { getSpellCheckMenu } = require('./spellCheckMenu');
 
-// Import config
+// Set custom user data path for development to avoid conflicts
+if (process.env.NODE_ENV === 'development') {
+  const devUserDataPath = path.join(app.getPath('userData'), '-dev-data');
+  app.setPath('userData', devUserDataPath);
+  log.info(`Development mode: User data path set to ${devUserDataPath}`);
+}
+
+// Import config (still needed for WindowController's default URL)
 const config = require('../../config/config.json');
 
-// Initialize store for user preferences
-const store = new Store({
+// Initialize store for user preferences (localStore for menu bar visibility etc.)
+const localStore = new Store({
   defaults: {
     menuBarVisible: true,
     autoHideMenuBar: false
   }
 });
 
-let mainWindow;
-let isQuitting = false;
+// --- Initialize spell check dictionaries in Redux from electron-store before anything else ---
+const spellCheckDictionaries = localStore.get('spellCheckDictionaries', ['en-US']);
+reduxStore.dispatch({ type: 'app/setDictionaries', payload: spellCheckDictionaries });
 
-function createWindow() {
-  // Create the browser window
-  const getIconPath = () => {
-    if (process.platform === 'linux') {
-      return path.join(__dirname, '../../assets/icon.png');
-    } else if (process.platform === 'win32') {
-      return path.join(__dirname, '../../assets/icon.ico');
-    } else if (process.platform === 'darwin') {
-      return path.join(__dirname, '../../assets/icon.icns');
-    }
-    return path.join(__dirname, '../../assets/icon.png'); // fallback
-  };
+// Instantiate AppController (singleton)
+const appController = new AppController(reduxStore);
+appController.init(); // Initialize AppController event handlers
 
-  mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    minWidth: 600,
-    minHeight: 400,
-    icon: getIconPath(),
-    // Use fully native title bar
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-      enableRemoteModule: false,
-      webSecurity: true,
-      allowRunningInsecureContent: false,
-      experimentalFeatures: false,
-      preload: path.join(__dirname, '../renderer/preload.js')
-    },
-    show: false
-  });
+// --- Helper Functions --- //
 
-  // Create a simple native menu bar with navigation
-  createNativeMenuWithNavigation();
-
-  // Load Notion web app
-  mainWindow.loadURL(config.domainBaseUrl);
-
-  // Show window when ready to prevent visual flash
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
-    
-    // Focus on window
-    if (process.platform === 'darwin') {
-      app.dock.show();
-    }
-
-    // Apply saved menu bar preferences
-    const menuBarVisible = store.get('menuBarVisible', true);
-    const autoHideMenuBar = store.get('autoHideMenuBar', false);
-    
-    mainWindow.setMenuBarVisibility(menuBarVisible);
-    mainWindow.setAutoHideMenuBar(autoHideMenuBar);
-
-    // Just update the title, no toolbar injection
-    updateWindowTitle();
-  });
-
-  // Handle window closed
-  mainWindow.on('closed', () => {
-    mainWindow = null;
-  });
-
-  // Handle external links
-  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    shell.openExternal(url);
-    return { action: 'deny' };
-  });
-
-  // Handle navigation
-  mainWindow.webContents.on('will-navigate', (event, navigationUrl) => {
-    const parsedUrl = new URL(navigationUrl);
-    
-    if (parsedUrl.origin !== config.domainBaseUrl) {
-      event.preventDefault();
-      shell.openExternal(navigationUrl);
-    }
-  });
-
-  // Update window title when navigation occurs
-  mainWindow.webContents.on('did-navigate', () => {
-    updateWindowTitle();
-  });
-
-  mainWindow.webContents.on('did-navigate-in-page', () => {
-    updateWindowTitle();
-  });
-
-  mainWindow.webContents.on('page-title-updated', (event, title) => {
-    event.preventDefault(); // Prevent default title setting
-    const cleanTitle = title.replace(' | Notion', '').trim();
-    mainWindow.setTitle(`${cleanTitle} - Lotion`);
-  });
-}
-
-// Preferences dialog
+// Preferences dialog - This needs to be callable, perhaps via an IPC call handled by AppController
 function showPreferencesDialog() {
-  const menuBarVisible = store.get('menuBarVisible', true);
-  const autoHideMenuBar = store.get('autoHideMenuBar', false);
-  
+  const focusedWindow = appController.getFocusedWindowController()?.getInternalBrowserWindow();
+  if (!focusedWindow) {
+    log.warn('showPreferencesDialog: No focused window to show dialog against.');
+    return;
+  }
+
+  const menuBarVisible = localStore.get('menuBarVisible', true);
+  const autoHideMenuBar = localStore.get('autoHideMenuBar', false);
+
   const options = {
     type: 'info',
     title: 'Lotion Preferences',
@@ -139,19 +67,16 @@ Note: Changes are saved automatically when using the View menu or keyboard short
     defaultId: 0
   };
 
-  dialog.showMessageBox(mainWindow, options).then((result) => {
+  dialog.showMessageBox(focusedWindow, options).then((result) => {
     if (result.response === 1) {
-      // Reset to defaults
-      store.set('menuBarVisible', true);
-      store.set('autoHideMenuBar', false);
-      
-      mainWindow.setMenuBarVisibility(true);
-      mainWindow.setAutoHideMenuBar(false);
-      
-      // Recreate menu to update labels
-      createNativeMenuWithNavigation();
-      
-      dialog.showMessageBox(mainWindow, {
+      localStore.set('menuBarVisible', true);
+      localStore.set('autoHideMenuBar', false);
+      if (focusedWindow) {
+        focusedWindow.setMenuBarVisibility(true);
+        focusedWindow.setAutoHideMenuBar(false);
+      }
+      createNativeMenuWithNavigation(); // Recreate menu to update labels
+      dialog.showMessageBox(focusedWindow, {
         type: 'info',
         title: 'Preferences Reset',
         message: 'Menu bar preferences have been reset to defaults.'
@@ -160,41 +85,43 @@ Note: Changes are saved automatically when using the View menu or keyboard short
   });
 }
 
-// Menu bar control functions
+// Menu bar control functions - These should operate on the focused window
 function toggleMenuBarVisibility() {
-  if (!mainWindow) return;
-  
-  const isVisible = mainWindow.isMenuBarVisible();
+  const focusedWC = appController.getFocusedWindowController();
+  const focusedWindow = focusedWC?.getInternalBrowserWindow();
+  if (!focusedWindow) return;
+
+  const isVisible = focusedWindow.isMenuBarVisible();
   const newVisibility = !isVisible;
-  
-  mainWindow.setMenuBarVisibility(newVisibility);
-  store.set('menuBarVisible', newVisibility);
-  
-  // Recreate menu to update the menu item text
-  createNativeMenuWithNavigation();
+
+  focusedWindow.setMenuBarVisibility(newVisibility);
+  localStore.set('menuBarVisible', newVisibility);
+  createNativeMenuWithNavigation(); // Recreate menu to update labels
 }
 
 function toggleAutoHideMenuBar() {
-  if (!mainWindow) return;
-  
-  const autoHide = mainWindow.isMenuBarAutoHide();
+  const focusedWC = appController.getFocusedWindowController();
+  const focusedWindow = focusedWC?.getInternalBrowserWindow();
+  if (!focusedWindow) return;
+
+  const autoHide = focusedWindow.isMenuBarAutoHide();
   const newAutoHide = !autoHide;
-  
-  mainWindow.setAutoHideMenuBar(newAutoHide);
-  store.set('autoHideMenuBar', newAutoHide);
-  
-  // If we're enabling auto-hide, make sure menu bar is visible first
+
+  focusedWindow.setAutoHideMenuBar(newAutoHide);
+  localStore.set('autoHideMenuBar', newAutoHide);
+
   if (newAutoHide) {
-    mainWindow.setMenuBarVisibility(true);
-    store.set('menuBarVisible', true);
+    focusedWindow.setMenuBarVisibility(true);
+    localStore.set('menuBarVisible', true);
   }
-  
-  // Recreate menu to update the menu item text
-  createNativeMenuWithNavigation();
+  createNativeMenuWithNavigation(); // Recreate menu to update labels
 }
 
 // Create a native menu with navigation controls
 function createNativeMenuWithNavigation() {
+  const focusedWC = appController.getFocusedWindowController();
+  const focusedWindow = focusedWC?.getInternalBrowserWindow();
+
   const template = [
     {
       label: 'Lotion',
@@ -202,30 +129,27 @@ function createNativeMenuWithNavigation() {
         {
           label: 'About Lotion',
           click: () => {
-            dialog.showMessageBox(mainWindow, {
-              type: 'info',
-              title: 'About Lotion',
-              message: 'Lotion',
-              detail: 'Unofficial Notion.so Desktop app for Linux\nVersion 1.0.0'
-            });
+            if (focusedWindow) {
+              dialog.showMessageBox(focusedWindow, {
+                type: 'info',
+                title: 'About Lotion',
+                message: 'Lotion',
+                detail: 'Unofficial Notion.so Desktop app for Linux\nVersion ' + app.getVersion()
+              });
+            }
           }
         },
         { type: 'separator' },
         {
           label: 'Preferences',
           accelerator: 'CmdOrCtrl+,',
-          click: () => {
-            showPreferencesDialog();
-          }
+          click: () => { showPreferencesDialog(); }
         },
         { type: 'separator' },
         {
           label: 'Quit',
           accelerator: process.platform === 'darwin' ? 'Cmd+Q' : 'Ctrl+Q',
-          click: () => {
-            isQuitting = true;
-            app.quit();
-          }
+          click: () => { appController.requestQuit(); }
         }
       ]
     },
@@ -235,39 +159,23 @@ function createNativeMenuWithNavigation() {
         {
           label: 'Back',
           accelerator: 'Alt+Left',
-          click: () => {
-            if (mainWindow && mainWindow.webContents.navigationHistory.canGoBack()) {
-              mainWindow.webContents.navigationHistory.goBack();
-            }
-          }
+          click: () => { focusedWC?.getInternalBrowserWindow()?.webContents.goBack(); }
         },
         {
           label: 'Forward',
           accelerator: 'Alt+Right',
-          click: () => {
-            if (mainWindow && mainWindow.webContents.navigationHistory.canGoForward()) {
-              mainWindow.webContents.navigationHistory.goForward();
-            }
-          }
+          click: () => { focusedWC?.getInternalBrowserWindow()?.webContents.goForward(); }
         },
         {
           label: 'Refresh',
           accelerator: 'CmdOrCtrl+R',
-          click: () => {
-            if (mainWindow) {
-              mainWindow.webContents.reload();
-            }
-          }
+          click: () => { focusedWC?.getInternalBrowserWindow()?.webContents.reload(); }
         },
         { type: 'separator' },
         {
           label: 'Home',
           accelerator: 'CmdOrCtrl+H',
-          click: () => {
-            if (mainWindow) {
-              mainWindow.loadURL(config.domainBaseUrl);
-            }
-          }
+          click: () => { focusedWC?.loadURL(config.domainBaseUrl); }
         }
       ]
     },
@@ -297,12 +205,12 @@ function createNativeMenuWithNavigation() {
         { role: 'togglefullscreen' },
         { type: 'separator' },
         {
-          label: mainWindow.isMenuBarVisible() ? 'Hide Menu Bar' : 'Show Menu Bar',
+          label: focusedWindow?.isMenuBarVisible() ? 'Hide Menu Bar' : 'Show Menu Bar',
           accelerator: 'CmdOrCtrl+Shift+M',
           click: toggleMenuBarVisibility
         },
         {
-          label: mainWindow.isMenuBarAutoHide() ? 'Disable Auto-Hide Menu Bar' : 'Enable Auto-Hide Menu Bar',
+          label: focusedWindow?.isMenuBarAutoHide() ? 'Disable Auto-Hide Menu Bar' : 'Enable Auto-Hide Menu Bar',
           accelerator: 'CmdOrCtrl+Alt+M',
           click: toggleAutoHideMenuBar
         },
@@ -311,19 +219,19 @@ function createNativeMenuWithNavigation() {
           label: 'Toggle Menu Bar (Alt Key)',
           accelerator: 'Alt',
           click: () => {
-            // This provides the traditional Alt key behavior
-            const isVisible = mainWindow.isMenuBarVisible();
-            const autoHide = mainWindow.isMenuBarAutoHide();
-            
+            if (!focusedWindow) return;
+            const isVisible = focusedWindow.isMenuBarVisible();
+            const autoHide = focusedWindow.isMenuBarAutoHide();
+
             if (autoHide) {
-              // If auto-hide is enabled, just show the menu temporarily
-              mainWindow.setMenuBarVisibility(true);
+              focusedWindow.setMenuBarVisibility(true);
             } else {
-              // Toggle visibility and save preference
               toggleMenuBarVisibility();
             }
           }
-        }
+        },
+        { type: 'separator' },
+        getSpellCheckMenu(appController)
       ]
     },
     {
@@ -337,45 +245,7 @@ function createNativeMenuWithNavigation() {
 
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
-  
-  // Menu bar visibility is now handled by preferences in ready-to-show event
 }
-
-// Simple window title update without script injection
-async function updateWindowTitle() {
-  try {
-    // Get the page title without injecting scripts
-    const title = await mainWindow.webContents.executeJavaScript('document.title', true);
-    if (title) {
-      const cleanTitle = title.replace(' | Notion', '').trim();
-      mainWindow.setTitle(`${cleanTitle} - Lotion`);
-    }
-  } catch (error) {
-    // Silently handle errors
-    mainWindow.setTitle('Lotion - Notion Desktop');
-  }
-}
-
-// App event handlers
-app.whenReady().then(() => {
-  createWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
-});
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
-app.on('before-quit', () => {
-  isQuitting = true;
-});
 
 // Security: Prevent new window creation
 app.on('web-contents-created', (event, contents) => {
@@ -437,43 +307,49 @@ ipcMain.handle('get-version', () => {
 
 // Window control handlers
 ipcMain.handle('window-minimize', () => {
-  if (mainWindow) {
-    mainWindow.minimize();
+  const focusedWindow = appController.getFocusedWindowController()?.getInternalBrowserWindow();
+  if (focusedWindow) {
+    focusedWindow.minimize();
   }
 });
 
 ipcMain.handle('window-toggle-maximize', () => {
-  if (mainWindow) {
-    if (mainWindow.isMaximized()) {
-      mainWindow.unmaximize();
+  const focusedWindow = appController.getFocusedWindowController()?.getInternalBrowserWindow();
+  if (focusedWindow) {
+    if (focusedWindow.isMaximized()) {
+      focusedWindow.unmaximize();
     } else {
-      mainWindow.maximize();
+      focusedWindow.maximize();
     }
   }
 });
 
 ipcMain.handle('window-close', () => {
-  if (mainWindow) {
-    mainWindow.close();
+  const focusedWindow = appController.getFocusedWindowController()?.getInternalBrowserWindow();
+  if (focusedWindow) {
+    focusedWindow.close();
   }
 });
 
 // Navigation handlers
 ipcMain.handle('navigation-back', () => {
-  if (mainWindow && mainWindow.webContents.navigationHistory.canGoBack()) {
-    mainWindow.webContents.navigationHistory.goBack();
+  const focusedWindow = appController.getFocusedWindowController()?.getInternalBrowserWindow();
+  if (focusedWindow && focusedWindow.webContents.navigationHistory.canGoBack()) {
+    focusedWindow.webContents.navigationHistory.goBack();
   }
 });
 
 ipcMain.handle('navigation-forward', () => {
-  if (mainWindow && mainWindow.webContents.navigationHistory.canGoForward()) {
-    mainWindow.webContents.navigationHistory.goForward();
+  const focusedWindow = appController.getFocusedWindowController()?.getInternalBrowserWindow();
+  if (focusedWindow && focusedWindow.webContents.navigationHistory.canGoForward()) {
+    focusedWindow.webContents.navigationHistory.goForward();
   }
 });
 
 ipcMain.handle('navigation-refresh', () => {
-  if (mainWindow) {
-    mainWindow.webContents.reload();
+  const focusedWindow = appController.getFocusedWindowController()?.getInternalBrowserWindow();
+  if (focusedWindow) {
+    focusedWindow.webContents.reload();
   }
 });
 
@@ -487,9 +363,10 @@ ipcMain.handle('menu-bar-toggle-auto-hide', () => {
 });
 
 ipcMain.handle('menu-bar-get-status', () => {
+  const focusedWindow = appController.getFocusedWindowController()?.getInternalBrowserWindow();
   return {
-    visible: mainWindow ? mainWindow.isMenuBarVisible() : true,
-    autoHide: mainWindow ? mainWindow.isMenuBarAutoHide() : false
+    visible: focusedWindow ? focusedWindow.isMenuBarVisible() : true,
+    autoHide: focusedWindow ? focusedWindow.isMenuBarAutoHide() : false
   };
 });
 
@@ -497,10 +374,13 @@ ipcMain.handle('preferences-show', () => {
   showPreferencesDialog();
 });
 
-// Export for testing
-module.exports = { createWindow };
-
 // Add command line switches to potentially reduce graphics errors on Linux
 app.commandLine.appendSwitch('disable-gpu-vsync');
 app.commandLine.appendSwitch('disable-gpu-sandbox');
-app.commandLine.appendSwitch('disable-software-rasterizer'); 
+app.commandLine.appendSwitch('disable-software-rasterizer');
+
+// Subscribe to Redux state changes to update menu when needed
+reduxStore.subscribe(() => {
+  // Recreate menu when spell check dictionaries change
+  createNativeMenuWithNavigation();
+});
