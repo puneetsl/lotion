@@ -60,6 +60,8 @@ class WindowController {
       minWidth: 600,
       minHeight: 400,
       icon: getIconPath(),
+      frame: false, // Remove window decorations for custom title bar
+      titleBarStyle: 'hidden', // Hide title bar on macOS
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,

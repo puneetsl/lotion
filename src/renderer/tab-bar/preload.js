@@ -13,6 +13,11 @@ contextBridge.exposeInMainWorld('tabBarAPI', {
   pinTab: (tabId) => ipcRenderer.invoke('tab-bar:pin-tab', tabId),
   unpinTab: (tabId) => ipcRenderer.invoke('tab-bar:unpin-tab', tabId),
 
+  // Window control operations
+  minimizeWindow: () => ipcRenderer.invoke('window-minimize'),
+  maximizeWindow: () => ipcRenderer.invoke('window-toggle-maximize'),
+  closeWindow: () => ipcRenderer.invoke('window-close'),
+
   // Listen for tab state changes from main process
   onTabsUpdated: (callback) => {
     const listener = (event, data) => callback(data);

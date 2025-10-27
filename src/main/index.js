@@ -580,8 +580,24 @@ app.commandLine.appendSwitch('disable-gpu-vsync');
 app.commandLine.appendSwitch('disable-gpu-sandbox');
 app.commandLine.appendSwitch('disable-software-rasterizer');
 
-// Subscribe to Redux state changes to update menu when needed
+// Subscribe to Redux state changes to update UI
+let previousTabsState = {};
 reduxStore.subscribe(() => {
+  const state = reduxStore.getState();
+
   // Recreate menu when spell check dictionaries change
   createNativeMenuWithNavigation();
+
+  // Notify tab bars when tabs change
+  const currentTabsState = state.tabs.tabs;
+  if (JSON.stringify(currentTabsState) !== JSON.stringify(previousTabsState)) {
+    previousTabsState = { ...currentTabsState };
+
+    // Notify all tab bars
+    for (const windowController of appController.windowControllers.values()) {
+      if (windowController.tabBarView && windowController.tabBarView.webContents) {
+        notifyTabBarUpdate(windowController.windowId);
+      }
+    }
+  }
 });

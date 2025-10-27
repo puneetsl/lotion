@@ -36,9 +36,39 @@
     .tab-list {
       display: flex;
       align-items: center;
-      width: 100%;
+      flex: 1;
       overflow-x: auto;
       overflow-y: hidden;
+    }
+
+    .window-controls {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      -webkit-app-region: no-drag;
+    }
+
+    .window-control-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 40px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      color: #666;
+      transition: background-color 0.2s;
+    }
+
+    .window-control-btn:hover {
+      background-color: #e0e0e0;
+    }
+
+    .window-control-btn.close:hover {
+      background-color: #e81123;
+      color: white;
     }
 
     /* Prevent dragging on interactive elements */

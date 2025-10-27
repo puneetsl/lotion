@@ -50,6 +50,11 @@ function render() {
         ${tabs.map(tab => renderTab(tab)).join('')}
         <button class="new-tab-btn" id="new-tab-btn" title="New Tab">+</button>
       </div>
+      <div class="window-controls">
+        <button class="window-control-btn minimize" id="minimize-btn" title="Minimize">−</button>
+        <button class="window-control-btn maximize" id="maximize-btn" title="Maximize">□</button>
+        <button class="window-control-btn close" id="close-btn" title="Close">×</button>
+      </div>
     </div>
   `;
 
@@ -100,6 +105,29 @@ function addEventListeners() {
   if (newTabBtn) {
     newTabBtn.addEventListener('click', () => {
       window.tabBarAPI.createTab({ windowId });
+    });
+  }
+
+  // Window control buttons
+  const minimizeBtn = document.getElementById('minimize-btn');
+  const maximizeBtn = document.getElementById('maximize-btn');
+  const closeBtn = document.getElementById('close-btn');
+
+  if (minimizeBtn) {
+    minimizeBtn.addEventListener('click', () => {
+      window.tabBarAPI.minimizeWindow();
+    });
+  }
+
+  if (maximizeBtn) {
+    maximizeBtn.addEventListener('click', () => {
+      window.tabBarAPI.maximizeWindow();
+    });
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      window.tabBarAPI.closeWindow();
     });
   }
 }
