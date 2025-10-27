@@ -47,6 +47,11 @@ function render() {
 
   container.innerHTML = `
     <div class="tab-bar">
+      <div class="nav-controls">
+        <img src="./logo.png" class="app-logo" alt="Lotion" title="Lotion" onerror="this.style.display='none'">
+        <button class="nav-btn" id="back-btn" title="Go Back">‹</button>
+        <button class="nav-btn" id="forward-btn" title="Go Forward">›</button>
+      </div>
       <div class="tab-list">
         ${tabs.map(tab => renderTab(tab)).join('')}
         <button class="new-tab-btn" id="new-tab-btn" title="New Tab">+</button>
@@ -118,6 +123,22 @@ function addEventListeners() {
   if (newTabBtn) {
     newTabBtn.addEventListener('click', () => {
       window.tabBarAPI.createTab({ windowId });
+    });
+  }
+
+  // Navigation buttons
+  const backBtn = document.getElementById('back-btn');
+  const forwardBtn = document.getElementById('forward-btn');
+
+  if (backBtn) {
+    backBtn.addEventListener('click', () => {
+      window.tabBarAPI.navigateBack();
+    });
+  }
+
+  if (forwardBtn) {
+    forwardBtn.addEventListener('click', () => {
+      window.tabBarAPI.navigateForward();
     });
   }
 

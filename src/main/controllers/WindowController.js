@@ -15,8 +15,8 @@ class WindowController {
     this.initialTitle = title || 'Lotion';
     this.initialBounds = bounds || { width: 1200, height: 800 };
 
-    // Tab bar height in pixels
-    this.TAB_BAR_HEIGHT = 40;
+    // Tab bar height in pixels (reduced for a sleeker look)
+    this.TAB_BAR_HEIGHT = 32;
 
     log.info(`WindowController initialized for windowId: ${this.windowId}`);
   }
@@ -62,6 +62,8 @@ class WindowController {
       icon: getIconPath(),
       frame: false, // Remove window decorations for custom title bar
       titleBarStyle: 'hidden', // Hide title bar on macOS
+      transparent: false, // Don't use transparency (causes resize issues on Linux)
+      backgroundColor: '#f5f5f5', // Match light theme background
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
@@ -137,6 +139,22 @@ class WindowController {
         this.store.dispatch(updateWindowBounds({ windowId: this.windowId, bounds }));
       }
     });
+
+    this.browserWindow.on('maximize', () => {
+      log.debug(`Window ${this.windowId} maximized`);
+      // Defer bounds update to next tick to ensure window manager has finished resizing
+      setImmediate(() => {
+        this.updateViewBounds();
+      });
+    });
+
+    this.browserWindow.on('unmaximize', () => {
+      log.debug(`Window ${this.windowId} unmaximized`);
+      // Defer bounds update to next tick to ensure window manager has finished resizing
+      setImmediate(() => {
+        this.updateViewBounds();
+      });
+    });
   }
 
   /**
@@ -170,9 +188,19 @@ class WindowController {
   updateViewBounds() {
     if (!this.browserWindow || !this.tabBarView) return;
 
-    const { width, height } = this.browserWindow.getContentBounds();
+    // For frameless windows (frame: false), getBounds() returns the correct size
+    // getContentBounds() can return cached/stale values during maximize transitions
+    const bounds = this.browserWindow.getBounds();
+    const { width, height } = bounds;
 
-    // Tab bar at top
+    log.debug(`Updating view bounds for window ${this.windowId}:`, {
+      bounds: bounds,
+      isMaximized: this.browserWindow.isMaximized(),
+      width,
+      height
+    });
+
+    // Tab bar at top - ALWAYS set bounds to ensure it stays on top
     this.tabBarView.setBounds({
       x: 0,
       y: 0,
@@ -188,6 +216,14 @@ class WindowController {
         width: width,
         height: height - this.TAB_BAR_HEIGHT,
       });
+      log.debug(`Set tab content bounds:`, { x: 0, y: this.TAB_BAR_HEIGHT, width, height: height - this.TAB_BAR_HEIGHT });
+    }
+
+    // Ensure tab bar stays on top by removing and re-adding it
+    // This forces it to be the topmost view
+    if (this.browserWindow.contentView) {
+      this.browserWindow.contentView.removeChildView(this.tabBarView);
+      this.browserWindow.contentView.addChildView(this.tabBarView);
     }
   }
 

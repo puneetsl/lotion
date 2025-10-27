@@ -13,6 +13,10 @@ contextBridge.exposeInMainWorld('tabBarAPI', {
   pinTab: (tabId) => ipcRenderer.invoke('tab-bar:pin-tab', tabId),
   unpinTab: (tabId) => ipcRenderer.invoke('tab-bar:unpin-tab', tabId),
 
+  // Navigation operations
+  navigateBack: () => ipcRenderer.invoke('tab-bar:navigate-back'),
+  navigateForward: () => ipcRenderer.invoke('tab-bar:navigate-forward'),
+
   // Window control operations
   minimizeWindow: () => ipcRenderer.invoke('window-minimize'),
   maximizeWindow: () => ipcRenderer.invoke('window-toggle-maximize'),

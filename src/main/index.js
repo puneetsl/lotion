@@ -534,6 +534,30 @@ ipcMain.handle('tab-bar:pin-tab', async (event, tabId) => {
   return { success: true };
 });
 
+// Navigate back in active tab
+ipcMain.handle('tab-bar:navigate-back', async (event) => {
+  const focusedWindowController = appController.getFocusedWindowController();
+  if (focusedWindowController && focusedWindowController.currentActiveTabController) {
+    const webContents = focusedWindowController.currentActiveTabController.webContentsView.webContents;
+    if (webContents.canGoBack()) {
+      webContents.goBack();
+    }
+  }
+  return { success: true };
+});
+
+// Navigate forward in active tab
+ipcMain.handle('tab-bar:navigate-forward', async (event) => {
+  const focusedWindowController = appController.getFocusedWindowController();
+  if (focusedWindowController && focusedWindowController.currentActiveTabController) {
+    const webContents = focusedWindowController.currentActiveTabController.webContentsView.webContents;
+    if (webContents.canGoForward()) {
+      webContents.goForward();
+    }
+  }
+  return { success: true };
+});
+
 // Unpin tab
 ipcMain.handle('tab-bar:unpin-tab', async (event, tabId) => {
   const { unpinTab } = require('./store/slices/tabsSlice');
