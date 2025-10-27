@@ -36,6 +36,10 @@ class WindowController {
       title: this.initialTitle,
       isFocused: this.browserWindow.isFocused(), // Check initial focus state
     }));
+
+    // Show window after everything is set up
+    // We don't use ready-to-show because we're using WebContentsView
+    this.show();
   }
 
   createBrowserWindow() {
@@ -90,11 +94,8 @@ class WindowController {
   }
 
   setupBrowserWindowListeners() {
-    this.browserWindow.once('ready-to-show', () => {
-      this.show();
-      // Any other ready-to-show logic from index.js can be moved here
-      // e.g., menu bar visibility based on localStore
-    });
+    // Note: ready-to-show doesn't fire reliably when using WebContentsView
+    // We'll show the window manually after setup
 
     this.browserWindow.on('closed', () => {
       log.info(`Window ${this.windowId} closed`);
