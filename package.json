@@ -66,7 +66,7 @@
     "@types/react-dom": "^18.2.0",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
     "css-loader": "6.10.0",
-    "electron": "34.3.2",
+    "electron": "35.7.5",
     "electron-packager": "17.1.2",
     "electron-reload": "^1.5.0",
     "electron-updater-yaml": "1.1.2",
