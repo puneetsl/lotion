@@ -4,7 +4,6 @@
 
 set -e
 
-REPO_URL="https://github.com/puneetsl/lotion"
 TEMP_DIR=$(mktemp -d)
 PKGBUILD_URL="https://raw.githubusercontent.com/puneetsl/lotion/master/PKGBUILD"
 
