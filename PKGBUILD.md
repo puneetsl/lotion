@@ -6,6 +6,7 @@ This PKGBUILD is used to build and install Lotion on Arch Linux via the AUR (Arc
 
 - **All assets are included in the source tarball**: The PKGBUILD downloads the complete source code tarball from GitHub releases, which includes all necessary files (icons, desktop files, etc.)
 - **Do NOT add separate source entries**: All assets like `icon.png` are located in the `assets/` directory within the tarball and should NOT be added as separate URLs in the `source=()` array
+- **.SRCINFO is generated, not committed**: The `.SRCINFO` file should be generated using `makepkg --printsrcinfo > .SRCINFO` before submitting to AUR. It's in `.gitignore` and not tracked in this repository.
 
 ## Building the Package
 
@@ -16,6 +17,14 @@ cd lotion
 
 # Build and install
 makepkg -si
+```
+
+## Generating .SRCINFO for AUR
+
+Before submitting to AUR, generate the `.SRCINFO` file:
+
+```bash
+makepkg --printsrcinfo > .SRCINFO
 ```
 
 ## Troubleshooting
