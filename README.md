@@ -142,6 +142,27 @@ cd lotion
 makepkg -si
 ```
 
+#### Quick Install from Source
+
+Alternatively, install directly from this repository with a one-liner:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/puneetsl/lotion/master/install-arch.sh)
+```
+
+Or download and review the script first:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/puneetsl/lotion/master/install-arch.sh -o install-arch.sh
+bash install-arch.sh
+```
+
+**Important Notes for Arch Users:**
+- The PKGBUILD downloads the complete source tarball which includes all assets (icons, desktop files, etc.)
+- Do NOT add `icon.png` or other assets as separate source entries
+- If you encounter a 404 error for `icon.png`, ensure you're using the latest PKGBUILD from this repository
+- For detailed troubleshooting, see [PKGBUILD.md](PKGBUILD.md)
+
 ### Debian/Ubuntu (.deb package)
 
 Download the latest `.deb` package from [Releases](https://github.com/puneetsl/lotion/releases):

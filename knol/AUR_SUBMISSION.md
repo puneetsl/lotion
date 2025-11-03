@@ -129,3 +129,21 @@ updpkgsums
 - The current PKGBUILD uses system Electron to keep package size down
 - Make sure to update the maintainer email in PKGBUILD before submission
 - Consider creating both `lotion` (stable) and `lotion-git` (development) packages
+- **IMPORTANT**: All assets (including `icon.png`) are included in the source tarball. Do NOT add separate source entries for icons or other assets. The PKGBUILD installs them from `assets/` directory within the extracted tarball.
+
+## Troubleshooting
+
+### 404 Error for icon.png
+
+If you encounter an error like:
+```
+ERROR: Failure while downloading https://raw.githubusercontent.com/puneetsl/lotion/master/icon.png
+```
+
+This means the PKGBUILD has an incorrect `source=()` entry. The correct PKGBUILD should only have the tarball as a source:
+
+```bash
+source=("$pkgname-$pkgver.tar.gz::https://github.com/puneetsl/$pkgname/archive/refs/tags/v$pkgver.tar.gz")
+```
+
+**Do not** add icon.png or any other assets as separate sources. They are all included in the tarball and will be available in the `assets/` directory after extraction.
