@@ -1,4 +1,3 @@
-# Maintainer: Puneet Singh Ludu <your-email@example.com>
 pkgname=lotion
 pkgver=1.5.0
 pkgrel=1
@@ -32,7 +31,7 @@ package() {
 
   # Install application files
   install -dm755 "$pkgdir/usr/lib/$pkgname"
-  cp -r out/lotion-linux-*/resources/app.asar "$pkgdir/usr/lib/$pkgname/"
+  cp -r out/Lotion-linux-*/resources/app.asar "$pkgdir/usr/lib/$pkgname/"
 
   # Install desktop file
   install -Dm644 assets/lotion.desktop "$pkgdir/usr/share/applications/$pkgname.desktop"
