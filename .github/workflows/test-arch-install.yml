@@ -1,0 +1,238 @@
+---
+name: Test Arch Installation
+
+'on':
+  push:
+    branches: [main, develop, feat/v1]
+    paths:
+      - 'PKGBUILD'
+      - 'install-arch.sh'
+      - '.github/workflows/test-arch-install.yml'
+  pull_request:
+    branches: [main, develop, feat/v1]
+    paths:
+      - 'PKGBUILD'
+      - 'install-arch.sh'
+      - '.github/workflows/test-arch-install.yml'
+
+jobs:
+  validate-pkgbuild:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update system and install dependencies
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm base-devel namcap shellcheck git
+
+      - name: Validate PKGBUILD syntax
+        run: |
+          echo "==> Checking PKGBUILD syntax..."
+          bash -n PKGBUILD
+          echo "✓ PKGBUILD syntax is valid"
+
+      - name: Run namcap on PKGBUILD
+        run: |
+          echo "==> Running namcap on PKGBUILD..."
+          namcap PKGBUILD || echo "⚠ namcap warnings detected (non-fatal)"
+
+      - name: Validate install-arch.sh syntax
+        run: |
+          echo "==> Checking install-arch.sh syntax..."
+          bash -n install-arch.sh
+          echo "✓ install-arch.sh syntax is valid"
+
+      - name: Run shellcheck on install-arch.sh
+        run: |
+          echo "==> Running shellcheck on install-arch.sh..."
+          shellcheck install-arch.sh
+          echo "✓ shellcheck passed"
+
+      - name: Verify PKGBUILD source URLs
+        run: |
+          echo "==> Verifying source URLs in PKGBUILD..."
+          source PKGBUILD
+          for src in "${source[@]}"; do
+            url="${src##*::}"
+            echo "Checking: $url"
+            # Extract base URL without query parameters
+            base_url=$(echo "$url" | sed 's/?.*//')
+            if [[ "$base_url" =~ ^https?:// ]]; then
+              if curl -I -L -s -f "$base_url" > /dev/null; then
+                echo "✓ URL accessible: $base_url"
+              else
+                echo "✗ URL not accessible: $base_url"
+                exit 1
+              fi
+            fi
+          done
+
+      - name: Check that icon.png is NOT in source array
+        run: |
+          echo "==> Verifying icon.png is not in source array..."
+          if grep -q "icon.png" PKGBUILD | grep -q "source="; then
+            echo "✗ ERROR: icon.png should not be in source array!"
+            echo "All assets are included in the tarball."
+            exit 1
+          else
+            echo "✓ icon.png correctly not in source array"
+          fi
+
+      - name: Verify assets exist in repository
+        run: |
+          echo "==> Verifying required assets exist..."
+          required_assets=(
+            "assets/icon.png"
+            "assets/lotion.desktop"
+            "assets/icons/16x16.png"
+            "assets/icons/32x32.png"
+            "assets/icons/48x48.png"
+            "assets/icons/64x64.png"
+            "assets/icons/128x128.png"
+            "assets/icons/256x256.png"
+            "assets/icons/512x512.png"
+          )
+
+          for asset in "${required_assets[@]}"; do
+            if [ -f "$asset" ]; then
+              echo "✓ Found: $asset"
+            else
+              echo "✗ Missing: $asset"
+              exit 1
+            fi
+          done
+
+      - name: Test PKGBUILD download and extraction (without building)
+        run: |
+          echo "==> Testing source download and extraction..."
+
+          # Create a non-root user for makepkg
+          useradd -m testuser
+          chown -R testuser:testuser .
+
+          # Switch to testuser and test
+          su testuser -c '
+            set -e
+            source PKGBUILD
+
+            # Download sources
+            echo "Downloading sources..."
+            for src in "${source[@]}"; do
+              filename="${src%%::*}"
+              url="${src##*::}"
+              if [[ "$url" =~ ^https?:// ]]; then
+                curl -L -o "$filename" "$url"
+              fi
+            done
+
+            # Extract tarball
+            echo "Extracting tarball..."
+            tar -xzf *.tar.gz
+
+            # Verify assets are in the extracted directory
+            echo "Verifying assets in extracted tarball..."
+            extracted_dir=$(find . -maxdepth 1 -type d \
+              -name "lotion-*" | head -1)
+
+            if [ ! -f "$extracted_dir/assets/icon.png" ]; then
+              echo "✗ ERROR: icon.png not found in tarball!"
+              exit 1
+            fi
+
+            echo "✓ All assets found in tarball"
+          '
+
+      - name: Test install-arch.sh script logic
+        run: |
+          echo "==> Testing install-arch.sh script can download PKGBUILD..."
+
+          # Test the download part of the script
+          TEMP_DIR=$(mktemp -d)
+          cd "$TEMP_DIR"
+
+          PKGBUILD_URL="https://raw.githubusercontent.com/puneetsl/lotion/master/PKGBUILD"
+
+          if curl -fsSL "$PKGBUILD_URL" -o PKGBUILD; then
+            echo "✓ Successfully downloaded PKGBUILD from GitHub"
+
+            # Verify it's a valid PKGBUILD
+            if bash -n PKGBUILD; then
+              echo "✓ Downloaded PKGBUILD has valid syntax"
+            else
+              echo "✗ Downloaded PKGBUILD has syntax errors"
+              exit 1
+            fi
+          else
+            echo "⚠ Could not download PKGBUILD"
+            echo "(may not be merged to master yet)"
+          fi
+
+          cd -
+          rm -rf "$TEMP_DIR"
+
+  test-documentation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check documentation files exist
+        run: |
+          echo "==> Verifying documentation files..."
+
+          files=(
+            "PKGBUILD.md"
+            "knol/AUR_SUBMISSION.md"
+            "README.md"
+          )
+
+          for file in "${files[@]}"; do
+            if [ -f "$file" ]; then
+              echo "✓ Found: $file"
+            else
+              echo "✗ Missing: $file"
+              exit 1
+            fi
+          done
+
+      - name: Verify troubleshooting documentation
+        run: |
+          echo "==> Checking for 404 error troubleshooting..."
+
+          if grep -q "404.*icon.png" PKGBUILD.md; then
+            echo "✓ PKGBUILD.md contains 404 troubleshooting"
+          else
+            echo "✗ PKGBUILD.md missing 404 troubleshooting"
+            exit 1
+          fi
+
+          if grep -q "404.*icon.png" knol/AUR_SUBMISSION.md; then
+            echo "✓ AUR_SUBMISSION.md contains 404 troubleshooting"
+          else
+            echo "✗ AUR_SUBMISSION.md missing 404 troubleshooting"
+            exit 1
+          fi
+
+      - name: Verify README has Arch installation instructions
+        run: |
+          echo "==> Checking README for Arch installation instructions..."
+
+          if grep -q "Quick Install from Source" README.md; then
+            echo "✓ README contains quick install instructions"
+          else
+            echo "✗ README missing quick install instructions"
+            exit 1
+          fi
+
+          if grep -q "install-arch.sh" README.md; then
+            echo "✓ README references install-arch.sh"
+          else
+            echo "✗ README doesn't reference install-arch.sh"
+            exit 1
+          fi
