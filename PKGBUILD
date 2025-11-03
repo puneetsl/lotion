@@ -8,6 +8,8 @@ url="https://github.com/puneetsl/lotion"
 license=('custom')
 depends=('electron' 'nodejs')
 makedepends=('npm' 'git')
+# NOTE: The source tarball includes all necessary files (assets, icons, etc.)
+# Do not add separate source entries for icon.png or other assets
 source=("$pkgname-$pkgver.tar.gz::https://github.com/puneetsl/$pkgname/archive/refs/tags/v$pkgver.tar.gz")
 sha256sums=('SKIP')  # Update this with actual checksum after first release
 
@@ -35,7 +37,7 @@ package() {
   # Install desktop file
   install -Dm644 assets/lotion.desktop "$pkgdir/usr/share/applications/$pkgname.desktop"
 
-  # Install icon
+  # Install icon (from assets/ directory in the source tarball)
   install -Dm644 assets/icon.png "$pkgdir/usr/share/pixmaps/$pkgname.png"
   for size in 16 32 48 64 128 256 512; do
     install -Dm644 "assets/icons/${size}x${size}.png" \
