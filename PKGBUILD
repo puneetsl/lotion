@@ -4,7 +4,7 @@ pkgrel=1
 pkgdesc="Unofficial Notion.so Desktop app for Linux"
 arch=('x86_64' 'aarch64')
 url="https://github.com/puneetsl/lotion"
-license=('custom')
+license=('mit')
 depends=('electron' 'nodejs')
 makedepends=('npm' 'git')
 # NOTE: The source tarball includes all necessary files (assets, icons, etc.)
