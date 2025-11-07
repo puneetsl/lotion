@@ -37,7 +37,28 @@ class AppController {
 
     this.electronApp.whenReady().then(() => {
       log.info('Electron app is ready via AppController');
-      this.createNewWindow();
+      
+      // Parse command line arguments for initial URL
+      const args = process.argv;
+      log.info('Command line arguments:', args);
+      
+      let initialUrl = null;
+      // Look for URLs in command line arguments (skip first 2 args which are electron and app path)
+      for (let i = 2; i < args.length; i++) {
+        const arg = args[i];
+        if (arg && (arg.startsWith('http://') || arg.startsWith('https://'))) {
+          initialUrl = arg;
+          log.info(`Found URL in command line: ${initialUrl}`);
+          break;
+        }
+      }
+      
+      const options = {};
+      if (initialUrl) {
+        options.initialUrl = initialUrl;
+      }
+
+      this.createNewWindow(options);
     });
 
     this.electronApp.on('window-all-closed', () => {
