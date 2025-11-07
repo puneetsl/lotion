@@ -17,7 +17,23 @@ if (process.env.NODE_ENV === 'development') {
   log.info(`Development mode: User data path set to ${devUserDataPath}`);
 }
 
-// Import config (still needed for WindowController's default URL)
+// --- Single Instance Lock --- //
+// IMPORTANT: Request single instance lock BEFORE any other initialization
+// Use single instance lock to handle multiple windows via second-instance events
+// When user runs 'lotion' again, create a new window in the existing process
+const gotTheLock = app.requestSingleInstanceLock();
+log.info(`Requesting single instance lock... Got lock: ${gotTheLock}`);
+
+if (!gotTheLock) {
+  log.info('Another instance of Lotion is already running. Quitting this instance.');
+  app.quit();
+  // Exit immediately - don't initialize anything else
+  process.exit(0);
+} else {
+  log.info('Single instance lock acquired successfully');
+}
+
+// Import config (needed after lock is acquired)
 const config = require('../../config/config.json');
 
 // Initialize store for user preferences (localStore for menu bar visibility etc.)
@@ -34,6 +50,41 @@ reduxStore.dispatch({ type: 'app/setDictionaries', payload: spellCheckDictionari
 
 // Instantiate AppController (singleton)
 const appController = new AppController(reduxStore);
+
+// Handle second-instance event (must be set up after appController is created)
+// This fires when someone tries to run 'lotion' again
+// We create a NEW WINDOW instead of focusing existing one
+app.on('second-instance', (event, commandLine, workingDirectory) => {
+  log.info('Second instance detected, creating new window');
+  log.info('Command line:', commandLine);
+  log.info('Working directory:', workingDirectory);
+
+  // Parse command line to extract URL if provided
+  // Command line format: ['electron', '/path/to/app', 'https://notion.so/...']
+  let initialUrl = null;
+  
+  // Look for URLs in command line arguments (skip first 2 args which are electron and app path)
+  for (let i = 2; i < commandLine.length; i++) {
+    const arg = commandLine[i];
+    if (arg && (arg.startsWith('http://') || arg.startsWith('https://'))) {
+      initialUrl = arg;
+      log.info(`Found URL in command line: ${initialUrl}`);
+      break;
+    }
+  }
+
+  // Create a new window with the URL if provided
+  const options = {};
+  if (initialUrl) {
+    options.initialUrl = initialUrl;
+    log.info(`Creating new window with URL: ${initialUrl}`);
+  } else {
+    log.info('Creating new window with default URL');
+  }
+
+  appController.createNewWindow(options);
+});
+
 appController.init(); // Initialize AppController event handlers
 
 // --- Helper Functions --- //
