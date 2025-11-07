@@ -38,26 +38,21 @@ class AppController {
     this.electronApp.whenReady().then(() => {
       log.info('Electron app is ready via AppController');
       
-      // Parse command line arguments for initial URL
+      // Parse command line arguments for Notion URL
       const args = process.argv;
-      log.info('Command line arguments:', args);
-      
       let initialUrl = null;
-      // Look for URLs in command line arguments (skip first 2 args which are electron and app path)
-      for (let i = 2; i < args.length; i++) {
-        const arg = args[i];
-        if (arg && (arg.startsWith('http://') || arg.startsWith('https://'))) {
+      // Find any argument that is a Notion URL
+      for (const arg of args) {
+        if (arg && 
+            (arg.startsWith('http://') || arg.startsWith('https://')) && 
+            arg.includes('notion.so')) {
           initialUrl = arg;
-          log.info(`Found URL in command line: ${initialUrl}`);
+          log.info(`Found Notion URL: ${initialUrl}`);
           break;
         }
       }
       
-      const options = {};
-      if (initialUrl) {
-        options.initialUrl = initialUrl;
-      }
-
+      const options = initialUrl ? { initialUrl } : {};
       this.createNewWindow(options);
     });
 

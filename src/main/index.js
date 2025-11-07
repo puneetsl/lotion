@@ -56,32 +56,20 @@ const appController = new AppController(reduxStore);
 // We create a NEW WINDOW instead of focusing existing one
 app.on('second-instance', (event, commandLine, workingDirectory) => {
   log.info('Second instance detected, creating new window');
-  log.info('Command line:', commandLine);
-  log.info('Working directory:', workingDirectory);
 
-  // Parse command line to extract URL if provided
-  // Command line format: ['electron', '/path/to/app', 'https://notion.so/...']
+  // Find any argument that is a Notion URL
   let initialUrl = null;
-  
-  // Look for URLs in command line arguments (skip first 2 args which are electron and app path)
-  for (let i = 2; i < commandLine.length; i++) {
-    const arg = commandLine[i];
-    if (arg && (arg.startsWith('http://') || arg.startsWith('https://'))) {
+  for (const arg of commandLine) {
+    if (arg && 
+        (arg.startsWith('http://') || arg.startsWith('https://')) && 
+        arg.includes('notion.so')) {
       initialUrl = arg;
-      log.info(`Found URL in command line: ${initialUrl}`);
+      log.info(`Found Notion URL: ${initialUrl}`);
       break;
     }
   }
 
-  // Create a new window with the URL if provided
-  const options = {};
-  if (initialUrl) {
-    options.initialUrl = initialUrl;
-    log.info(`Creating new window with URL: ${initialUrl}`);
-  } else {
-    log.info('Creating new window with default URL');
-  }
-
+  const options = initialUrl ? { initialUrl } : {};
   appController.createNewWindow(options);
 });
 
