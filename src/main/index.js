@@ -17,7 +17,23 @@ if (process.env.NODE_ENV === 'development') {
   log.info(`Development mode: User data path set to ${devUserDataPath}`);
 }
 
-// Import config (still needed for WindowController's default URL)
+// --- Single Instance Lock --- //
+// IMPORTANT: Request single instance lock BEFORE any other initialization
+// Use single instance lock to handle multiple windows via second-instance events
+// When user runs 'lotion' again, create a new window in the existing process
+const gotTheLock = app.requestSingleInstanceLock();
+log.info(`Requesting single instance lock... Got lock: ${gotTheLock}`);
+
+if (!gotTheLock) {
+  log.info('Another instance of Lotion is already running. Quitting this instance.');
+  app.quit();
+  // Exit immediately - don't initialize anything else
+  process.exit(0);
+} else {
+  log.info('Single instance lock acquired successfully');
+}
+
+// Import config (needed after lock is acquired)
 const config = require('../../config/config.json');
 
 // Initialize store for user preferences (localStore for menu bar visibility etc.)
@@ -34,6 +50,29 @@ reduxStore.dispatch({ type: 'app/setDictionaries', payload: spellCheckDictionari
 
 // Instantiate AppController (singleton)
 const appController = new AppController(reduxStore);
+
+// Handle second-instance event (must be set up after appController is created)
+// This fires when someone tries to run 'lotion' again
+// We create a NEW WINDOW instead of focusing existing one
+app.on('second-instance', (event, commandLine, workingDirectory) => {
+  log.info('Second instance detected, creating new window');
+
+  // Find any argument that is a Notion URL
+  let initialUrl = null;
+  for (const arg of commandLine) {
+    if (arg && 
+        (arg.startsWith('http://') || arg.startsWith('https://')) && 
+        arg.includes('notion.so')) {
+      initialUrl = arg;
+      log.info(`Found Notion URL: ${initialUrl}`);
+      break;
+    }
+  }
+
+  const options = initialUrl ? { initialUrl } : {};
+  appController.createNewWindow(options);
+});
+
 appController.init(); // Initialize AppController event handlers
 
 // --- Helper Functions --- //
