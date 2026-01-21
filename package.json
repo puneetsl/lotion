@@ -20,7 +20,7 @@
     "fs-extra": "8.1.0",
     "get-port": "5.1.1",
     "intl-messageformat": "10.5.0",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "loudness": "0.4.2",
     "luxon": "^3.4.4",
     "md5": "2.2.1",
