@@ -3,6 +3,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/sponsors/puneetsl"><img src="https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?style=flat-square" alt="Sponsor"></a>
   <img src="https://img.shields.io/badge/version-1.5.0-blue.svg" alt="Version">
   <img src="https://img.shields.io/badge/platform-linux-lightgrey.svg" alt="Platform">
   <img src="https://img.shields.io/badge/electron-34.3.2-9feaf9.svg" alt="Electron">
@@ -10,11 +11,24 @@
 </p>
 
 ---
+<div align="center">
+<table>
+<tr>
+<td>
+<strong>💖 Like Lotion?</strong><br>
+Consider <a href="https://github.com/sponsors/puneetsl">sponsoring me on GitHub</a> to keep this project alive and support more Linux tools!
+</td>
+</tr>
+</table>
+</div>
+
 
 ## Introduction
 
 Lotion is an unofficial Electron-based desktop application that brings Notion.so to Linux. While NotionHQ continues to focus on feature development for other platforms, Linux support remains a lower priority. This project aims to fill that gap by providing a native desktop experience with modern UI and comprehensive features.
 
+
+ 
 <blockquote>
 "Hey we don't want to release on platforms that we cannot ensure the quality – the team is still small and we don't use Linux ourselves"
 <br>— Notion (@NotionHQ)
