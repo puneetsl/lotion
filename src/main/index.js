@@ -40,7 +40,8 @@ const config = require('../../config/config.json');
 const localStore = new Store({
   defaults: {
     menuBarVisible: true,
-    autoHideMenuBar: false
+    autoHideMenuBar: false,
+    restoreTabsOnStartup: false
   }
 });
 
@@ -428,6 +429,7 @@ ipcMain.handle('show-logo-menu', async (event) => {
   const store = new Store();
   const spellCheckEnabled = store.get('spellCheckEnabled', true); // Default to enabled
   const currentTheme = store.get('theme', 'default'); // Default to Notion's default theme
+  const restoreTabsOnStartup = store.get('restoreTabsOnStartup', false);
 
   // Theme switcher helper function
   const switchTheme = async (themeName) => {
@@ -524,6 +526,12 @@ ipcMain.handle('show-logo-menu', async (event) => {
           click: () => switchTheme('catppuccin-latte')
         }
       ]
+    },
+    {
+      label: restoreTabsOnStartup ? '✓ Restore Tabs on Startup' : 'Restore Tabs on Startup',
+      click: () => {
+        store.set('restoreTabsOnStartup', !restoreTabsOnStartup);
+      }
     },
     {
       label: spellCheckEnabled ? '✓ Spell Check Enabled' : 'Spell Check Disabled',

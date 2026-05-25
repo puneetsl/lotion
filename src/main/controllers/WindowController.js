@@ -26,16 +26,20 @@ class WindowController {
     this.createBrowserWindow();
     this.createTabBarView();
     this.setupBrowserWindowListeners();
-    this.createInitialTab();
 
-    // Dispatch action to add this window to the Redux store
+    // Register the window in Redux BEFORE creating the initial tab.
+    // addTabToWindow and setActiveTabForWindow both silently no-op if the
+    // window entry doesn't exist yet, which meant the first tab never
+    // landed in tabIds and was missing from the tab bar.
     this.store.dispatch(addWindow({
       windowId: this.windowId,
-      bounds: this.browserWindow.getBounds(), // Get actual bounds after creation
+      bounds: this.browserWindow.getBounds(),
       url: this.initialUrl,
       title: this.initialTitle,
-      isFocused: this.browserWindow.isFocused(), // Check initial focus state
+      isFocused: this.browserWindow.isFocused(),
     }));
+
+    this.createInitialTab();
 
     // Show window after everything is set up
     // We don't use ready-to-show because we're using WebContentsView

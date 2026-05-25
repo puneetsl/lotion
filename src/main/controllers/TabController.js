@@ -149,6 +149,19 @@ class TabController {
       );
     });
 
+    // In-page URL changes (Notion uses history.pushState for routing
+    // between workspace pages — did-navigate doesn't fire for those).
+    webContents.on('did-navigate-in-page', (event, url, isMainFrame) => {
+      if (!isMainFrame) return;
+      log.debug(`Tab ${this.tabId}: In-page navigation to ${url}`);
+      this.store.dispatch(
+        updateTabUrl({
+          tabId: this.tabId,
+          url,
+        })
+      );
+    });
+
     // Favicon updated
     webContents.on('page-favicon-updated', (event, favicons) => {
       if (favicons && favicons.length > 0) {
