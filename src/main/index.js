@@ -237,9 +237,41 @@ function createNativeMenuWithNavigation() {
         { role: 'forceReload' },
         { role: 'toggleDevTools' },
         { type: 'separator' },
-        { role: 'resetZoom' },
-        { role: 'zoomIn' },
-        { role: 'zoomOut' },
+        {
+          label: 'Actual Size',
+          accelerator: 'CmdOrCtrl+0',
+          click: () => {
+            const wc = focusedWC?.getActiveTabController()?.webContentsView?.webContents;
+            if (wc) wc.setZoomLevel(0);
+          }
+        },
+        {
+          label: 'Zoom In',
+          accelerator: 'CmdOrCtrl+=',
+          click: () => {
+            const wc = focusedWC?.getActiveTabController()?.webContentsView?.webContents;
+            if (wc) wc.setZoomLevel(wc.getZoomLevel() + 0.5);
+          }
+        },
+        {
+          // Hidden alias so US-layout users pressing Ctrl + + (i.e. Ctrl+Shift+=) still trigger zoom in
+          label: 'Zoom In',
+          accelerator: 'CmdOrCtrl+Shift+=',
+          visible: false,
+          acceleratorWorksWhenHidden: true,
+          click: () => {
+            const wc = focusedWC?.getActiveTabController()?.webContentsView?.webContents;
+            if (wc) wc.setZoomLevel(wc.getZoomLevel() + 0.5);
+          }
+        },
+        {
+          label: 'Zoom Out',
+          accelerator: 'CmdOrCtrl+-',
+          click: () => {
+            const wc = focusedWC?.getActiveTabController()?.webContentsView?.webContents;
+            if (wc) wc.setZoomLevel(wc.getZoomLevel() - 0.5);
+          }
+        },
         { type: 'separator' },
         { role: 'togglefullscreen' },
         { type: 'separator' },
