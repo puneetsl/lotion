@@ -462,112 +462,115 @@ ipcMain.handle('show-logo-menu', async (event) => {
     }
   };
 
+  const themes = [
+    { id: 'default', label: 'Default' },
+    null, // separator
+    { id: 'dracula', label: 'Dracula' },
+    { id: 'nord', label: 'Nord' },
+    { id: 'gruvbox-dark', label: 'Gruvbox Dark' },
+    null,
+    { id: 'catppuccin-mocha', label: 'Catppuccin Mocha' },
+    { id: 'catppuccin-macchiato', label: 'Catppuccin Macchiato' },
+    { id: 'catppuccin-frappe', label: 'Catppuccin Frappe' },
+    { id: 'catppuccin-latte', label: 'Catppuccin Latte' },
+  ];
+
+  const themeSubmenu = themes.map((t) => {
+    if (t === null) return { type: 'separator' };
+    return {
+      label: t.label,
+      type: 'radio',
+      checked: currentTheme === t.id,
+      click: () => switchTheme(t.id),
+    };
+  });
+
+  const applySpellCheckToTabs = (enabled) => {
+    if (!focusedWindowController) return;
+    const tabManager = require('./managers/TabManager').getInstance();
+    const tabs = tabManager.getTabsForWindow(focusedWindowController.windowId);
+    tabs.forEach((tabController) => {
+      const wc = tabController.webContentsView?.webContents;
+      if (wc) wc.session.setSpellCheckerEnabled(enabled);
+    });
+  };
+
   const menu = Menu.buildFromTemplate([
     {
-      label: 'About Lotion',
-      enabled: false
+      label: `Lotion v${app.getVersion()}`,
+      enabled: false,
     },
     { type: 'separator' },
     {
-      label: '⭐ Star on GitHub',
-      click: () => {
-        shell.openExternal('https://github.com/puneetsl/lotion');
-      }
+      label: 'Spell Check',
+      type: 'checkbox',
+      checked: spellCheckEnabled,
+      click: (menuItem) => {
+        store.set('spellCheckEnabled', menuItem.checked);
+        applySpellCheckToTabs(menuItem.checked);
+      },
     },
     {
-      label: '👤 Follow @puneetsl',
-      click: () => {
-        shell.openExternal('https://github.com/puneetsl');
-      }
-    },
-    { type: 'separator' },
-    {
-      label: '📂 View Repository',
-      click: () => {
-        shell.openExternal('https://github.com/puneetsl/lotion');
-      }
+      label: 'Restore Tabs on Startup',
+      type: 'checkbox',
+      checked: restoreTabsOnStartup,
+      click: (menuItem) => {
+        store.set('restoreTabsOnStartup', menuItem.checked);
+      },
     },
     { type: 'separator' },
     {
-      label: '🎨 Theme',
-      submenu: [
-        {
-          label: currentTheme === 'default' ? '✓ Default (Notion)' : 'Default (Notion)',
-          click: () => switchTheme('default')
-        },
-        { type: 'separator' },
-        {
-          label: currentTheme === 'dracula' ? '✓ Dracula' : 'Dracula',
-          click: () => switchTheme('dracula')
-        },
-        {
-          label: currentTheme === 'nord' ? '✓ Nord' : 'Nord',
-          click: () => switchTheme('nord')
-        },
-        {
-          label: currentTheme === 'gruvbox-dark' ? '✓ Gruvbox Dark' : 'Gruvbox Dark',
-          click: () => switchTheme('gruvbox-dark')
-        },
-        { type: 'separator' },
-        {
-          label: currentTheme === 'catppuccin-mocha' ? '✓ Catppuccin Mocha' : 'Catppuccin Mocha',
-          click: () => switchTheme('catppuccin-mocha')
-        },
-        {
-          label: currentTheme === 'catppuccin-macchiato' ? '✓ Catppuccin Macchiato' : 'Catppuccin Macchiato',
-          click: () => switchTheme('catppuccin-macchiato')
-        },
-        {
-          label: currentTheme === 'catppuccin-frappe' ? '✓ Catppuccin Frappe' : 'Catppuccin Frappe',
-          click: () => switchTheme('catppuccin-frappe')
-        },
-        {
-          label: currentTheme === 'catppuccin-latte' ? '✓ Catppuccin Latte' : 'Catppuccin Latte',
-          click: () => switchTheme('catppuccin-latte')
-        }
-      ]
-    },
-    {
-      label: restoreTabsOnStartup ? '✓ Restore Tabs on Startup' : 'Restore Tabs on Startup',
-      click: () => {
-        store.set('restoreTabsOnStartup', !restoreTabsOnStartup);
-      }
-    },
-    {
-      label: spellCheckEnabled ? '✓ Spell Check Enabled' : 'Spell Check Disabled',
-      click: () => {
-        const newValue = !spellCheckEnabled;
-        store.set('spellCheckEnabled', newValue);
-
-        // Apply to all existing tabs
-        if (focusedWindowController) {
-          const windowId = focusedWindowController.windowId;
-          const tabManager = require('./managers/TabManager').getInstance();
-          const tabs = tabManager.getTabsForWindow(windowId);
-
-          tabs.forEach(tabController => {
-            if (tabController.webContentsView && tabController.webContentsView.webContents) {
-              tabController.webContentsView.webContents.session.setSpellCheckerEnabled(newValue);
-            }
-          });
-        }
-      }
+      label: 'Theme',
+      submenu: themeSubmenu,
     },
     {
       label: 'Reload Custom CSS',
       click: async () => {
-        // Reload CSS for all tabs in focused window
-        if (focusedWindowController) {
-          const windowId = focusedWindowController.windowId;
-          const tabManager = require('./managers/TabManager').getInstance();
-          const tabs = tabManager.getTabsForWindow(windowId);
-
-          for (const tabController of tabs) {
-            await tabController.reloadCustomCSS();
-          }
+        if (!focusedWindowController) return;
+        const tabManager = require('./managers/TabManager').getInstance();
+        const tabs = tabManager.getTabsForWindow(focusedWindowController.windowId);
+        for (const tabController of tabs) {
+          await tabController.reloadCustomCSS();
         }
-      }
-    }
+      },
+    },
+    { type: 'separator' },
+    {
+      label: 'About Lotion',
+      click: () => {
+        dialog.showMessageBox(focusedWindowController.browserWindow, {
+          type: 'info',
+          title: 'About Lotion',
+          message: `Lotion ${app.getVersion()}`,
+          detail: 'Unofficial Notion.so desktop client.\n\nhttps://github.com/puneetsl/lotion',
+          buttons: ['Close', 'Open GitHub'],
+          defaultId: 0,
+          cancelId: 0,
+        }).then((result) => {
+          if (result.response === 1) {
+            shell.openExternal('https://github.com/puneetsl/lotion');
+          }
+        });
+      },
+    },
+    {
+      label: 'Help & GitHub',
+      submenu: [
+        {
+          label: 'Star on GitHub',
+          click: () => shell.openExternal('https://github.com/puneetsl/lotion'),
+        },
+        {
+          label: 'Follow @puneetsl',
+          click: () => shell.openExternal('https://github.com/puneetsl'),
+        },
+        { type: 'separator' },
+        {
+          label: 'Report an Issue',
+          click: () => shell.openExternal('https://github.com/puneetsl/lotion/issues/new'),
+        },
+      ],
+    },
   ]);
 
   // Popup the menu at the mouse cursor position
