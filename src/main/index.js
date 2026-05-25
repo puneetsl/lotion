@@ -41,7 +41,8 @@ const localStore = new Store({
   defaults: {
     menuBarVisible: true,
     autoHideMenuBar: false,
-    restoreTabsOnStartup: false
+    restoreTabsOnStartup: false,
+    useNativeWindowFrame: false
   }
 });
 
@@ -77,6 +78,31 @@ app.on('second-instance', (event, commandLine, workingDirectory) => {
 appController.init(); // Initialize AppController event handlers
 
 // --- Helper Functions --- //
+
+// Toggle native-vs-custom window frame. The Electron `frame` option is
+// fixed at BrowserWindow creation time, so we just persist the choice
+// and tell the user to relaunch.
+function toggleNativeWindowFrame(newValue) {
+  localStore.set('useNativeWindowFrame', newValue);
+  const focusedWindow = appController.getFocusedWindowController()?.getInternalBrowserWindow();
+  if (!focusedWindow) return;
+  dialog.showMessageBox(focusedWindow, {
+    type: 'info',
+    title: 'Restart Required',
+    message: newValue ? 'Native window decorations enabled' : 'Custom (tabbed) window enabled',
+    detail: newValue
+      ? "Lotion will switch to native window decorations the next time you launch. The custom tab bar is replaced with single-window-per-tab behavior, and settings move to the standard menu bar."
+      : "Lotion will switch back to the custom tab bar the next time you launch.",
+    buttons: ['Restart Now', 'Later'],
+    defaultId: 0,
+    cancelId: 1,
+  }).then((result) => {
+    if (result.response === 0) {
+      app.relaunch();
+      app.exit(0);
+    }
+  });
+}
 
 // Preferences dialog - This needs to be callable, perhaps via an IPC call handled by AppController
 function showPreferencesDialog() {
@@ -184,6 +210,12 @@ function createNativeMenuWithNavigation() {
           label: 'Preferences',
           accelerator: 'CmdOrCtrl+,',
           click: () => { showPreferencesDialog(); }
+        },
+        {
+          label: 'Use Native Window Decorations',
+          type: 'checkbox',
+          checked: localStore.get('useNativeWindowFrame', false),
+          click: (menuItem) => toggleNativeWindowFrame(menuItem.checked),
         },
         { type: 'separator' },
         {
@@ -517,6 +549,12 @@ ipcMain.handle('show-logo-menu', async (event) => {
       click: (menuItem) => {
         store.set('restoreTabsOnStartup', menuItem.checked);
       },
+    },
+    {
+      label: 'Use Native Window Decorations',
+      type: 'checkbox',
+      checked: localStore.get('useNativeWindowFrame', false),
+      click: (menuItem) => toggleNativeWindowFrame(menuItem.checked),
     },
     { type: 'separator' },
     {
