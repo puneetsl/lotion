@@ -855,18 +855,31 @@ app.commandLine.appendSwitch('disable-software-rasterizer');
 
 // Subscribe to Redux state changes to update UI
 let previousTabsState = {};
+let previousActiveTabsState = {};
 reduxStore.subscribe(() => {
   const state = reduxStore.getState();
 
   // Recreate menu when spell check dictionaries change
   createNativeMenuWithNavigation();
 
-  // Notify tab bars when tabs change
+  // Notify tab bars when tab data changes (titles, favicons, etc.)
   const currentTabsState = state.tabs.tabs;
-  if (JSON.stringify(currentTabsState) !== JSON.stringify(previousTabsState)) {
-    previousTabsState = { ...currentTabsState };
 
-    // Notify all tab bars
+  // Notify tab bars when the active tab changes — the per-window activeTabId
+  // lives in state.windows, not state.tabs, so we need to watch it separately
+  // or tab clicks won't update the highlighted tab in the bar.
+  const currentActiveTabsState = {};
+  for (const [wid, w] of Object.entries(state.windows.windows || {})) {
+    currentActiveTabsState[wid] = w.activeTabId;
+  }
+
+  const tabsChanged = JSON.stringify(currentTabsState) !== JSON.stringify(previousTabsState);
+  const activeChanged = JSON.stringify(currentActiveTabsState) !== JSON.stringify(previousActiveTabsState);
+
+  if (tabsChanged || activeChanged) {
+    previousTabsState = { ...currentTabsState };
+    previousActiveTabsState = currentActiveTabsState;
+
     for (const windowController of appController.windowControllers.values()) {
       if (windowController.tabBarView && windowController.tabBarView.webContents) {
         notifyTabBarUpdate(windowController.windowId);
