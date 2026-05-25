@@ -65,8 +65,8 @@ function render() {
       </div>
       <div class="tab-list">
         ${tabs.map(tab => renderTab(tab)).join('')}
-        <button class="new-tab-btn" id="new-tab-btn" title="New Tab">+</button>
       </div>
+      <button class="new-tab-btn" id="new-tab-btn" title="New Tab">+</button>
       <div class="window-controls">
         <button class="window-control-btn minimize" id="minimize-btn" title="Minimize">−</button>
         <button class="window-control-btn maximize" id="maximize-btn" title="Maximize">□</button>
@@ -78,6 +78,44 @@ function render() {
   // Add event listeners after rendering
   addEventListeners();
   setupTabDragAndDrop();
+  setupTabListWheelScroll();
+}
+
+// Translate vertical scroll wheel into horizontal panning over the tab
+// list so users can navigate overflowing tabs without reaching for the
+// (intentionally hidden) scrollbar.
+function setupTabListWheelScroll() {
+  const list = document.querySelector('.tab-list');
+  if (!list) return;
+  list.addEventListener('wheel', (e) => {
+    // If the user is already scrolling horizontally (touchpad), let the
+    // native behavior handle it.
+    if (e.deltaY === 0 || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    if (list.scrollWidth <= list.clientWidth) return; // No overflow
+    e.preventDefault();
+    list.scrollLeft += e.deltaY;
+  }, { passive: false });
+
+  list.addEventListener('scroll', updateOverflowIndicators, { passive: true });
+  // Initial classification + reclassify whenever the window resizes.
+  updateOverflowIndicators();
+  if (!setupTabListWheelScroll._resizeHooked) {
+    window.addEventListener('resize', () => updateOverflowIndicators());
+    setupTabListWheelScroll._resizeHooked = true;
+  }
+}
+
+// Toggle `.overflow-left` / `.overflow-right` on the tab list so the
+// mask gradient fades whichever edges have hidden tabs. Acts as a
+// visual "more tabs that way" cue.
+function updateOverflowIndicators() {
+  const list = document.querySelector('.tab-list');
+  if (!list) return;
+  const hasOverflow = list.scrollWidth > list.clientWidth + 1;
+  const atStart = list.scrollLeft <= 0;
+  const atEnd = list.scrollLeft + list.clientWidth >= list.scrollWidth - 1;
+  list.classList.toggle('overflow-left', hasOverflow && !atStart);
+  list.classList.toggle('overflow-right', hasOverflow && !atEnd);
 }
 
 // Render individual tab
