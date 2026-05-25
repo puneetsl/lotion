@@ -5,6 +5,24 @@ All notable changes to Lotion will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2026-05-25
+
+### ⬆️ Dependency Overhaul
+
+**Changed**
+- **Electron 35.7.5 → 41.7.0** — fixes Notion's "Your browser is not compatible" error by shipping a newer Chromium engine
+- **Electron Forge 7.6.1 → 7.11.2** — updated build/packaging toolchain
+- **better-sqlite3 11.8.1 → 12.10.0**
+- **electron-updater ^6.6.2 → ^6.8.3**
+
+### 🔒 Security
+
+**Fixed**
+- **node-forge 1.3.1 → 1.4.0** — addresses 3 CVEs (ASN.1 validator desynchronization, unbounded recursion DoS, OID integer truncation)
+- **lodash 4.17.21 → 4.18.1** — prototype pollution fix in `baseUnset`
+- **js-yaml 4.1.0 → 4.1.1** — prototype pollution fix in YAML merge operator
+- Refreshed transitive dependencies pulling in patched versions of `qs`, `express`, `postcss`, `@xmldom/xmldom`, `ip-address`, `socks`, `fast-uri`, `terser-webpack-plugin`, and others
+
 ## [1.5.0] - 2025-10-27
 
 ### 🎨 Theme System
