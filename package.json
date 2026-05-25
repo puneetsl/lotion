@@ -30,7 +30,7 @@
     "react-dom": "18.2.0",
     "react-intl": "6.6.8",
     "redux": "^5.0.1",
-    "uuid": "^9.0.0"
+    "uuid": "^14.0.0"
   },
   "scripts": {
     "start": "electron-forge start",
