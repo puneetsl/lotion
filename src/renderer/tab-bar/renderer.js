@@ -331,7 +331,13 @@ function applyTheme(isDark) {
 
 function applyLotionTheme(themeName) {
   // Remove all theme classes
-  document.body.classList.remove('dark-mode', 'theme-dracula', 'theme-nord', 'theme-gruvbox-dark', 'theme-catppuccin-mocha', 'theme-catppuccin-macchiato', 'theme-catppuccin-frappe', 'theme-catppuccin-latte');
+  document.body.classList.remove(
+    'dark-mode',
+    'theme-dracula', 'theme-nord', 'theme-gruvbox-dark',
+    'theme-monokai', 'theme-noir', 'theme-sakura',
+    'theme-catppuccin-mocha', 'theme-catppuccin-macchiato',
+    'theme-catppuccin-frappe', 'theme-catppuccin-latte',
+  );
 
   // Apply new theme class (default theme has no class)
   if (themeName && themeName !== 'default' && themeName !== 'none') {

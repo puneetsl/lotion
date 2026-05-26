@@ -50,6 +50,21 @@ const localStore = new Store({
 const spellCheckDictionaries = localStore.get('spellCheckDictionaries', ['en-US']);
 reduxStore.dispatch({ type: 'app/setDictionaries', payload: spellCheckDictionaries });
 
+// Restore prefers-color-scheme override from the saved theme before any
+// BrowserWindow is created — otherwise Notion launches in its system
+// mode and our --c-* overrides land on the wrong base palette until
+// the user picks a theme again. Mode mapping mirrors the themes[]
+// array in show-logo-menu; light-mode themes set 'light', dark-mode
+// themes set 'dark', and Default leaves it as 'system'.
+{
+  const savedTheme = (new Store()).get('theme', 'default');
+  const lightThemes = new Set(['catppuccin-latte', 'sakura']);
+  const isExplicitlyLight = lightThemes.has(savedTheme);
+  const isExplicitlyDark = savedTheme !== 'default' && !isExplicitlyLight;
+  const { nativeTheme } = require('electron');
+  nativeTheme.themeSource = isExplicitlyLight ? 'light' : (isExplicitlyDark ? 'dark' : 'system');
+}
+
 // Instantiate AppController (singleton)
 const appController = new AppController(reduxStore);
 
@@ -98,8 +113,15 @@ function toggleNativeWindowFrame(newValue) {
     cancelId: 1,
   }).then((result) => {
     if (result.response === 0) {
-      app.relaunch();
-      app.exit(0);
+      // Defer to next tick so the dialog has a chance to fully dismiss
+      // before we begin shutdown. Using app.quit() (not app.exit()) so
+      // BrowserWindows and WebContentsViews get torn down properly —
+      // app.exit() bypasses cleanup and has been seen to leave orphan
+      // renderer processes that have to be killed manually.
+      setImmediate(() => {
+        app.relaunch();
+        app.quit();
+      });
     }
   });
 }
@@ -468,6 +490,11 @@ ipcMain.handle('show-logo-menu', async (event) => {
     store.set('theme', themeName);
     console.log(`Switching theme to: ${themeName}`);
 
+    // Match Notion's "use system setting" detection to the theme so
+    // its prefers-color-scheme media queries flip appropriately.
+    const themeMode = (themes.find((t) => t.id === themeName) || {}).mode || 'system';
+    require('electron').nativeTheme.themeSource = themeMode;
+
     // Apply theme to all tabs in focused window
     if (focusedWindowController) {
       const windowId = focusedWindowController.windowId;
@@ -494,28 +521,36 @@ ipcMain.handle('show-logo-menu', async (event) => {
     }
   };
 
+  // Use `type: 'checkbox'` rather than 'radio' because Electron's
+  // radio behavior in popup menus on Linux/GTK doesn't reliably
+  // reset sibling state across menu instances — we ended up showing
+  // multiple "checked" themes after the user picked several in a
+  // row. Each menu open rebuilds the items fresh, so a single
+  // `checked: true` (the current theme) renders correctly.
+  // `mode` drives nativeTheme.themeSource so Notion's "use system
+  // setting" auto-switches between its own light/dark mode to match
+  // the theme intent — keeps our --c-* overrides applied to the right
+  // base palette.
   const themes = [
-    { id: 'default', label: 'Default' },
-    null, // separator
-    { id: 'dracula', label: 'Dracula' },
-    { id: 'nord', label: 'Nord' },
-    { id: 'gruvbox-dark', label: 'Gruvbox Dark' },
-    null,
-    { id: 'catppuccin-mocha', label: 'Catppuccin Mocha' },
-    { id: 'catppuccin-macchiato', label: 'Catppuccin Macchiato' },
-    { id: 'catppuccin-frappe', label: 'Catppuccin Frappe' },
-    { id: 'catppuccin-latte', label: 'Catppuccin Latte' },
+    { id: 'default', label: 'Default', mode: 'system' },
+    { id: 'dracula', label: 'Dracula', mode: 'dark' },
+    { id: 'nord', label: 'Nord', mode: 'dark' },
+    { id: 'gruvbox-dark', label: 'Gruvbox Dark', mode: 'dark' },
+    { id: 'monokai', label: 'Monokai', mode: 'dark' },
+    { id: 'noir', label: 'Noir', mode: 'dark' },
+    { id: 'catppuccin-mocha', label: 'Catppuccin Mocha', mode: 'dark' },
+    { id: 'catppuccin-macchiato', label: 'Catppuccin Macchiato', mode: 'dark' },
+    { id: 'catppuccin-frappe', label: 'Catppuccin Frappe', mode: 'dark' },
+    { id: 'catppuccin-latte', label: 'Catppuccin Latte', mode: 'light' },
+    { id: 'sakura', label: 'Sakura', mode: 'light' },
   ];
 
-  const themeSubmenu = themes.map((t) => {
-    if (t === null) return { type: 'separator' };
-    return {
-      label: t.label,
-      type: 'radio',
-      checked: currentTheme === t.id,
-      click: () => switchTheme(t.id),
-    };
-  });
+  const themeSubmenu = themes.map((t) => ({
+    label: t.label,
+    type: 'checkbox',
+    checked: currentTheme === t.id,
+    click: () => switchTheme(t.id),
+  }));
 
   const applySpellCheckToTabs = (enabled) => {
     if (!focusedWindowController) return;

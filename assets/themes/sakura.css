@@ -1,0 +1,82 @@
+/* Sakura theme for Lotion / Notion
+   Soft pastel pink — Hello Kitty / cherry blossom vibes. Light bg
+   with deep magenta text for readability and hot-pink accents.
+   See dracula.css for selector / !important rationale. */
+
+:root,
+:root.dark,
+:root.light,
+body,
+body.notion-body,
+.notion-dark-theme,
+.notion-light-theme,
+.notion-app-inner {
+  --c-bacPri: #fff0f5 !important;          /* lavender blush */
+  --c-bacSec: #ffe4ec !important;          /* lighter pink */
+  --c-bacTer: #ffd4e1 !important;          /* hover pink */
+  --c-bacEle: #ffe4ec !important;
+  --c-bacAccPri: #ffd4e1 !important;
+  --c-bacAccSec: #ffc0cb !important;
+
+  --c-borPri: #ffd4e1 !important;
+  --c-borSec: #ffe4ec !important;
+  --c-borAccPri: #ffc0cb !important;
+  --c-borInvPri: #ff9eb5 !important;
+  --c-borStr: #ff9eb5 !important;
+
+  --c-icoPri: #4a1a3a !important;
+  --c-icoSec: #d6336c !important;
+  --c-icoTer: #a04668 !important;
+  --c-icoAccPri: #ff69b4 !important;
+  --c-icoDis: #ffc0cb !important;
+  --c-icoInvPri: #fff0f5 !important;
+  --c-icoInvSec: #ffe4ec !important;
+
+  --c-graTexPri: #4a1a3a !important;
+  --c-graTexSec: #7a2c54 !important;
+  --c-graTexTer: #a04668 !important;
+  --c-graTexDis: #d49db1 !important;
+  --c-graTexInvPri: #fff0f5 !important;
+  --c-graTexInvSec: #ffe4ec !important;
+
+  --c-graBacPri: #ffe4ec !important;
+  --c-graBacSec: #ffd4e1 !important;
+  --c-graBacTer: #ffc0cb !important;
+  --c-graBacEle: #ffd4e1 !important;
+  --c-graBacAccPri: #ffc0cb !important;
+  --c-graBacAccSec: #ff69b4 !important;
+
+  --c-graBorPri: #ffd4e1 !important;
+  --c-graBorSec: #ffe4ec !important;
+  --c-graBorAccPri: #ffc0cb !important;
+  --c-graBorInvPri: #ff9eb5 !important;
+  --c-graBorStr: #ff9eb5 !important;
+
+  --c-graIcoPri: #4a1a3a !important;
+  --c-graIcoSec: #ff69b4 !important;
+  --c-graIcoTer: #a04668 !important;
+  --c-graIcoAccPri: #ff69b4 !important;
+  --c-graIcoDis: #ffc0cb !important;
+  --c-graIcoInvPri: #fff0f5 !important;
+  --c-graIcoInvSec: #ffe4ec !important;
+
+  --c-popBac: #ffe4ec !important;
+  --c-butGroBac: #ffd4e1 !important;
+  --c-calIteBac: #ffd4e1 !important;
+  --c-codStiBloBac: #ffd4e1 !important;
+  --c-keyActBarBac: #ffe4ec !important;
+  --c-keyDonBarBac: #ffe4ec !important;
+  --c-peeTimBac: #ffe4ec !important;
+  --c-hovMarDisBac: #ffd4e1 !important;
+  --c-homScrButBacBas: #ffe4ec !important;
+
+  --c-palUiBlu600: #ff69b4 !important;
+  --c-palUiBlu700: #ff85c4 !important;
+
+  --theme--bg: #fff0f5;
+  --theme--bg-secondary: #ffe4ec;
+  --theme--bg-tertiary: #ffd4e1;
+  --theme--text: #4a1a3a;
+  --theme--text-secondary: #d6336c;
+  --theme--accent: #ff69b4;
+}

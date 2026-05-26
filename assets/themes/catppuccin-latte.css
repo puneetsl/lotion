@@ -1,0 +1,85 @@
+/* Catppuccin Latte theme for Lotion / Notion (LIGHT)
+   Palette: https://catppuccin.com/palette
+
+   Light theme — dark text on light bg. The Inv* (inverted) values
+   stay light because they typically render text on accent/dark
+   surfaces (e.g. primary buttons). See dracula.css for selector and
+   !important rationale. */
+
+:root,
+:root.dark,
+:root.light,
+body,
+body.notion-body,
+.notion-dark-theme,
+.notion-light-theme,
+.notion-app-inner {
+  --c-bacPri: #eff1f5 !important;
+  --c-bacSec: #e6e9ef !important;
+  --c-bacTer: #ccd0da !important;
+  --c-bacEle: #e6e9ef !important;
+  --c-bacAccPri: #ccd0da !important;
+  --c-bacAccSec: #bcc0cc !important;
+
+  --c-borPri: #ccd0da !important;
+  --c-borSec: #e6e9ef !important;
+  --c-borAccPri: #bcc0cc !important;
+  --c-borInvPri: #acb0be !important;
+  --c-borStr: #acb0be !important;
+
+  --c-icoPri: #4c4f69 !important;
+  --c-icoSec: #8839ef !important;
+  --c-icoTer: #6c6f85 !important;
+  --c-icoAccPri: #8839ef !important;
+  --c-icoDis: #acb0be !important;
+  --c-icoInvPri: #eff1f5 !important;
+  --c-icoInvSec: #dce0e8 !important;
+
+  --c-graTexPri: #4c4f69 !important;
+  --c-graTexSec: #5c5f77 !important;
+  --c-graTexTer: #7c7f93 !important;
+  --c-graTexDis: #bcc0cc !important;
+  --c-graTexInvPri: #eff1f5 !important;
+  --c-graTexInvSec: #dce0e8 !important;
+
+  --c-graBacPri: #e6e9ef !important;
+  --c-graBacSec: #ccd0da !important;
+  --c-graBacTer: #bcc0cc !important;
+  --c-graBacEle: #ccd0da !important;
+  --c-graBacAccPri: #bcc0cc !important;
+  --c-graBacAccSec: #8839ef !important;
+
+  --c-graBorPri: #ccd0da !important;
+  --c-graBorSec: #e6e9ef !important;
+  --c-graBorAccPri: #bcc0cc !important;
+  --c-graBorInvPri: #acb0be !important;
+  --c-graBorStr: #acb0be !important;
+
+  --c-graIcoPri: #4c4f69 !important;
+  --c-graIcoSec: #8839ef !important;
+  --c-graIcoTer: #6c6f85 !important;
+  --c-graIcoAccPri: #8839ef !important;
+  --c-graIcoDis: #acb0be !important;
+  --c-graIcoInvPri: #eff1f5 !important;
+  --c-graIcoInvSec: #dce0e8 !important;
+
+  --c-popBac: #e6e9ef !important;
+  --c-butGroBac: #ccd0da !important;
+  --c-calIteBac: #ccd0da !important;
+  --c-codStiBloBac: #dce0e8 !important;
+  --c-keyActBarBac: #e6e9ef !important;
+  --c-keyDonBarBac: #e6e9ef !important;
+  --c-peeTimBac: #e6e9ef !important;
+  --c-hovMarDisBac: #ccd0da !important;
+  --c-homScrButBacBas: #e6e9ef !important;
+
+  --c-palUiBlu600: #8839ef !important;
+  --c-palUiBlu700: #9b53f4 !important;
+
+  --theme--bg: #eff1f5;
+  --theme--bg-secondary: #e6e9ef;
+  --theme--bg-tertiary: #ccd0da;
+  --theme--text: #4c4f69;
+  --theme--text-secondary: #8839ef;
+  --theme--accent: #8839ef;
+}

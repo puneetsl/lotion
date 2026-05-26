@@ -1,0 +1,82 @@
+/* Noir theme for Lotion / Notion
+   High-contrast monochrome with a single blood-red accent — film noir
+   aesthetic. Pure black bg, near-white text, sharp red highlights.
+   See dracula.css for selector / !important rationale. */
+
+:root,
+:root.dark,
+:root.light,
+body,
+body.notion-body,
+.notion-dark-theme,
+.notion-light-theme,
+.notion-app-inner {
+  --c-bacPri: #0a0a0a !important;
+  --c-bacSec: #000000 !important;
+  --c-bacTer: #1a1a1a !important;
+  --c-bacEle: #000000 !important;
+  --c-bacAccPri: #1a1a1a !important;
+  --c-bacAccSec: #222222 !important;
+
+  --c-borPri: #222222 !important;
+  --c-borSec: #111111 !important;
+  --c-borAccPri: #333333 !important;
+  --c-borInvPri: #444444 !important;
+  --c-borStr: #555555 !important;
+
+  --c-icoPri: #f0f0f0 !important;
+  --c-icoSec: #cc3333 !important;
+  --c-icoTer: #666666 !important;
+  --c-icoAccPri: #cc3333 !important;
+  --c-icoDis: #222222 !important;
+  --c-icoInvPri: #f0f0f0 !important;
+  --c-icoInvSec: #cc3333 !important;
+
+  --c-graTexPri: #f0f0f0 !important;
+  --c-graTexSec: #aaaaaa !important;
+  --c-graTexTer: #666666 !important;
+  --c-graTexDis: #333333 !important;
+  --c-graTexInvPri: #f0f0f0 !important;
+  --c-graTexInvSec: #cc3333 !important;
+
+  --c-graBacPri: #000000 !important;
+  --c-graBacSec: #1a1a1a !important;
+  --c-graBacTer: #222222 !important;
+  --c-graBacEle: #1a1a1a !important;
+  --c-graBacAccPri: #333333 !important;
+  --c-graBacAccSec: #cc3333 !important;
+
+  --c-graBorPri: #222222 !important;
+  --c-graBorSec: #111111 !important;
+  --c-graBorAccPri: #333333 !important;
+  --c-graBorInvPri: #444444 !important;
+  --c-graBorStr: #555555 !important;
+
+  --c-graIcoPri: #f0f0f0 !important;
+  --c-graIcoSec: #cc3333 !important;
+  --c-graIcoTer: #666666 !important;
+  --c-graIcoAccPri: #cc3333 !important;
+  --c-graIcoDis: #222222 !important;
+  --c-graIcoInvPri: #f0f0f0 !important;
+  --c-graIcoInvSec: #cc3333 !important;
+
+  --c-popBac: #000000 !important;
+  --c-butGroBac: #1a1a1a !important;
+  --c-calIteBac: #1a1a1a !important;
+  --c-codStiBloBac: #050505 !important;
+  --c-keyActBarBac: #000000 !important;
+  --c-keyDonBarBac: #000000 !important;
+  --c-peeTimBac: #000000 !important;
+  --c-hovMarDisBac: #1a1a1a !important;
+  --c-homScrButBacBas: #000000 !important;
+
+  --c-palUiBlu600: #cc3333 !important;
+  --c-palUiBlu700: #e64545 !important;
+
+  --theme--bg: #0a0a0a;
+  --theme--bg-secondary: #000000;
+  --theme--bg-tertiary: #1a1a1a;
+  --theme--text: #f0f0f0;
+  --theme--text-secondary: #cc3333;
+  --theme--accent: #cc3333;
+}

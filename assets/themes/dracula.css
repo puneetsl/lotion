@@ -1,0 +1,107 @@
+/* Dracula theme for Lotion / Notion
+   Palette: https://draculatheme.com
+
+   Notion declares its --c-* variables on .notion-dark-theme /
+   .notion-light-theme (applied to <body>). CSS custom properties
+   inherit from the *closest* ancestor, so a :root declaration is
+   shadowed for any descendant of <body>. We declare on the .notion-*
+   classes too, and use !important to win over any later overrides. */
+
+:root,
+:root.dark,
+:root.light,
+body,
+body.notion-body,
+.notion-dark-theme,
+.notion-light-theme,
+.notion-app-inner {
+  /* Core backgrounds */
+  --c-bacPri: #282a36 !important;
+  --c-bacSec: #21222c !important;
+  --c-bacTer: #44475a !important;
+  --c-bacEle: #21222c !important;
+  --c-bacAccPri: #44475a !important;
+  --c-bacAccSec: #6272a4 !important;
+
+  /* Borders */
+  --c-borPri: #44475a !important;
+  --c-borSec: #21222c !important;
+  --c-borAccPri: #6272a4 !important;
+  --c-borInvPri: #6272a4 !important;
+  --c-borStr: #6272a4 !important;
+
+  /* Default icons (also used for text) */
+  --c-icoPri: #f8f8f2 !important;
+  --c-icoSec: #bd93f9 !important;
+  --c-icoTer: #6272a4 !important;
+  --c-icoAccPri: #bd93f9 !important;
+  --c-icoDis: #44475a !important;
+  --c-icoInvPri: #f8f8f2 !important;
+  --c-icoInvSec: #bd93f9 !important;
+
+  /* Gray-scale (most page text / surfaces) */
+  --c-graTexPri: #f8f8f2 !important;
+  --c-graTexSec: #bd93f9 !important;
+  --c-graTexTer: #6272a4 !important;
+  --c-graTexDis: #44475a !important;
+  --c-graTexInvPri: #f8f8f2 !important;
+  --c-graTexInvSec: #bd93f9 !important;
+
+  --c-graBacPri: #21222c !important;
+  --c-graBacSec: #44475a !important;
+  --c-graBacTer: #6272a4 !important;
+  --c-graBacEle: #44475a !important;
+  --c-graBacAccPri: #6272a4 !important;
+  --c-graBacAccSec: #bd93f9 !important;
+
+  --c-graBorPri: #44475a !important;
+  --c-graBorSec: #21222c !important;
+  --c-graBorAccPri: #6272a4 !important;
+  --c-graBorInvPri: #6272a4 !important;
+  --c-graBorStr: #6272a4 !important;
+
+  --c-graIcoPri: #f8f8f2 !important;
+  --c-graIcoSec: #bd93f9 !important;
+  --c-graIcoTer: #6272a4 !important;
+  --c-graIcoAccPri: #bd93f9 !important;
+  --c-graIcoDis: #44475a !important;
+  --c-graIcoInvPri: #f8f8f2 !important;
+  --c-graIcoInvSec: #bd93f9 !important;
+
+  /* Specific surfaces */
+  --c-popBac: #21222c !important;
+  --c-butGroBac: #44475a !important;
+  --c-calIteBac: #44475a !important;
+  --c-codStiBloBac: #1e1f29 !important;
+  --c-keyActBarBac: #21222c !important;
+  --c-keyDonBarBac: #21222c !important;
+  --c-peeTimBac: #21222c !important;
+  --c-hovMarDisBac: #44475a !important;
+  --c-homScrButBacBas: #21222c !important;
+
+  /* Notion's primary action color (blue → theme accent) */
+  --c-palUiBlu600: #bd93f9 !important;
+  --c-palUiBlu700: #d6acff !important;
+
+  /* Legacy --theme--* variables (older Notion + extensions) */
+  --theme--bg: #282a36;
+  --theme--bg-secondary: #21222c;
+  --theme--bg-tertiary: #44475a;
+  --theme--ui: #44475a;
+  --theme--ui-border-mode: #44475a;
+  --theme--ui-border-image: #44475a;
+  --theme--ui-border-table: #44475a;
+  --theme--ui-divider: #44475a;
+  --theme--ui-input: #21222c;
+  --theme--ui-input-border: #6272a4;
+  --theme--ui-overlay: rgba(0, 0, 0, 0.4);
+  --theme--ui-scrollbar: #44475a;
+  --theme--ui-scrollbar-track: #282a36;
+  --theme--ui-shadow: rgba(0, 0, 0, 0.5);
+  --theme--ui-tooltip: #21222c;
+  --theme--ui-tooltip-text: #f8f8f2;
+  --theme--text: #f8f8f2;
+  --theme--text-secondary: #bd93f9;
+  --theme--text-disabled: #6272a4;
+  --theme--accent: #bd93f9;
+}
