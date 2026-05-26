@@ -149,6 +149,19 @@ class TabController {
       );
     });
 
+    // In-page URL changes (Notion uses history.pushState for routing
+    // between workspace pages — did-navigate doesn't fire for those).
+    webContents.on('did-navigate-in-page', (event, url, isMainFrame) => {
+      if (!isMainFrame) return;
+      log.debug(`Tab ${this.tabId}: In-page navigation to ${url}`);
+      this.store.dispatch(
+        updateTabUrl({
+          tabId: this.tabId,
+          url,
+        })
+      );
+    });
+
     // Favicon updated
     webContents.on('page-favicon-updated', (event, favicons) => {
       if (favicons && favicons.length > 0) {
@@ -318,6 +331,31 @@ class TabController {
   }
 
   /**
+   * Resolve a theme name to its CSS contents. Checks the user override
+   * directory first (~/.config/Lotion/themes/<name>.css) so users can
+   * customize, then falls back to the bundled themes in assets/themes/.
+   * Returns null if neither is present.
+   */
+  _readThemeCSS(themeName) {
+    const { app } = require('electron');
+    const fs = require('fs');
+    const candidates = [
+      path.join(app.getPath('userData'), 'themes', `${themeName}.css`),
+      path.join(app.getAppPath(), 'assets', 'themes', `${themeName}.css`),
+    ];
+    for (const p of candidates) {
+      if (fs.existsSync(p)) {
+        try {
+          return fs.readFileSync(p, 'utf8');
+        } catch (err) {
+          log.error(`Tab ${this.tabId}: failed to read theme at ${p}:`, err);
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
    * Inject custom CSS from user's config directory
    */
   async injectCustomCSS() {
@@ -335,10 +373,9 @@ class TabController {
     const currentTheme = store.get('theme', 'default');
     // Check if theme is not default (also support legacy 'none' value)
     if (currentTheme !== 'default' && currentTheme !== 'none') {
-      const themePath = path.join(app.getPath('userData'), 'themes', `${currentTheme}.css`);
-      if (fs.existsSync(themePath)) {
+      const themeCSS = this._readThemeCSS(currentTheme);
+      if (themeCSS) {
         try {
-          const themeCSS = fs.readFileSync(themePath, 'utf8');
           // Remove old theme CSS if exists
           if (this.injectedThemeKey) {
             await this.webContentsView.webContents.removeInsertedCSS(this.injectedThemeKey);
@@ -349,6 +386,8 @@ class TabController {
         } catch (err) {
           log.error(`Tab ${this.tabId}: Error injecting theme:`, err);
         }
+      } else {
+        log.warn(`Tab ${this.tabId}: theme "${currentTheme}" CSS not found (neither user override nor bundled)`);
       }
     } else {
       // Remove theme if switching to "default" (or legacy "none")
@@ -379,6 +418,20 @@ class TabController {
         log.error(`Tab ${this.tabId}: Error injecting custom CSS:`, err);
       }
     }
+
+    // Debug: dump Notion's current CSS variables once per process so
+    // we can discover the actual variable names this Notion version
+    // uses. TODO: remove once theme overrides are known to apply.
+    // dumpNotionCSSVars() is a debugging helper kept on the class so
+    // future Notion CSS variable changes can be investigated. Enable
+    // via LOTION_DUMP_VARS=1 in the environment.
+    if (process.env.LOTION_DUMP_VARS && !TabController._cssVarsDumped) {
+      TabController._cssVarsDumped = true;
+      setTimeout(() => {
+        this.dumpNotionCSSVars().catch((err) => log.warn('CSS dump failed:', err));
+      }, 1500);
+    }
+
   }
 
   /**
@@ -397,9 +450,6 @@ class TabController {
       return;
     }
 
-    const { app } = require('electron');
-    const fs = require('fs');
-
     // Remove old theme if exists
     if (this.injectedThemeKey) {
       try {
@@ -412,20 +462,92 @@ class TabController {
 
     // Load new theme if not "default" (also support legacy "none")
     if (themeName !== 'default' && themeName !== 'none') {
-      const themePath = path.join(app.getPath('userData'), 'themes', `${themeName}.css`);
-      if (fs.existsSync(themePath)) {
+      const themeCSS = this._readThemeCSS(themeName);
+      if (themeCSS) {
         try {
-          const themeCSS = fs.readFileSync(themePath, 'utf8');
           this.injectedThemeKey = await this.webContentsView.webContents.insertCSS(themeCSS);
           log.info(`Theme "${themeName}" loaded for tab ${this.tabId}`);
         } catch (err) {
           log.error(`Tab ${this.tabId}: Error loading theme "${themeName}":`, err);
         }
       } else {
-        log.warn(`Tab ${this.tabId}: Theme file not found: ${themePath}`);
+        log.warn(`Tab ${this.tabId}: Theme file not found: ${themeName} (checked user dir + bundled assets)`);
       }
     } else {
       log.info(`Theme removed for tab ${this.tabId} (using default Notion theme)`);
+    }
+
+    // Debug: dump Notion's actual CSS variables so we can author themes
+    // against the right names. Off-by-default; toggle via LOTION_DUMP_VARS=1.
+    if (process.env.LOTION_DUMP_VARS) {
+      this.dumpNotionCSSVars().catch((err) => log.warn('CSS var dump failed:', err));
+    }
+  }
+
+  /**
+   * Dump CSS custom properties defined on :root (and a few likely
+   * theme-related elements) from the Notion webContents. Used as a
+   * one-time investigation tool to discover Notion's current theming
+   * variable names. Output is sorted alphabetically and split into
+   * "theme-ish" vs other for readability.
+   */
+  async dumpNotionCSSVars() {
+    if (this.isDestroyed || !this.webContentsView) return;
+    const wc = this.webContentsView.webContents;
+    try {
+      const result = await wc.executeJavaScript(`(() => {
+        const out = {};
+        const roots = [document.documentElement, document.body];
+        for (const el of roots) {
+          if (!el) continue;
+          const styles = getComputedStyle(el);
+          for (let i = 0; i < styles.length; i++) {
+            const name = styles[i];
+            if (!name.startsWith('--')) continue;
+            out[name] = styles.getPropertyValue(name).trim();
+          }
+        }
+        // Also probe bg/color of common Notion containers so we can
+        // see which classes carry the actual painted colors.
+        const probeSelectors = [
+          'body',
+          '.notion-app',
+          '.notion-app-inner',
+          '.notion-frame',
+          '.notion-sidebar',
+          '.notion-sidebar-container',
+          '.notion-cursor-listener',
+          '.notion-page-content',
+          '.notion-default-page',
+        ];
+        const probes = {};
+        for (const sel of probeSelectors) {
+          const el = document.querySelector(sel);
+          if (el) {
+            const cs = getComputedStyle(el);
+            probes[sel] = {
+              bg: cs.backgroundColor,
+              color: cs.color,
+              classes: el.className.split(/\\s+/).filter(c => c.includes('theme') || c.includes('notion')).slice(0, 6),
+            };
+          }
+        }
+        return { vars: out, probes };
+      })()`);
+      const vars = result.vars || {};
+      const themeish = Object.keys(vars).filter(k => /theme|color|bg|fg|accent|notion/i.test(k)).sort();
+      const others = Object.keys(vars).filter(k => !themeish.includes(k)).sort();
+      log.info(`[CSS DUMP] Tab ${this.tabId} — ${themeish.length} theme-ish vars, ${others.length} other vars`);
+      log.info('[CSS DUMP] theme-ish vars:');
+      for (const k of themeish) log.info(`  ${k}: ${vars[k]}`);
+      log.info(`[CSS DUMP] other vars (all ${others.length}):`);
+      for (const k of others) log.info(`  ${k}: ${vars[k]}`);
+      log.info('[CSS DUMP] notion container probes:');
+      for (const [sel, p] of Object.entries(result.probes || {})) {
+        log.info(`  ${sel} → bg=${p.bg}, color=${p.color}, classes=${(p.classes || []).join(',')}`);
+      }
+    } catch (err) {
+      log.warn(`CSS dump executeJavaScript threw: ${err.message}`);
     }
   }
 

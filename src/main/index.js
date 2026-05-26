@@ -40,13 +40,30 @@ const config = require('../../config/config.json');
 const localStore = new Store({
   defaults: {
     menuBarVisible: true,
-    autoHideMenuBar: false
+    autoHideMenuBar: false,
+    restoreTabsOnStartup: false,
+    useNativeWindowFrame: false
   }
 });
 
 // --- Initialize spell check dictionaries in Redux from electron-store before anything else ---
 const spellCheckDictionaries = localStore.get('spellCheckDictionaries', ['en-US']);
 reduxStore.dispatch({ type: 'app/setDictionaries', payload: spellCheckDictionaries });
+
+// Restore prefers-color-scheme override from the saved theme before any
+// BrowserWindow is created — otherwise Notion launches in its system
+// mode and our --c-* overrides land on the wrong base palette until
+// the user picks a theme again. Mode mapping mirrors the themes[]
+// array in show-logo-menu; light-mode themes set 'light', dark-mode
+// themes set 'dark', and Default leaves it as 'system'.
+{
+  const savedTheme = (new Store()).get('theme', 'default');
+  const lightThemes = new Set(['catppuccin-latte', 'sakura']);
+  const isExplicitlyLight = lightThemes.has(savedTheme);
+  const isExplicitlyDark = savedTheme !== 'default' && !isExplicitlyLight;
+  const { nativeTheme } = require('electron');
+  nativeTheme.themeSource = isExplicitlyLight ? 'light' : (isExplicitlyDark ? 'dark' : 'system');
+}
 
 // Instantiate AppController (singleton)
 const appController = new AppController(reduxStore);
@@ -76,6 +93,38 @@ app.on('second-instance', (event, commandLine, workingDirectory) => {
 appController.init(); // Initialize AppController event handlers
 
 // --- Helper Functions --- //
+
+// Toggle native-vs-custom window frame. The Electron `frame` option is
+// fixed at BrowserWindow creation time, so we just persist the choice
+// and tell the user to relaunch.
+function toggleNativeWindowFrame(newValue) {
+  localStore.set('useNativeWindowFrame', newValue);
+  const focusedWindow = appController.getFocusedWindowController()?.getInternalBrowserWindow();
+  if (!focusedWindow) return;
+  dialog.showMessageBox(focusedWindow, {
+    type: 'info',
+    title: 'Restart Required',
+    message: newValue ? 'Native window decorations enabled' : 'Custom (tabbed) window enabled',
+    detail: newValue
+      ? "Lotion will switch to native window decorations the next time you launch. The custom tab bar is replaced with single-window-per-tab behavior, and settings move to the standard menu bar."
+      : "Lotion will switch back to the custom tab bar the next time you launch.",
+    buttons: ['Restart Now', 'Later'],
+    defaultId: 0,
+    cancelId: 1,
+  }).then((result) => {
+    if (result.response === 0) {
+      // Defer to next tick so the dialog has a chance to fully dismiss
+      // before we begin shutdown. Using app.quit() (not app.exit()) so
+      // BrowserWindows and WebContentsViews get torn down properly —
+      // app.exit() bypasses cleanup and has been seen to leave orphan
+      // renderer processes that have to be killed manually.
+      setImmediate(() => {
+        app.relaunch();
+        app.quit();
+      });
+    }
+  });
+}
 
 // Preferences dialog - This needs to be callable, perhaps via an IPC call handled by AppController
 function showPreferencesDialog() {
@@ -184,6 +233,12 @@ function createNativeMenuWithNavigation() {
           accelerator: 'CmdOrCtrl+,',
           click: () => { showPreferencesDialog(); }
         },
+        {
+          label: 'Use Native Window Decorations',
+          type: 'checkbox',
+          checked: localStore.get('useNativeWindowFrame', false),
+          click: (menuItem) => toggleNativeWindowFrame(menuItem.checked),
+        },
         { type: 'separator' },
         {
           label: 'Quit',
@@ -237,9 +292,41 @@ function createNativeMenuWithNavigation() {
         { role: 'forceReload' },
         { role: 'toggleDevTools' },
         { type: 'separator' },
-        { role: 'resetZoom' },
-        { role: 'zoomIn' },
-        { role: 'zoomOut' },
+        {
+          label: 'Actual Size',
+          accelerator: 'CmdOrCtrl+0',
+          click: () => {
+            const wc = focusedWC?.getActiveTabController()?.webContentsView?.webContents;
+            if (wc) wc.setZoomLevel(0);
+          }
+        },
+        {
+          label: 'Zoom In',
+          accelerator: 'CmdOrCtrl+=',
+          click: () => {
+            const wc = focusedWC?.getActiveTabController()?.webContentsView?.webContents;
+            if (wc) wc.setZoomLevel(wc.getZoomLevel() + 0.5);
+          }
+        },
+        {
+          // Hidden alias so US-layout users pressing Ctrl + + (i.e. Ctrl+Shift+=) still trigger zoom in
+          label: 'Zoom In',
+          accelerator: 'CmdOrCtrl+Shift+=',
+          visible: false,
+          acceleratorWorksWhenHidden: true,
+          click: () => {
+            const wc = focusedWC?.getActiveTabController()?.webContentsView?.webContents;
+            if (wc) wc.setZoomLevel(wc.getZoomLevel() + 0.5);
+          }
+        },
+        {
+          label: 'Zoom Out',
+          accelerator: 'CmdOrCtrl+-',
+          click: () => {
+            const wc = focusedWC?.getActiveTabController()?.webContentsView?.webContents;
+            if (wc) wc.setZoomLevel(wc.getZoomLevel() - 0.5);
+          }
+        },
         { type: 'separator' },
         { role: 'togglefullscreen' },
         { type: 'separator' },
@@ -396,11 +483,17 @@ ipcMain.handle('show-logo-menu', async (event) => {
   const store = new Store();
   const spellCheckEnabled = store.get('spellCheckEnabled', true); // Default to enabled
   const currentTheme = store.get('theme', 'default'); // Default to Notion's default theme
+  const restoreTabsOnStartup = store.get('restoreTabsOnStartup', false);
 
   // Theme switcher helper function
   const switchTheme = async (themeName) => {
     store.set('theme', themeName);
     console.log(`Switching theme to: ${themeName}`);
+
+    // Match Notion's "use system setting" detection to the theme so
+    // its prefers-color-scheme media queries flip appropriately.
+    const themeMode = (themes.find((t) => t.id === themeName) || {}).mode || 'system';
+    require('electron').nativeTheme.themeSource = themeMode;
 
     // Apply theme to all tabs in focused window
     if (focusedWindowController) {
@@ -428,106 +521,129 @@ ipcMain.handle('show-logo-menu', async (event) => {
     }
   };
 
+  // Use `type: 'checkbox'` rather than 'radio' because Electron's
+  // radio behavior in popup menus on Linux/GTK doesn't reliably
+  // reset sibling state across menu instances — we ended up showing
+  // multiple "checked" themes after the user picked several in a
+  // row. Each menu open rebuilds the items fresh, so a single
+  // `checked: true` (the current theme) renders correctly.
+  // `mode` drives nativeTheme.themeSource so Notion's "use system
+  // setting" auto-switches between its own light/dark mode to match
+  // the theme intent — keeps our --c-* overrides applied to the right
+  // base palette.
+  const themes = [
+    { id: 'default', label: 'Default', mode: 'system' },
+    { id: 'dracula', label: 'Dracula', mode: 'dark' },
+    { id: 'nord', label: 'Nord', mode: 'dark' },
+    { id: 'gruvbox-dark', label: 'Gruvbox Dark', mode: 'dark' },
+    { id: 'monokai', label: 'Monokai', mode: 'dark' },
+    { id: 'noir', label: 'Noir', mode: 'dark' },
+    { id: 'catppuccin-mocha', label: 'Catppuccin Mocha', mode: 'dark' },
+    { id: 'catppuccin-macchiato', label: 'Catppuccin Macchiato', mode: 'dark' },
+    { id: 'catppuccin-frappe', label: 'Catppuccin Frappe', mode: 'dark' },
+    { id: 'catppuccin-latte', label: 'Catppuccin Latte', mode: 'light' },
+    { id: 'sakura', label: 'Sakura', mode: 'light' },
+  ];
+
+  const themeSubmenu = themes.map((t) => ({
+    label: t.label,
+    type: 'checkbox',
+    checked: currentTheme === t.id,
+    click: () => switchTheme(t.id),
+  }));
+
+  const applySpellCheckToTabs = (enabled) => {
+    if (!focusedWindowController) return;
+    const tabManager = require('./managers/TabManager').getInstance();
+    const tabs = tabManager.getTabsForWindow(focusedWindowController.windowId);
+    tabs.forEach((tabController) => {
+      const wc = tabController.webContentsView?.webContents;
+      if (wc) wc.session.setSpellCheckerEnabled(enabled);
+    });
+  };
+
   const menu = Menu.buildFromTemplate([
     {
-      label: 'About Lotion',
-      enabled: false
+      label: `Lotion v${app.getVersion()}`,
+      enabled: false,
     },
     { type: 'separator' },
     {
-      label: '⭐ Star on GitHub',
-      click: () => {
-        shell.openExternal('https://github.com/puneetsl/lotion');
-      }
+      label: 'Spell Check',
+      type: 'checkbox',
+      checked: spellCheckEnabled,
+      click: (menuItem) => {
+        store.set('spellCheckEnabled', menuItem.checked);
+        applySpellCheckToTabs(menuItem.checked);
+      },
     },
     {
-      label: '👤 Follow @puneetsl',
-      click: () => {
-        shell.openExternal('https://github.com/puneetsl');
-      }
+      label: 'Restore Tabs on Startup',
+      type: 'checkbox',
+      checked: restoreTabsOnStartup,
+      click: (menuItem) => {
+        store.set('restoreTabsOnStartup', menuItem.checked);
+      },
+    },
+    {
+      label: 'Use Native Window Decorations',
+      type: 'checkbox',
+      checked: localStore.get('useNativeWindowFrame', false),
+      click: (menuItem) => toggleNativeWindowFrame(menuItem.checked),
     },
     { type: 'separator' },
     {
-      label: '📂 View Repository',
-      click: () => {
-        shell.openExternal('https://github.com/puneetsl/lotion');
-      }
-    },
-    { type: 'separator' },
-    {
-      label: '🎨 Theme',
-      submenu: [
-        {
-          label: currentTheme === 'default' ? '✓ Default (Notion)' : 'Default (Notion)',
-          click: () => switchTheme('default')
-        },
-        { type: 'separator' },
-        {
-          label: currentTheme === 'dracula' ? '✓ Dracula' : 'Dracula',
-          click: () => switchTheme('dracula')
-        },
-        {
-          label: currentTheme === 'nord' ? '✓ Nord' : 'Nord',
-          click: () => switchTheme('nord')
-        },
-        {
-          label: currentTheme === 'gruvbox-dark' ? '✓ Gruvbox Dark' : 'Gruvbox Dark',
-          click: () => switchTheme('gruvbox-dark')
-        },
-        { type: 'separator' },
-        {
-          label: currentTheme === 'catppuccin-mocha' ? '✓ Catppuccin Mocha' : 'Catppuccin Mocha',
-          click: () => switchTheme('catppuccin-mocha')
-        },
-        {
-          label: currentTheme === 'catppuccin-macchiato' ? '✓ Catppuccin Macchiato' : 'Catppuccin Macchiato',
-          click: () => switchTheme('catppuccin-macchiato')
-        },
-        {
-          label: currentTheme === 'catppuccin-frappe' ? '✓ Catppuccin Frappe' : 'Catppuccin Frappe',
-          click: () => switchTheme('catppuccin-frappe')
-        },
-        {
-          label: currentTheme === 'catppuccin-latte' ? '✓ Catppuccin Latte' : 'Catppuccin Latte',
-          click: () => switchTheme('catppuccin-latte')
-        }
-      ]
-    },
-    {
-      label: spellCheckEnabled ? '✓ Spell Check Enabled' : 'Spell Check Disabled',
-      click: () => {
-        const newValue = !spellCheckEnabled;
-        store.set('spellCheckEnabled', newValue);
-
-        // Apply to all existing tabs
-        if (focusedWindowController) {
-          const windowId = focusedWindowController.windowId;
-          const tabManager = require('./managers/TabManager').getInstance();
-          const tabs = tabManager.getTabsForWindow(windowId);
-
-          tabs.forEach(tabController => {
-            if (tabController.webContentsView && tabController.webContentsView.webContents) {
-              tabController.webContentsView.webContents.session.setSpellCheckerEnabled(newValue);
-            }
-          });
-        }
-      }
+      label: 'Theme',
+      submenu: themeSubmenu,
     },
     {
       label: 'Reload Custom CSS',
       click: async () => {
-        // Reload CSS for all tabs in focused window
-        if (focusedWindowController) {
-          const windowId = focusedWindowController.windowId;
-          const tabManager = require('./managers/TabManager').getInstance();
-          const tabs = tabManager.getTabsForWindow(windowId);
-
-          for (const tabController of tabs) {
-            await tabController.reloadCustomCSS();
-          }
+        if (!focusedWindowController) return;
+        const tabManager = require('./managers/TabManager').getInstance();
+        const tabs = tabManager.getTabsForWindow(focusedWindowController.windowId);
+        for (const tabController of tabs) {
+          await tabController.reloadCustomCSS();
         }
-      }
-    }
+      },
+    },
+    { type: 'separator' },
+    {
+      label: 'About Lotion',
+      click: () => {
+        dialog.showMessageBox(focusedWindowController.browserWindow, {
+          type: 'info',
+          title: 'About Lotion',
+          message: `Lotion ${app.getVersion()}`,
+          detail: 'Unofficial Notion.so desktop client.\n\nhttps://github.com/puneetsl/lotion',
+          buttons: ['Close', 'Open GitHub'],
+          defaultId: 0,
+          cancelId: 0,
+        }).then((result) => {
+          if (result.response === 1) {
+            shell.openExternal('https://github.com/puneetsl/lotion');
+          }
+        });
+      },
+    },
+    {
+      label: 'Help & GitHub',
+      submenu: [
+        {
+          label: 'Star on GitHub',
+          click: () => shell.openExternal('https://github.com/puneetsl/lotion'),
+        },
+        {
+          label: 'Follow @puneetsl',
+          click: () => shell.openExternal('https://github.com/puneetsl'),
+        },
+        { type: 'separator' },
+        {
+          label: 'Report an Issue',
+          click: () => shell.openExternal('https://github.com/puneetsl/lotion/issues/new'),
+        },
+      ],
+    },
   ]);
 
   // Popup the menu at the mouse cursor position
@@ -823,18 +939,31 @@ app.commandLine.appendSwitch('disable-software-rasterizer');
 
 // Subscribe to Redux state changes to update UI
 let previousTabsState = {};
+let previousActiveTabsState = {};
 reduxStore.subscribe(() => {
   const state = reduxStore.getState();
 
   // Recreate menu when spell check dictionaries change
   createNativeMenuWithNavigation();
 
-  // Notify tab bars when tabs change
+  // Notify tab bars when tab data changes (titles, favicons, etc.)
   const currentTabsState = state.tabs.tabs;
-  if (JSON.stringify(currentTabsState) !== JSON.stringify(previousTabsState)) {
-    previousTabsState = { ...currentTabsState };
 
-    // Notify all tab bars
+  // Notify tab bars when the active tab changes — the per-window activeTabId
+  // lives in state.windows, not state.tabs, so we need to watch it separately
+  // or tab clicks won't update the highlighted tab in the bar.
+  const currentActiveTabsState = {};
+  for (const [wid, w] of Object.entries(state.windows.windows || {})) {
+    currentActiveTabsState[wid] = w.activeTabId;
+  }
+
+  const tabsChanged = JSON.stringify(currentTabsState) !== JSON.stringify(previousTabsState);
+  const activeChanged = JSON.stringify(currentActiveTabsState) !== JSON.stringify(previousActiveTabsState);
+
+  if (tabsChanged || activeChanged) {
+    previousTabsState = { ...currentTabsState };
+    previousActiveTabsState = currentActiveTabsState;
+
     for (const windowController of appController.windowControllers.values()) {
       if (windowController.tabBarView && windowController.tabBarView.webContents) {
         notifyTabBarUpdate(windowController.windowId);

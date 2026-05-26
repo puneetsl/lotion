@@ -1,0 +1,83 @@
+/* Nord theme for Lotion / Notion
+   Palette: https://www.nordtheme.com
+
+   Overrides Notion's --c-* variables — see dracula.css for why we
+   declare on .notion-dark-theme/.notion-app-inner with !important. */
+
+:root,
+:root.dark,
+:root.light,
+body,
+body.notion-body,
+.notion-dark-theme,
+.notion-light-theme,
+.notion-app-inner {
+  --c-bacPri: #2e3440 !important;
+  --c-bacSec: #3b4252 !important;
+  --c-bacTer: #434c5e !important;
+  --c-bacEle: #3b4252 !important;
+  --c-bacAccPri: #434c5e !important;
+  --c-bacAccSec: #4c566a !important;
+
+  --c-borPri: #434c5e !important;
+  --c-borSec: #3b4252 !important;
+  --c-borAccPri: #4c566a !important;
+  --c-borInvPri: #4c566a !important;
+  --c-borStr: #4c566a !important;
+
+  --c-icoPri: #eceff4 !important;
+  --c-icoSec: #88c0d0 !important;
+  --c-icoTer: #4c566a !important;
+  --c-icoAccPri: #88c0d0 !important;
+  --c-icoDis: #434c5e !important;
+  --c-icoInvPri: #eceff4 !important;
+  --c-icoInvSec: #88c0d0 !important;
+
+  --c-graTexPri: #eceff4 !important;
+  --c-graTexSec: #d8dee9 !important;
+  --c-graTexTer: #4c566a !important;
+  --c-graTexDis: #434c5e !important;
+  --c-graTexInvPri: #eceff4 !important;
+  --c-graTexInvSec: #88c0d0 !important;
+
+  --c-graBacPri: #3b4252 !important;
+  --c-graBacSec: #434c5e !important;
+  --c-graBacTer: #4c566a !important;
+  --c-graBacEle: #434c5e !important;
+  --c-graBacAccPri: #4c566a !important;
+  --c-graBacAccSec: #88c0d0 !important;
+
+  --c-graBorPri: #434c5e !important;
+  --c-graBorSec: #3b4252 !important;
+  --c-graBorAccPri: #4c566a !important;
+  --c-graBorInvPri: #4c566a !important;
+  --c-graBorStr: #4c566a !important;
+
+  --c-graIcoPri: #eceff4 !important;
+  --c-graIcoSec: #88c0d0 !important;
+  --c-graIcoTer: #4c566a !important;
+  --c-graIcoAccPri: #88c0d0 !important;
+  --c-graIcoDis: #434c5e !important;
+  --c-graIcoInvPri: #eceff4 !important;
+  --c-graIcoInvSec: #88c0d0 !important;
+
+  --c-popBac: #3b4252 !important;
+  --c-butGroBac: #434c5e !important;
+  --c-calIteBac: #434c5e !important;
+  --c-codStiBloBac: #242933 !important;
+  --c-keyActBarBac: #3b4252 !important;
+  --c-keyDonBarBac: #3b4252 !important;
+  --c-peeTimBac: #3b4252 !important;
+  --c-hovMarDisBac: #434c5e !important;
+  --c-homScrButBacBas: #3b4252 !important;
+
+  --c-palUiBlu600: #88c0d0 !important;
+  --c-palUiBlu700: #a3d5e0 !important;
+
+  --theme--bg: #2e3440;
+  --theme--bg-secondary: #3b4252;
+  --theme--bg-tertiary: #434c5e;
+  --theme--text: #eceff4;
+  --theme--text-secondary: #88c0d0;
+  --theme--accent: #88c0d0;
+}

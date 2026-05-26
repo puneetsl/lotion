@@ -1,0 +1,83 @@
+/* Catppuccin Frappe theme for Lotion / Notion
+   Palette: https://catppuccin.com/palette
+
+   Overrides Notion's --c-* variables — see dracula.css for why we
+   declare on .notion-dark-theme/.notion-app-inner with !important. */
+
+:root,
+:root.dark,
+:root.light,
+body,
+body.notion-body,
+.notion-dark-theme,
+.notion-light-theme,
+.notion-app-inner {
+  --c-bacPri: #303446 !important;
+  --c-bacSec: #292c3c !important;
+  --c-bacTer: #414559 !important;
+  --c-bacEle: #292c3c !important;
+  --c-bacAccPri: #414559 !important;
+  --c-bacAccSec: #51576d !important;
+
+  --c-borPri: #414559 !important;
+  --c-borSec: #292c3c !important;
+  --c-borAccPri: #51576d !important;
+  --c-borInvPri: #626880 !important;
+  --c-borStr: #626880 !important;
+
+  --c-icoPri: #c6d0f5 !important;
+  --c-icoSec: #ca9ee6 !important;
+  --c-icoTer: #737994 !important;
+  --c-icoAccPri: #ca9ee6 !important;
+  --c-icoDis: #414559 !important;
+  --c-icoInvPri: #c6d0f5 !important;
+  --c-icoInvSec: #ca9ee6 !important;
+
+  --c-graTexPri: #c6d0f5 !important;
+  --c-graTexSec: #b5bfe2 !important;
+  --c-graTexTer: #838ba7 !important;
+  --c-graTexDis: #51576d !important;
+  --c-graTexInvPri: #c6d0f5 !important;
+  --c-graTexInvSec: #b5bfe2 !important;
+
+  --c-graBacPri: #292c3c !important;
+  --c-graBacSec: #414559 !important;
+  --c-graBacTer: #51576d !important;
+  --c-graBacEle: #414559 !important;
+  --c-graBacAccPri: #51576d !important;
+  --c-graBacAccSec: #ca9ee6 !important;
+
+  --c-graBorPri: #414559 !important;
+  --c-graBorSec: #292c3c !important;
+  --c-graBorAccPri: #51576d !important;
+  --c-graBorInvPri: #626880 !important;
+  --c-graBorStr: #626880 !important;
+
+  --c-graIcoPri: #c6d0f5 !important;
+  --c-graIcoSec: #ca9ee6 !important;
+  --c-graIcoTer: #737994 !important;
+  --c-graIcoAccPri: #ca9ee6 !important;
+  --c-graIcoDis: #414559 !important;
+  --c-graIcoInvPri: #c6d0f5 !important;
+  --c-graIcoInvSec: #ca9ee6 !important;
+
+  --c-popBac: #292c3c !important;
+  --c-butGroBac: #414559 !important;
+  --c-calIteBac: #414559 !important;
+  --c-codStiBloBac: #232634 !important;
+  --c-keyActBarBac: #292c3c !important;
+  --c-keyDonBarBac: #292c3c !important;
+  --c-peeTimBac: #292c3c !important;
+  --c-hovMarDisBac: #414559 !important;
+  --c-homScrButBacBas: #292c3c !important;
+
+  --c-palUiBlu600: #ca9ee6 !important;
+  --c-palUiBlu700: #d6b3ec !important;
+
+  --theme--bg: #303446;
+  --theme--bg-secondary: #292c3c;
+  --theme--bg-tertiary: #414559;
+  --theme--text: #c6d0f5;
+  --theme--text-secondary: #ca9ee6;
+  --theme--accent: #ca9ee6;
+}

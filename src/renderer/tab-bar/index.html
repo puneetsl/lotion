@@ -136,6 +136,45 @@
       --accent-color: #8839ef;
     }
 
+    /* Monokai Theme */
+    body.theme-monokai {
+      --bg-primary: #272822;
+      --bg-tab: #3e3d32;
+      --bg-tab-hover: #75715e;
+      --bg-tab-active: #272822;
+      --border-color: #3e3d32;
+      --border-tab: #75715e;
+      --text-primary: #f8f8f2;
+      --text-secondary: #e6db74;
+      --accent-color: #f92672;
+    }
+
+    /* Noir Theme */
+    body.theme-noir {
+      --bg-primary: #0a0a0a;
+      --bg-tab: #1a1a1a;
+      --bg-tab-hover: #2a2a2a;
+      --bg-tab-active: #0a0a0a;
+      --border-color: #222222;
+      --border-tab: #333333;
+      --text-primary: #f0f0f0;
+      --text-secondary: #aaaaaa;
+      --accent-color: #cc3333;
+    }
+
+    /* Sakura Theme */
+    body.theme-sakura {
+      --bg-primary: #fff0f5;
+      --bg-tab: #ffd4e1;
+      --bg-tab-hover: #ffc0cb;
+      --bg-tab-active: #fff0f5;
+      --border-color: #ffd4e1;
+      --border-tab: #ffc0cb;
+      --text-primary: #4a1a3a;
+      --text-secondary: #a04668;
+      --accent-color: #ff69b4;
+    }
+
     #root {
       width: 100%;
       height: 100%;
@@ -264,6 +303,57 @@
       flex: 1;
       overflow-x: auto;
       overflow-y: hidden;
+      /* Hide the scrollbar until the user hovers — keeps the tab bar
+         visually quiet when many tabs overflow horizontally (#158). */
+      scrollbar-width: thin;
+      scrollbar-color: transparent transparent;
+      transition: scrollbar-color 0.2s ease;
+    }
+
+    .tab-list:hover {
+      scrollbar-color: var(--border-tab) transparent;
+    }
+
+    .tab-list::-webkit-scrollbar {
+      height: 4px;
+      background: transparent;
+    }
+
+    .tab-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .tab-list::-webkit-scrollbar-thumb {
+      background: transparent;
+      border-radius: 2px;
+      transition: background 0.2s ease;
+    }
+
+    .tab-list:hover::-webkit-scrollbar-thumb {
+      background: var(--border-tab);
+    }
+
+    .tab-list::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary, var(--text-primary));
+    }
+
+    /* Fade-out gradient on whichever edge has hidden tabs — signals
+       "more tabs that way" without resorting to a visible scrollbar
+       or extra chrome. Mask is composed dynamically based on which
+       sides are overflowing (toggled from JS). */
+    .tab-list.overflow-left {
+      -webkit-mask-image: linear-gradient(to right, transparent, black 28px);
+              mask-image: linear-gradient(to right, transparent, black 28px);
+    }
+
+    .tab-list.overflow-right {
+      -webkit-mask-image: linear-gradient(to left, transparent, black 28px);
+              mask-image: linear-gradient(to left, transparent, black 28px);
+    }
+
+    .tab-list.overflow-left.overflow-right {
+      -webkit-mask-image: linear-gradient(to right, transparent, black 28px, black calc(100% - 28px), transparent);
+              mask-image: linear-gradient(to right, transparent, black 28px, black calc(100% - 28px), transparent);
     }
 
     .window-controls {
@@ -306,8 +396,13 @@
       align-items: center;
       gap: 6px;
       padding: 4px 10px;
-      min-width: 100px;
+      /* Shrink-first overflow strategy: tabs squeeze down to ~80px
+         before the (hidden) scrollbar kicks in. Matches Chrome/Firefox
+         behavior more closely than a fixed min-width that forces
+         scrolling at low tab counts. */
+      min-width: 80px;
       max-width: 180px;
+      flex-shrink: 1;
       background-color: var(--bg-tab);
       border-right: 1px solid var(--border-tab);
       cursor: pointer;
@@ -328,6 +423,18 @@
       min-width: 40px;
       max-width: 40px;
       padding: 6px 8px;
+    }
+
+    .tab.dragging {
+      opacity: 0.5;
+    }
+
+    .tab.drop-before {
+      box-shadow: inset 2px 0 0 0 var(--accent-color);
+    }
+
+    .tab.drop-after {
+      box-shadow: inset -2px 0 0 0 var(--accent-color);
     }
 
     .favicon {

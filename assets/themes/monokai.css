@@ -1,0 +1,81 @@
+/* Monokai theme for Lotion / Notion
+   Palette: classic Sublime Text Monokai
+   Overrides --c-* on .notion-*/body — see dracula.css for rationale. */
+
+:root,
+:root.dark,
+:root.light,
+body,
+body.notion-body,
+.notion-dark-theme,
+.notion-light-theme,
+.notion-app-inner {
+  --c-bacPri: #272822 !important;
+  --c-bacSec: #1e1f1c !important;
+  --c-bacTer: #3e3d32 !important;
+  --c-bacEle: #1e1f1c !important;
+  --c-bacAccPri: #3e3d32 !important;
+  --c-bacAccSec: #75715e !important;
+
+  --c-borPri: #3e3d32 !important;
+  --c-borSec: #1e1f1c !important;
+  --c-borAccPri: #75715e !important;
+  --c-borInvPri: #75715e !important;
+  --c-borStr: #75715e !important;
+
+  --c-icoPri: #f8f8f2 !important;
+  --c-icoSec: #a6e22e !important;
+  --c-icoTer: #75715e !important;
+  --c-icoAccPri: #f92672 !important;
+  --c-icoDis: #3e3d32 !important;
+  --c-icoInvPri: #f8f8f2 !important;
+  --c-icoInvSec: #a6e22e !important;
+
+  --c-graTexPri: #f8f8f2 !important;
+  --c-graTexSec: #e6db74 !important;
+  --c-graTexTer: #75715e !important;
+  --c-graTexDis: #3e3d32 !important;
+  --c-graTexInvPri: #f8f8f2 !important;
+  --c-graTexInvSec: #e6db74 !important;
+
+  --c-graBacPri: #1e1f1c !important;
+  --c-graBacSec: #3e3d32 !important;
+  --c-graBacTer: #75715e !important;
+  --c-graBacEle: #3e3d32 !important;
+  --c-graBacAccPri: #75715e !important;
+  --c-graBacAccSec: #a6e22e !important;
+
+  --c-graBorPri: #3e3d32 !important;
+  --c-graBorSec: #1e1f1c !important;
+  --c-graBorAccPri: #75715e !important;
+  --c-graBorInvPri: #75715e !important;
+  --c-graBorStr: #75715e !important;
+
+  --c-graIcoPri: #f8f8f2 !important;
+  --c-graIcoSec: #a6e22e !important;
+  --c-graIcoTer: #75715e !important;
+  --c-graIcoAccPri: #a6e22e !important;
+  --c-graIcoDis: #3e3d32 !important;
+  --c-graIcoInvPri: #f8f8f2 !important;
+  --c-graIcoInvSec: #a6e22e !important;
+
+  --c-popBac: #1e1f1c !important;
+  --c-butGroBac: #3e3d32 !important;
+  --c-calIteBac: #3e3d32 !important;
+  --c-codStiBloBac: #1e1f1c !important;
+  --c-keyActBarBac: #1e1f1c !important;
+  --c-keyDonBarBac: #1e1f1c !important;
+  --c-peeTimBac: #1e1f1c !important;
+  --c-hovMarDisBac: #3e3d32 !important;
+  --c-homScrButBacBas: #1e1f1c !important;
+
+  --c-palUiBlu600: #f92672 !important;
+  --c-palUiBlu700: #fb528d !important;
+
+  --theme--bg: #272822;
+  --theme--bg-secondary: #1e1f1c;
+  --theme--bg-tertiary: #3e3d32;
+  --theme--text: #f8f8f2;
+  --theme--text-secondary: #a6e22e;
+  --theme--accent: #f92672;
+}

@@ -5,6 +5,35 @@ All notable changes to Lotion will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-05-25
+
+### 🎨 Theme System (closes #150)
+
+**Fixed**
+- **Built-in themes now actually apply** — the 7 named themes were listed in the menu but never shipped CSS, so theming silently no-oped for everyone. Themes are bundled in `assets/themes/` and override Notion's current `--c-*` CSS variable convention with `!important` on `.notion-dark-theme` / `.notion-light-theme` so they win the cascade.
+
+**Added**
+- **3 new themes**: **Monokai** (classic Sublime green/yellow on olive), **Noir** (high-contrast B&W with blood-red accent), and **Sakura** (pastel pink light theme)
+- **System-theme sync** — picking a light theme (Sakura, Catppuccin Latte) flips Notion's "use system setting" detection to light; dark themes flip it to dark. Uses `nativeTheme.themeSource`.
+
+### 🪟 Window & Tab UX
+
+**Added**
+- **Session restore** — opt-in "Restore Tabs on Startup" toggle (logo menu) persists each window's tabs and restores them on next launch. Saves via a debounced Redux subscriber so close-via-X-button doesn't lose state.
+- **Native window decorations toggle** (closes #151) — opt-in mode swaps the frameless custom tab bar for DE-provided window chrome + the standard Electron menu bar. Single-tab-per-window in this mode.
+
+**Fixed**
+- **Active tab indicator out of sync** (closes #157) — the Redux subscriber only fired on tab-data changes, missing active-tab-id updates, so the highlight lagged a click behind.
+- **Drag-and-drop tab reordering** (closes #156) — the IPC handler and preload bridge were wired but the renderer had no drag handlers at all. Added native HTML5 drag-and-drop with before/after drop indicators.
+- **First tab missing from tab bar** — `addTabToWindow` silently no-oped if dispatched before `addWindow`; the init order was the reverse. Reorder so the first tab actually lands in `tabIds`.
+- **Tab overflow scrollbar** (closes #158) — tabs now shrink Chrome-style first (min-width 80px), then hide the scrollbar in favor of mouse-wheel scroll + soft fade gradients on whichever edge has hidden tabs. The `+` button stays pinned next to window controls.
+- **Zoom shortcuts on Spanish (and other non-US) keyboards** (closes #155) — replaced the built-in `zoomIn`/`zoomOut`/`resetZoom` roles (which bind to layout-dependent `Plus`/`Minus`) with explicit `CmdOrCtrl+=` / `CmdOrCtrl+-` / `CmdOrCtrl+0` handlers that target the active tab's content.
+
+### 🎛️ Logo Menu Redesign
+
+**Changed**
+- Replaced emoji-prefixed text labels and `✓` pseudo-checkmark hacks with native Electron menu controls: `type:'checkbox'` for toggles, app version header, About dialog, Help & GitHub submenu.
+
 ## [1.5.1] - 2026-05-25
 
 ### ⬆️ Dependency Overhaul

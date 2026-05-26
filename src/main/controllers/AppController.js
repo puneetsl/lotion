@@ -1,9 +1,12 @@
 const { app, BrowserWindow } = require('electron');
 const log = require('electron-log').scope('AppController');
+const Store = require('electron-store');
 const { addWindow } = require('../store/slices/windowsSlice'); // Import addWindow
 const WindowController = require('./WindowController'); // Import WindowController
 const TabManager = require('../managers/TabManager'); // Import TabManager
 const { v4: uuidv4 } = require('uuid'); // For generating unique window IDs
+
+const SESSION_KEY = 'sessionTabs';
 
 let instance = null; // For singleton pattern
 
@@ -37,21 +40,28 @@ class AppController {
 
     this.electronApp.whenReady().then(() => {
       log.info('Electron app is ready via AppController');
-      
+
       // Parse command line arguments for Notion URL
       const args = process.argv;
       let initialUrl = null;
       // Find any argument that is a Notion URL
       for (const arg of args) {
-        if (arg && 
-            (arg.startsWith('http://') || arg.startsWith('https://')) && 
+        if (arg &&
+            (arg.startsWith('http://') || arg.startsWith('https://')) &&
             arg.includes('notion.so')) {
           initialUrl = arg;
           log.info(`Found Notion URL: ${initialUrl}`);
           break;
         }
       }
-      
+
+      // If no CLI URL was passed and session restore is enabled, try to
+      // restore the previous session. If that succeeds, skip the default
+      // new-window creation.
+      if (!initialUrl && this.tryRestoreSession()) {
+        return;
+      }
+
       const options = initialUrl ? { initialUrl } : {};
       this.createNewWindow(options);
     });
@@ -80,8 +90,138 @@ class AppController {
     this.electronApp.on('before-quit', () => {
       log.info('App before-quit event triggered in AppController');
       this.isQuitting = true;
-      // Potentially iterate over windowControllers and tell them to prepare for quit
     });
+
+    // Keep the on-disk session snapshot in sync with live state.
+    // We do this here (rather than at before-quit) because clicking
+    // the window's close button fires window-closed BEFORE before-quit,
+    // which wipes our Redux state and empties windowControllers — so by
+    // the time before-quit ran there was nothing left to save.
+    this.installSessionAutoSave();
+  }
+
+  /**
+   * Build a snapshot of the current window/tab state suitable for
+   * persistence. Returns null when there's nothing meaningful to save
+   * (no live windows with tabs) — callers should treat that as "keep
+   * whatever was already on disk" rather than as "save an empty state."
+   */
+  buildSessionSnapshot() {
+    const state = this.store.getState();
+    const windowsState = state.windows.windows || {};
+    const tabsState = state.tabs.tabs || {};
+
+    const windows = [];
+    for (const windowController of this.windowControllers.values()) {
+      const w = windowsState[windowController.windowId];
+      if (!w || !w.tabIds || w.tabIds.length === 0) continue;
+
+      const tabs = w.tabIds
+        .map((tabId) => tabsState[tabId])
+        .filter((t) => t && t.url)
+        .map((t) => ({ url: t.url, isPinned: !!t.isPinned }));
+
+      if (tabs.length === 0) continue;
+
+      const activeIdx = w.activeTabId ? w.tabIds.indexOf(w.activeTabId) : 0;
+      windows.push({
+        tabs,
+        activeTabIndex: activeIdx >= 0 ? activeIdx : 0,
+      });
+    }
+
+    return windows.length > 0 ? { savedAt: new Date().toISOString(), windows } : null;
+  }
+
+  /**
+   * Subscribe to Redux state changes and write a debounced snapshot of
+   * the current session to electron-store. Only writes non-empty
+   * snapshots, so closing the last window leaves the previous good
+   * snapshot in place for restoration on next launch.
+   */
+  installSessionAutoSave() {
+    let timer = null;
+    const SAVE_DEBOUNCE_MS = 800;
+
+    const persistNow = () => {
+      const store = new Store();
+      if (!store.get('restoreTabsOnStartup', false)) return;
+
+      const snapshot = this.buildSessionSnapshot();
+      if (!snapshot) return; // Don't overwrite a good snapshot with nothing
+
+      store.set(SESSION_KEY, snapshot);
+      log.debug(`Persisted session snapshot: ${snapshot.windows.length} window(s), ${snapshot.windows.reduce((n, w) => n + w.tabs.length, 0)} tab(s)`);
+    };
+
+    this.store.subscribe(() => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(persistNow, SAVE_DEBOUNCE_MS);
+    });
+  }
+
+  /**
+   * Attempt to restore the previous session. Returns true iff at least
+   * one window was created from saved state (caller should then skip
+   * its default first-window creation).
+   */
+  tryRestoreSession() {
+    const store = new Store();
+    if (!store.get('restoreTabsOnStartup', false)) {
+      return false;
+    }
+
+    const saved = store.get(SESSION_KEY);
+    if (!saved || !Array.isArray(saved.windows) || saved.windows.length === 0) {
+      return false;
+    }
+
+    log.info(`Restoring session: ${saved.windows.length} window(s) saved at ${saved.savedAt}`);
+    let restoredAny = false;
+
+    for (const w of saved.windows) {
+      if (!w.tabs || w.tabs.length === 0) continue;
+
+      // First tab becomes the window's initial tab via createNewWindow.
+      const firstTab = w.tabs[0];
+      const windowController = this.createNewWindow({ initialUrl: firstTab.url });
+
+      // The first tab was just created; pin it after creation if needed.
+      if (firstTab.isPinned) {
+        const firstTabController = windowController.getActiveTabController();
+        if (firstTabController) {
+          const { pinTab } = require('../store/slices/tabsSlice');
+          this.store.dispatch(pinTab(firstTabController.tabId));
+        }
+      }
+
+      // Remaining tabs.
+      for (let i = 1; i < w.tabs.length; i++) {
+        const t = w.tabs[i];
+        this.tabManager.createTab({
+          windowId: windowController.windowId,
+          url: t.url,
+          isPinned: !!t.isPinned,
+          makeActive: false,
+        });
+      }
+
+      // Restore active-tab selection (only meaningful when not the first tab,
+      // which is already active by default).
+      const targetIdx = Math.min(Math.max(w.activeTabIndex || 0, 0), w.tabs.length - 1);
+      if (targetIdx > 0) {
+        const state = this.store.getState();
+        const tabIds = state.windows.windows[windowController.windowId]?.tabIds || [];
+        const targetTabId = tabIds[targetIdx];
+        if (targetTabId) {
+          windowController.switchToTab(targetTabId);
+        }
+      }
+
+      restoredAny = true;
+    }
+
+    return restoredAny;
   }
 
   createNewWindow(options = {}) {

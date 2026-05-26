@@ -1,56 +1,48 @@
-pkgname=lotion
-pkgver=1.5.0
+# Maintainer: Puneet S. Lamba <puneetsl@gmail.com>
+#
+# Binary package — extracts the official .deb produced by our
+# build-and-release workflow rather than rebuilding from source. This
+# is intentionally a -bin style PKGBUILD: it avoids running `npm
+# install` (and pulling ~950 node packages) on the user's machine and
+# guarantees the same artifact that ships in our GitHub release.
+
+pkgname=lotion-bin
+_pkgname=lotion
+pkgver=1.6.0
 pkgrel=1
-pkgdesc="Unofficial Notion.so Desktop app for Linux"
+pkgdesc="Unofficial Notion.so desktop client for Linux (prebuilt)"
 arch=('x86_64' 'aarch64')
 url="https://github.com/puneetsl/lotion"
-license=('mit')
-depends=('electron' 'nodejs')
-makedepends=('npm' 'git')
-# NOTE: The source tarball includes all necessary files (assets, icons, etc.)
-# Do not add separate source entries for icon.png or other assets
-source=("$pkgname-$pkgver.tar.gz::https://github.com/puneetsl/$pkgname/archive/refs/tags/v$pkgver.tar.gz")
-sha256sums=('SKIP')  # Update this with actual checksum after first release
+license=('MIT')
+provides=('lotion')
+conflicts=('lotion')
+# Electron runtime libs that the bundled Chromium needs at runtime.
+depends=('gtk3' 'nss' 'libxss' 'libsecret' 'libnotify' 'alsa-lib' 'xdg-utils')
+makedepends=('libarchive')
 
-prepare() {
-  cd "$srcdir/$pkgname-$pkgver"
+# Architecture-specific .deb produced by the GitHub release build.
+source_x86_64=("$pkgname-$pkgver-x86_64.deb::$url/releases/download/v$pkgver/${_pkgname}_${pkgver}_amd64.deb")
+source_aarch64=("$pkgname-$pkgver-aarch64.deb::$url/releases/download/v$pkgver/${_pkgname}_${pkgver}_arm64.deb")
 
-  # Install dependencies
-  npm install --cache "$srcdir/npm-cache"
-}
-
-build() {
-  cd "$srcdir/$pkgname-$pkgver"
-
-  # Package the application
-  npm run package
-}
+# Run `updpkgsums` after bumping pkgver to lock these to the
+# release-tagged artifact checksums. SKIP only for first-cut testing.
+sha256sums_x86_64=('SKIP')
+sha256sums_aarch64=('SKIP')
 
 package() {
-  cd "$srcdir/$pkgname-$pkgver"
+  cd "$srcdir"
 
-  # Install application files
-  install -dm755 "$pkgdir/usr/lib/$pkgname"
-  cp -r out/Lotion-linux-*/resources/app.asar "$pkgdir/usr/lib/$pkgname/"
+  # The .deb is an ar archive containing control.tar.* and data.tar.*.
+  # bsdtar (from libarchive, part of base-devel) reads both.
+  local deb="$pkgname-$pkgver-${CARCH}.deb"
+  bsdtar -x -f "$deb"
+  bsdtar -x -C "$pkgdir" -f data.tar.*
 
-  # Install desktop file
-  install -Dm644 assets/lotion.desktop "$pkgdir/usr/share/applications/$pkgname.desktop"
-
-  # Install icon (from assets/ directory in the source tarball)
-  install -Dm644 assets/icon.png "$pkgdir/usr/share/pixmaps/$pkgname.png"
-  for size in 16 32 48 64 128 256 512; do
-    install -Dm644 "assets/icons/${size}x${size}.png" \
-      "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps/$pkgname.png"
-  done
-
-  # Create executable wrapper
-  install -dm755 "$pkgdir/usr/bin"
-  cat > "$pkgdir/usr/bin/$pkgname" << 'EOF'
-#!/bin/sh
-exec electron /usr/lib/lotion/app.asar "$@"
-EOF
-  chmod +x "$pkgdir/usr/bin/$pkgname"
-
-  # Install license
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE" 2>/dev/null || true
+  # The .deb already lays out files under the right system paths
+  # (/opt/Lotion + /usr/share/{applications,icons}/...). Move the LICENSE
+  # alongside other Arch-conventional locations if present.
+  if [ -f "$pkgdir/opt/Lotion/LICENSE" ]; then
+    install -Dm644 "$pkgdir/opt/Lotion/LICENSE" \
+      "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  fi
 }

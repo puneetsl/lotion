@@ -65,8 +65,8 @@ function render() {
       </div>
       <div class="tab-list">
         ${tabs.map(tab => renderTab(tab)).join('')}
-        <button class="new-tab-btn" id="new-tab-btn" title="New Tab">+</button>
       </div>
+      <button class="new-tab-btn" id="new-tab-btn" title="New Tab">+</button>
       <div class="window-controls">
         <button class="window-control-btn minimize" id="minimize-btn" title="Minimize">−</button>
         <button class="window-control-btn maximize" id="maximize-btn" title="Maximize">□</button>
@@ -77,6 +77,45 @@ function render() {
 
   // Add event listeners after rendering
   addEventListeners();
+  setupTabDragAndDrop();
+  setupTabListWheelScroll();
+}
+
+// Translate vertical scroll wheel into horizontal panning over the tab
+// list so users can navigate overflowing tabs without reaching for the
+// (intentionally hidden) scrollbar.
+function setupTabListWheelScroll() {
+  const list = document.querySelector('.tab-list');
+  if (!list) return;
+  list.addEventListener('wheel', (e) => {
+    // If the user is already scrolling horizontally (touchpad), let the
+    // native behavior handle it.
+    if (e.deltaY === 0 || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    if (list.scrollWidth <= list.clientWidth) return; // No overflow
+    e.preventDefault();
+    list.scrollLeft += e.deltaY;
+  }, { passive: false });
+
+  list.addEventListener('scroll', updateOverflowIndicators, { passive: true });
+  // Initial classification + reclassify whenever the window resizes.
+  updateOverflowIndicators();
+  if (!setupTabListWheelScroll._resizeHooked) {
+    window.addEventListener('resize', () => updateOverflowIndicators());
+    setupTabListWheelScroll._resizeHooked = true;
+  }
+}
+
+// Toggle `.overflow-left` / `.overflow-right` on the tab list so the
+// mask gradient fades whichever edges have hidden tabs. Acts as a
+// visual "more tabs that way" cue.
+function updateOverflowIndicators() {
+  const list = document.querySelector('.tab-list');
+  if (!list) return;
+  const hasOverflow = list.scrollWidth > list.clientWidth + 1;
+  const atStart = list.scrollLeft <= 0;
+  const atEnd = list.scrollLeft + list.clientWidth >= list.scrollWidth - 1;
+  list.classList.toggle('overflow-left', hasOverflow && !atStart);
+  list.classList.toggle('overflow-right', hasOverflow && !atEnd);
 }
 
 // Render individual tab
@@ -93,12 +132,77 @@ function renderTab(tab) {
   return `
     <div class="tab ${isActive ? 'active' : ''} ${isPinned ? 'pinned' : ''}"
          data-tab-id="${tab.tabId}"
+         draggable="true"
          title="${escapeHtml(tab.title || 'Untitled')}">
       ${faviconHtml}
       <span class="tab-title">${escapeHtml(title)}</span>
       ${!isPinned ? `<button class="close-btn" data-tab-id="${tab.tabId}" title="Close Tab">×</button>` : ''}
     </div>
   `;
+}
+
+// Compute the new tab order if `draggedId` is dropped at the position of `targetId`.
+// `before` = true drops to the left of target, false drops to the right.
+function computeReorderedIds(draggedId, targetId, before) {
+  const ids = tabs.map(t => t.tabId);
+  const fromIdx = ids.indexOf(draggedId);
+  if (fromIdx === -1 || draggedId === targetId) return null;
+  ids.splice(fromIdx, 1);
+  let toIdx = ids.indexOf(targetId);
+  if (toIdx === -1) return null;
+  if (!before) toIdx += 1;
+  ids.splice(toIdx, 0, draggedId);
+  return ids;
+}
+
+function setupTabDragAndDrop() {
+  let draggedId = null;
+
+  document.querySelectorAll('.tab').forEach(el => {
+    el.addEventListener('dragstart', (e) => {
+      draggedId = el.dataset.tabId;
+      e.dataTransfer.effectAllowed = 'move';
+      // Some browsers require dataTransfer.setData to start a drag.
+      try { e.dataTransfer.setData('text/plain', draggedId); } catch (_) {}
+      el.classList.add('dragging');
+    });
+
+    el.addEventListener('dragend', () => {
+      draggedId = null;
+      document.querySelectorAll('.tab').forEach(t => {
+        t.classList.remove('dragging', 'drop-before', 'drop-after');
+      });
+    });
+
+    el.addEventListener('dragover', (e) => {
+      if (!draggedId || el.dataset.tabId === draggedId) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      const rect = el.getBoundingClientRect();
+      const before = (e.clientX - rect.left) < rect.width / 2;
+      el.classList.toggle('drop-before', before);
+      el.classList.toggle('drop-after', !before);
+    });
+
+    el.addEventListener('dragleave', () => {
+      el.classList.remove('drop-before', 'drop-after');
+    });
+
+    el.addEventListener('drop', (e) => {
+      if (!draggedId) return;
+      e.preventDefault();
+      const targetId = el.dataset.tabId;
+      const rect = el.getBoundingClientRect();
+      const before = (e.clientX - rect.left) < rect.width / 2;
+      const newOrder = computeReorderedIds(draggedId, targetId, before);
+      if (newOrder && window.tabBarAPI.reorderTabs) {
+        // Optimistically reorder locally so the UI doesn't lag the IPC roundtrip
+        tabs = newOrder.map(id => tabs.find(t => t.tabId === id)).filter(Boolean);
+        render();
+        window.tabBarAPI.reorderTabs(windowId, newOrder);
+      }
+    });
+  });
 }
 
 // Escape HTML to prevent XSS
@@ -227,7 +331,13 @@ function applyTheme(isDark) {
 
 function applyLotionTheme(themeName) {
   // Remove all theme classes
-  document.body.classList.remove('dark-mode', 'theme-dracula', 'theme-nord', 'theme-gruvbox-dark', 'theme-catppuccin-mocha', 'theme-catppuccin-macchiato', 'theme-catppuccin-frappe', 'theme-catppuccin-latte');
+  document.body.classList.remove(
+    'dark-mode',
+    'theme-dracula', 'theme-nord', 'theme-gruvbox-dark',
+    'theme-monokai', 'theme-noir', 'theme-sakura',
+    'theme-catppuccin-mocha', 'theme-catppuccin-macchiato',
+    'theme-catppuccin-frappe', 'theme-catppuccin-latte',
+  );
 
   // Apply new theme class (default theme has no class)
   if (themeName && themeName !== 'default' && themeName !== 'none') {

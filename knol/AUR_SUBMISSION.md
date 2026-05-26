@@ -1,149 +1,116 @@
-# Submitting Lotion to AUR (Arch User Repository)
+# Submitting Lotion to the AUR
 
-This guide explains how to submit and maintain the Lotion package on AUR.
+This guide covers submitting and maintaining the `lotion-bin` package
+on the Arch User Repository.
 
 ## Prerequisites
 
-1. An AUR account: https://aur.archlinux.org/register
-2. SSH key added to your AUR account
-3. `git` and `base-devel` installed on your system
+1. An AUR account: <https://aur.archlinux.org/register>
+2. An SSH key registered on your AUR account
+3. `git` + `base-devel` installed locally
 
-## Initial Submission
+## Initial submission
 
-### 1. Generate .SRCINFO
-
-After updating `PKGBUILD`, generate the `.SRCINFO` file:
+The repo's `PKGBUILD` is the source of truth — the AUR repo is just a
+mirror of it plus an `.SRCINFO`.
 
 ```bash
+# 1. From the lotion repo: regenerate the SRCINFO from PKGBUILD
+cd /path/to/lotion
 makepkg --printsrcinfo > .SRCINFO
-```
 
-### 2. Clone AUR repository
-
-```bash
-git clone ssh://aur@aur.archlinux.org/lotion.git lotion-aur
+# 2. Clone the empty AUR repo (replace lotion-bin with whatever
+#    package name has been reserved — see "Package naming" below)
+git clone ssh://aur@aur.archlinux.org/lotion-bin.git lotion-aur
 cd lotion-aur
-```
 
-### 3. Copy files
+# 3. Copy the two files the AUR cares about
+cp ../lotion/PKGBUILD .
+cp ../lotion/.SRCINFO .
 
-```bash
-cp ../PKGBUILD .
-cp ../.SRCINFO .
-```
-
-### 4. Commit and push
-
-```bash
+# 4. Commit and push
 git add PKGBUILD .SRCINFO
-git commit -m "Initial commit: Lotion v1.0.0"
+git commit -m "Initial release: lotion-bin v1.6.0"
 git push
 ```
 
-## Updating the Package
+## Updating for a new release
 
-### 1. Update PKGBUILD
+1. Tag the new version in the lotion repo (push `vX.Y.Z`). Wait for
+   the GitHub Actions release build to finish — `lotion_X.Y.Z_amd64.deb`
+   and `lotion_X.Y.Z_arm64.deb` must exist in the release assets
+   before makepkg can fetch them.
 
-When releasing a new version:
+2. In the lotion repo, update `PKGBUILD`:
+   - Bump `pkgver`
+   - Reset `pkgrel=1`
+   - Lock checksums: `updpkgsums` (this fetches each .deb and writes
+     real sha256 values; replaces the `SKIP` placeholders)
 
-1. Update `pkgver` in `PKGBUILD`
-2. Update `pkgrel` to `1` (reset for new version)
-3. Update `sha256sums` with the new tarball checksum
+3. Regenerate `.SRCINFO`:
 
-To get the checksum:
-```bash
-curl -sL https://github.com/puneetsl/lotion/archive/refs/tags/v1.0.0.tar.gz | sha256sum
-```
+   ```bash
+   makepkg --printsrcinfo > .SRCINFO
+   ```
 
-### 2. Test the build
+4. Test the build locally:
 
-```bash
-makepkg -si
-```
+   ```bash
+   makepkg -si
+   lotion        # verify it runs
+   sudo pacman -R lotion-bin   # clean up
+   ```
 
-### 3. Generate new .SRCINFO
+5. Copy `PKGBUILD` + `.SRCINFO` into the AUR repo, commit, push:
 
-```bash
-makepkg --printsrcinfo > .SRCINFO
-```
+   ```bash
+   cd /path/to/lotion-aur
+   cp ../lotion/PKGBUILD .
+   cp ../lotion/.SRCINFO .
+   git add PKGBUILD .SRCINFO
+   git commit -m "Update to v1.6.0"
+   git push
+   ```
 
-### 4. Commit and push
+## Package naming
 
-```bash
-cd lotion-aur
-git add PKGBUILD .SRCINFO
-git commit -m "Update to v1.0.x"
-git push
-```
+The packaged artifact is a prebuilt binary (extracted from our
+official `.deb`), so it follows the AUR `-bin` convention:
 
-## Package Naming Conventions
+- **`lotion-bin`** — prebuilt; what we publish.
+- `lotion` (no suffix) — would imply a source build; we don't ship one.
+- `lotion-git` — would build from `master`; we don't ship one either.
 
-- **lotion**: For stable releases from tags/releases
-- **lotion-git**: For building from the latest git master (optional, can be separate)
-- **lotion-bin**: For pre-built binaries (optional, if providing pre-built packages)
+If a user really wants a source build, they can clone the repo and
+run `npm install && npm run package` directly.
 
-## Testing Before Submission
-
-```bash
-# In the directory with PKGBUILD
-makepkg -si
-
-# Test the installed application
-lotion
-
-# Uninstall
-sudo pacman -R lotion
-```
-
-## Maintenance
-
-- Respond to comments on the AUR page
-- Update the package when new versions are released
-- Mark out-of-date packages when notified
-- Keep dependencies up to date
-
-## Helpful Commands
+## Useful commands
 
 ```bash
-# Clean build artifacts
-makepkg -c
-
 # Check PKGBUILD for issues
 namcap PKGBUILD
 
-# Check built package
-namcap lotion-*.pkg.tar.zst
+# Check the built package
+namcap lotion-bin-*.pkg.tar.zst
 
-# Update checksums automatically (for git packages)
+# Clean build artifacts
+makepkg -c
+
+# Force-refresh checksums from the live release assets
 updpkgsums
 ```
+
+## Maintenance notes
+
+- Watch the AUR comments page for breakage reports
+- Mark out-of-date when notified (a user without push access can flag it)
+- If Electron runtime deps change (gtk3, nss, etc.), update `depends=`
+- The `.deb` build is owned by the project's GitHub Actions release
+  workflow — if releases stop producing `lotion_X.Y.Z_amd64.deb`, the
+  PKGBUILD source URL will 404
 
 ## Resources
 
 - [AUR Submission Guidelines](https://wiki.archlinux.org/title/AUR_submission_guidelines)
 - [PKGBUILD Reference](https://wiki.archlinux.org/title/PKGBUILD)
 - [Creating Packages](https://wiki.archlinux.org/title/Creating_packages)
-
-## Notes
-
-- The current PKGBUILD uses system Electron to keep package size down
-- Make sure to update the maintainer email in PKGBUILD before submission
-- Consider creating both `lotion` (stable) and `lotion-git` (development) packages
-- **IMPORTANT**: All assets (including `icon.png`) are included in the source tarball. Do NOT add separate source entries for icons or other assets. The PKGBUILD installs them from `assets/` directory within the extracted tarball.
-
-## Troubleshooting
-
-### 404 Error for icon.png
-
-If you encounter an error like:
-```
-ERROR: Failure while downloading https://raw.githubusercontent.com/puneetsl/lotion/master/icon.png
-```
-
-This means the PKGBUILD has an incorrect `source=()` entry. The correct PKGBUILD should only have the tarball as a source:
-
-```bash
-source=("$pkgname-$pkgver.tar.gz::https://github.com/puneetsl/$pkgname/archive/refs/tags/v$pkgver.tar.gz")
-```
-
-**Do not** add icon.png or any other assets as separate sources. They are all included in the tarball and will be available in the `assets/` directory after extraction.
