@@ -156,6 +156,18 @@ class WindowController {
       }
     });
 
+    // After the window is actually shown the WM may report different
+    // dimensions than at create time (especially on Linux with DE
+    // decorations enabled). Re-run bounds once to ensure the content
+    // view fills the window correctly on first paint.
+    this.browserWindow.once('show', () => {
+      this.updateViewBounds();
+      // Linux WMs sometimes report stale content bounds for a frame
+      // or two after show — recompute again shortly after to catch
+      // the final geometry without spamming the layout on every paint.
+      setTimeout(() => this.updateViewBounds(), 100);
+    });
+
     this.browserWindow.on('move', () => {
       if(this.browserWindow && !this.browserWindow.isMinimized()) {
         const bounds = this.browserWindow.getBounds();
