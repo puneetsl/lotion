@@ -20,6 +20,12 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: archlinux:latest
+    # Default shell in the Arch container is `sh -e`, but `source` and
+    # bash array expansions (e.g. ${source_x86_64[@]}) below are
+    # bash-only — explicitly opt every `run` step into bash.
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: Checkout code
