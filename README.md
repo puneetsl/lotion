@@ -143,9 +143,26 @@ sudo dnf install ./lotion-1.6.0-1.x86_64.rpm
 
 Download `Lotion-linux-x64-1.6.0.zip` (or `arm64`) from [the latest release](https://github.com/puneetsl/lotion/releases/latest), extract, and run the `lotion` binary inside.
 
-### macOS / Windows
+### macOS
 
-Lotion's primary target is Linux, but the build does produce macOS `.zip` and Windows `.exe`/`.zip` artifacts on every release. Use at your own risk — most testing happens on Linux.
+The release ships `Lotion-darwin-x64-1.6.0.zip` (Intel) and `Lotion-darwin-arm64-1.6.0.zip` (Apple Silicon).
+
+**macOS will complain about the app being damaged or from an unidentified developer.** This is because Lotion isn't signed with an Apple Developer ID certificate (the program costs $99/year — if you'd like to help, [sponsor on GitHub](https://github.com/sponsors/puneetsl)). The app is fine; macOS just adds a quarantine flag to anything downloaded via a browser, and Gatekeeper refuses to validate the unsigned signature. Two ways past it:
+
+```bash
+# A) Strip the quarantine attribute from the .zip before extracting:
+xattr -cr ~/Downloads/Lotion-darwin-arm64-1.6.0.zip
+# Then extract and double-click as normal.
+
+# B) Or, after extracting, strip it from the .app:
+xattr -cr /Applications/Lotion.app
+```
+
+Alternatively, **right-click → Open** (not double-click) the first time to bypass Gatekeeper interactively. After that first launch macOS remembers your decision.
+
+### Windows
+
+The release ships `Lotion-1.6.0.Setup.exe` and `Lotion-win32-x64-1.6.0.zip` (also an ia32 build). Windows SmartScreen may flag the installer as "Unrecognized" for the same reason (no code-signing certificate); click **More info → Run anyway**. Primary target is Linux — Windows is best-effort.
 
 ### From source (development)
 

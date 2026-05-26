@@ -86,7 +86,10 @@
         "name": "Lotion",
         "executableName": "lotion",
         "icon": "./assets/icon",
-        "asar": true
+        "asar": true,
+        "osxSign": {
+          "identity": "-"
+        }
       },
       "makers": [
         {
