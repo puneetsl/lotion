@@ -106,8 +106,8 @@ function toggleNativeWindowFrame(newValue) {
     title: 'Restart Required',
     message: newValue ? 'Native window decorations enabled' : 'Custom (tabbed) window enabled',
     detail: newValue
-      ? "Lotion will switch to native window decorations the next time you launch. The custom tab bar is replaced with single-window-per-tab behavior, and settings move to the standard menu bar."
-      : "Lotion will switch back to the custom tab bar the next time you launch.",
+      ? "Lotion will use your desktop's window decorations the next time you launch. The tab bar stays; settings also remain in the standard menu bar."
+      : "Lotion will switch back to the custom frameless window the next time you launch.",
     buttons: ['Restart Now', 'Later'],
     defaultId: 0,
     cancelId: 1,
@@ -722,7 +722,12 @@ ipcMain.handle('tab-bar:get-initial-state', (event) => {
   const windowState = state.windows.windows[windowController.windowId];
 
   if (!windowState) {
-    return { tabs: [], activeTabId: null, windowId: windowController.windowId };
+    return {
+      tabs: [],
+      activeTabId: null,
+      windowId: windowController.windowId,
+      useNativeFrame: !!windowController.useNativeFrame,
+    };
   }
 
   // Build tab list with details
@@ -735,6 +740,7 @@ ipcMain.handle('tab-bar:get-initial-state', (event) => {
     tabs,
     activeTabId: windowState.activeTabId,
     windowId: windowController.windowId,
+    useNativeFrame: !!windowController.useNativeFrame,
   };
 });
 

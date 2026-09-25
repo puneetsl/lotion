@@ -5,6 +5,9 @@
   "private": true,
   "description": "Unofficial Notion.so Desktop app for Linux",
   "main": "./src/main/index.js",
+  "engines": {
+    "node": ">=24"
+  },
   "dependencies": {
     "@atlaskit/pragmatic-drag-and-drop": "1.4.0",
     "@atlaskit/pragmatic-drag-and-drop-hitbox": "1.0.3",
@@ -45,6 +48,7 @@
   },
   "overrides": {
     "asar": "3.2.6",
+    "@electron/rebuild": "4.2.0",
     "@electron/universal": "2.0.1",
     "webpack": "5.98.0"
   },
@@ -61,7 +65,7 @@
     "@electron-forge/shared-types": "7.11.2",
     "@electron/fuses": "1.8.0",
     "@playwright/test": "1.56.1",
-    "@types/node": "^20.0.0",
+    "@types/node": "^24.0.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
