@@ -16,7 +16,21 @@
 <table><tr><td>
 <strong>💖 Like Lotion?</strong> &nbsp;Consider <a href="https://github.com/sponsors/puneetsl">sponsoring on GitHub</a> to keep this and other Linux tools alive.
 </td></tr></table>
+
+
+<p align="center"><h3>ALSO WORTH A LOOK</h3></p>
+<p align="center">
+  <a href="https://binarydecimal.com/tools/markdown-editor?utm_source=github&utm_medium=readme&utm_campaign=lotion&utm_content=banner">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/18d5543f-c0ea-403d-bc7a-5f5d232df95a">
+      <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/59585b82-44c5-433d-9c20-ddf024113a56">
+      <img width="70%" alt="Free & private alternative to your paid note apps: a block-based Markdown editor that runs in your browser. Open the editor on binarydecimal.com" src="./assets/binarydecimal-dark.png">
+    </picture>
+  </a>
+</p>
+
 </div>
+
 
 ## What is Lotion?
 
