@@ -12,7 +12,7 @@
     "@reduxjs/toolkit": "2.2.3",
     "better-sqlite3": "12.10.0",
     "bindings": "1.5.0",
-    "colord": "2.9.3",
+    "colord": "2.9.4",
     "electron-log": "4.4.8",
     "electron-store": "8.2.0",
     "electron-updater": "^6.8.3",
