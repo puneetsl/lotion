@@ -4,6 +4,7 @@
 let tabs = [];
 let activeTabId = null;
 let windowId = null;
+let useNativeFrame = false;
 
 // Initialize on DOM load
 document.addEventListener('DOMContentLoaded', async () => {
@@ -20,7 +21,9 @@ async function loadInitialState() {
     tabs = state.tabs || [];
     activeTabId = state.activeTabId || null;
     windowId = state.windowId || null;
-    console.log('Tab bar loaded:', { tabs, activeTabId, windowId });
+    useNativeFrame = !!state.useNativeFrame;
+    document.body.classList.toggle('native-frame', useNativeFrame);
+    console.log('Tab bar loaded:', { tabs, activeTabId, windowId, useNativeFrame });
   } catch (error) {
     console.error('Failed to load initial tab state:', error);
   }
@@ -67,11 +70,11 @@ function render() {
         ${tabs.map(tab => renderTab(tab)).join('')}
       </div>
       <button class="new-tab-btn" id="new-tab-btn" title="New Tab">+</button>
-      <div class="window-controls">
+      ${useNativeFrame ? '' : `<div class="window-controls">
         <button class="window-control-btn minimize" id="minimize-btn" title="Minimize">−</button>
         <button class="window-control-btn maximize" id="maximize-btn" title="Maximize">□</button>
         <button class="window-control-btn close" id="close-btn" title="Close">×</button>
-      </div>
+      </div>`}
     </div>
   `;
 

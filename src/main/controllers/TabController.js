@@ -11,16 +11,34 @@ const {
 } = require('../store/slices/tabsSlice');
 const config = require('../../../config/config.json');
 
+function isNotionUrl(urlString) {
+  try {
+    const { hostname } = new URL(urlString);
+    return (
+      hostname === 'notion.so' ||
+      hostname === 'www.notion.so' ||
+      hostname.endsWith('.notion.so') ||
+      hostname === 'notion.com' ||
+      hostname === 'www.notion.com' ||
+      hostname.endsWith('.notion.com')
+    );
+  } catch {
+    return false;
+  }
+}
+
 /**
  * TabController manages a single tab instance
  * Each tab has its own WebContentsView that loads Notion
  */
 class TabController {
-  constructor({ tabId, windowId, store, initialUrl }) {
+  constructor({ tabId, windowId, store, initialUrl, webContents, skipInitialLoad }) {
     this.tabId = tabId;
     this.windowId = windowId;
     this.store = store;
     this.initialUrl = initialUrl || config.domainBaseUrl;
+    this.adoptedWebContents = webContents || null;
+    this.skipInitialLoad = !!skipInitialLoad;
     this.webContentsView = null;
     this.isVisible = false;
     this.isDestroyed = false;
@@ -40,14 +58,16 @@ class TabController {
     log.info(`Initializing tab: ${this.tabId}`);
     this.createWebContentsView();
     this.setupEventListeners();
-    this.loadURL(this.initialUrl);
+    if (!this.skipInitialLoad) {
+      this.loadURL(this.initialUrl);
+    }
   }
 
   /**
    * Create the WebContentsView for this tab
    */
   createWebContentsView() {
-    this.webContentsView = new WebContentsView({
+    const viewOptions = {
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
@@ -58,7 +78,14 @@ class TabController {
         preload: path.join(__dirname, '../../renderer/preload.js'),
         spellcheck: true,
       },
-    });
+    };
+    // Electron 41's setWindowOpenHandler can pass an existing WebContents
+    // (target=_blank / window.open). Omit the key when absent — passing
+    // webContents: undefined throws in some Electron versions.
+    if (this.adoptedWebContents) {
+      viewOptions.webContents = this.adoptedWebContents;
+    }
+    this.webContentsView = new WebContentsView(viewOptions);
 
     // Set up spell checker languages from Redux store
     const state = this.store.getState();
@@ -175,46 +202,43 @@ class TabController {
       }
     });
 
-    // Handle external links - allow Notion domains, open others externally
-    webContents.setWindowOpenHandler(({ url }) => {
-      const parsedUrl = new URL(url);
+    // Middle-click, Ctrl/Cmd-click, target=_blank, and Notion's "Open in
+    // new tab" all go through this handler. `{ action: 'allow' }` would
+    // spawn a bare BrowserWindow (github.com/puneetsl/lotion/issues/149).
+    // Wrap the guest WebContents in a Lotion tab instead.
+    webContents.setWindowOpenHandler((details) => {
+      const { url, disposition } = details;
 
-      // Check if URL is a Notion domain (notion.so or notion.com)
-      const isNotionDomain =
-        parsedUrl.hostname === 'notion.so' ||
-        parsedUrl.hostname === 'www.notion.so' ||
-        parsedUrl.hostname.endsWith('.notion.so') ||
-        parsedUrl.hostname === 'notion.com' ||
-        parsedUrl.hostname === 'www.notion.com' ||
-        parsedUrl.hostname.endsWith('.notion.com');
-
-      if (isNotionDomain) {
-        // Allow Notion links to open in new tab within app
-        log.debug(`Tab ${this.tabId}: Allowing new window for Notion URL: ${url}`);
-        return { action: 'allow' };
-      } else {
-        // Open non-Notion links in external browser
+      if (!isNotionUrl(url)) {
         require('electron').shell.openExternal(url);
         log.debug(`Tab ${this.tabId}: Opening external URL in browser: ${url}`);
         return { action: 'deny' };
       }
+
+      const TabManager = require('../managers/TabManager');
+      log.debug(`Tab ${this.tabId}: Opening Notion URL in new tab (${disposition}): ${url}`);
+      return {
+        action: 'allow',
+        createWindow: (options) => {
+          const tabController = TabManager.getInstance().openUrlInNewTab({
+            windowId: this.windowId,
+            url,
+            // Middle-click / Ctrl-click should not steal focus.
+            makeActive: disposition !== 'background-tab',
+            webContents: options.webContents,
+            // Chromium already owns navigation when a guest WebContents
+            // is provided. For background-tab it is deferred, so the
+            // new tab's init() loads the URL itself.
+            skipInitialLoad: Boolean(options.webContents),
+          });
+          return tabController.webContentsView.webContents;
+        },
+      };
     });
 
     // Allow navigation within Notion, block external sites
     webContents.on('will-navigate', (event, navigationUrl) => {
-      const parsedUrl = new URL(navigationUrl);
-
-      // Check if URL is a Notion domain (notion.so or notion.com)
-      const isNotionDomain =
-        parsedUrl.hostname === 'notion.so' ||
-        parsedUrl.hostname === 'www.notion.so' ||
-        parsedUrl.hostname.endsWith('.notion.so') ||
-        parsedUrl.hostname === 'notion.com' ||
-        parsedUrl.hostname === 'www.notion.com' ||
-        parsedUrl.hostname.endsWith('.notion.com');
-
-      // Only block if it's NOT a Notion URL
-      if (!isNotionDomain) {
+      if (!isNotionUrl(navigationUrl)) {
         event.preventDefault();
         require('electron').shell.openExternal(navigationUrl);
         log.debug(`Tab ${this.tabId}: Blocked external navigation to ${navigationUrl}`);

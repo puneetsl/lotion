@@ -59,6 +59,8 @@ class TabManager {
     title = 'New Tab',
     makeActive = true,
     isPinned = false,
+    webContents,
+    skipInitialLoad = false,
   }) {
     if (this.tabs.has(tabId)) {
       log.warn(`Tab ${tabId} already exists, returning existing tab`);
@@ -92,6 +94,8 @@ class TabManager {
       windowId,
       store: this.store,
       initialUrl: url,
+      webContents,
+      skipInitialLoad,
     });
 
     // Initialize the tab (creates WebContentsView)
@@ -113,6 +117,35 @@ class TabManager {
     log.info(
       `Tab ${tabId} created successfully. Total tabs: ${this.tabs.size}`
     );
+
+    return tabController;
+  }
+
+  /**
+   * Open a URL as a new tab in an existing window.
+   * Used by setWindowOpenHandler so target=_blank / middle-click land in
+   * the tab bar instead of a new BrowserWindow.
+   */
+  openUrlInNewTab({
+    windowId,
+    url,
+    makeActive = true,
+    webContents = null,
+    skipInitialLoad = false,
+  }) {
+    const tabController = this.createTab({
+      windowId,
+      url,
+      makeActive,
+      webContents,
+      skipInitialLoad,
+    });
+
+    if (makeActive) {
+      const AppController = require('../controllers/AppController');
+      const windowController = AppController.getInstance()?.windowControllers.get(windowId);
+      windowController?.setActiveTab(tabController);
+    }
 
     return tabController;
   }
