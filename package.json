@@ -15,7 +15,7 @@
     "colord": "2.9.3",
     "electron-log": "4.4.8",
     "electron-store": "8.2.0",
-    "electron-updater": "^6.8.3",
+    "electron-updater": "^6.8.9",
     "fflate": "0.7.4",
     "fs-extra": "8.1.0",
     "get-port": "5.1.1",
